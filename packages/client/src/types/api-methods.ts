@@ -1,6 +1,6 @@
 export enum ApiMethods {
   Login = 'auth/login',
   Register = 'auth/register',
-  ChangeName = 'user/name',
+  UpdateName = 'user/name',
   RefreshToken = 'auth/refresh',
 }
