@@ -1,10 +1,12 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common'
+import { TypeOrmModule } from '@nestjs/typeorm'
+import { ConfigModule, ConfigService } from '@nestjs/config'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
-import { ConfigModule, ConfigService } from '@nestjs/config'
 import { getEnvPath } from './common/helpers/env.helper'
-import { TypeOrmModule } from '@nestjs/typeorm'
-import { LoggerMiddleware } from './middleware/validate'
+import { LoggerMiddleware } from './common/middleware/validate'
+import { TypeOrmConfigService } from './shared/typeorm/typeorm.service'
+import { ApiModule } from './api/api.module'
 
 const envFilePath: string = getEnvPath(`${__dirname}/common/envs`)
 
@@ -14,21 +16,8 @@ const envFilePath: string = getEnvPath(`${__dirname}/common/envs`)
       isGlobal: true,
       envFilePath,
     }),
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => ({
-        type: configService.get<string>('TYPEORM_CONNECTION') as 'postgres',
-        username: configService.get<string>('TYPEORM_USERNAME'),
-        password: configService.get<string>('TYPEORM_PASSWORD'),
-        database: configService.get<string>('TYPEORM_DATABASE'),
-        port: configService.get<number>('TYPEORM_PORT'),
-        entities: [__dirname + 'dist/**/*.entity/{.ts, .js}'],
-        synchronize: true,
-        autoLoadEntities: true,
-        logging: true,
-      }),
-    }),
+    TypeOrmModule.forRootAsync({ useClass: TypeOrmConfigService }),
+    ApiModule,
   ],
   controllers: [AppController],
   providers: [AppService],
