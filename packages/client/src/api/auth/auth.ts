@@ -1,4 +1,5 @@
 import { ApiMethods } from 'src/types'
+
 import { BaseService } from '../base'
 import { AuthLogin, AuthRegister, UpdateName } from './req-types'
 

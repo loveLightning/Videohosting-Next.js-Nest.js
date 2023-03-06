@@ -15,7 +15,6 @@ export const StyledComponentsRegistry = ({ children }: Props) => {
     const styles = styledComponentsStyleSheet.getStyleElement()
     styledComponentsStyleSheet.instance.clearTag()
 
-
     return <>{styles}</>
   })
 

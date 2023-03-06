@@ -1,4 +1,5 @@
 import { AxiosRequestConfig } from 'axios'
+
 import { axiosBase } from './axios'
 
 export class BaseService {
