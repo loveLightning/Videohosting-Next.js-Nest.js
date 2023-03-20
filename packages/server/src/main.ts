@@ -1,33 +1,33 @@
-import { NestFactory } from '@nestjs/core'
-import { AppModule } from './app.module'
-import { ConfigService } from '@nestjs/config'
 import { ValidationPipe } from '@nestjs/common'
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
+import { NestFactory } from '@nestjs/core'
+import { AppModule } from './models/app/app.module'
+import { PrismaService } from './services/prisma/prisma.service'
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     cors: {
       origin: 'http://localhost:3000',
-      credentials: true,
     },
   })
-  const config = await app.get(ConfigService)
-  const port = config.get<number>('PORT')
+  app.useGlobalPipes(
+    new ValidationPipe(/* {
+      transform: true, 
+    } */),
+  )
 
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }))
-
-  const configSwagger = new DocumentBuilder()
-    .setTitle('Notes API')
-    .setDescription('The notes API description')
+  const config = new DocumentBuilder()
+    .setTitle('Cats example')
+    .setDescription('The cats API description')
     .setVersion('1.0')
+    .addTag('cats')
     .build()
 
-  const document = SwaggerModule.createDocument(app, configSwagger)
-
+  const document = SwaggerModule.createDocument(app, config)
   SwaggerModule.setup('api', app, document)
 
-  await app.listen(port || 3001, () => {
-    console.log(port)
-  })
+  const prismaService = app.get(PrismaService)
+  await prismaService.enableShutdownHooks(app)
+  await app.listen(3001)
 }
 bootstrap()

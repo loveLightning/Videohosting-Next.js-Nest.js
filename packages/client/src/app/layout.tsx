@@ -3,6 +3,9 @@ import { ThemeProvider } from 'styled-components'
 
 import { AppTheme, GlobalStyles, StyledComponentsRegistry } from 'src/theme'
 
+import Head from './head'
+// import { AuthProvider } from 'src/context'
+
 export default function RootLayout({
   children,
 }: {
@@ -10,11 +13,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <head />
+      <Head />
       <body>
         <StyledComponentsRegistry>
           <GlobalStyles />
-          <ThemeProvider theme={AppTheme}>{children}</ThemeProvider>
+          <ThemeProvider theme={AppTheme}>
+            {children}
+            {/* <AuthProvider>{children}</AuthProvider> */}
+          </ThemeProvider>
         </StyledComponentsRegistry>
       </body>
     </html>

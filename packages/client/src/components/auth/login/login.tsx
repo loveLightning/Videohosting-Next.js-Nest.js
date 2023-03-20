@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { Form, Formik, FormikHelpers } from 'formik'
+import { useRouter } from 'next/navigation'
 
 import { AuthService } from 'src/api'
 import { Button, FormikField } from 'src/components'
@@ -25,12 +26,16 @@ const initialValues: InitialValuesTypes = {
 }
 
 export const Login = () => {
+  const router = useRouter()
+
   const onSubmit = async (
     values: InitialValuesTypes,
     formikHelpers: FormikHelpers<InitialValuesTypes>,
   ) => {
     try {
       await AuthService.login(values)
+      localStorage.setItem('token', '')
+      router.push('/')
     } catch (err) {
       if (axios.isAxiosError(err)) {
         if (err.response?.status === 404) {
@@ -80,7 +85,7 @@ export const Login = () => {
         </Formik>
         <WrapToggle>
           <RegisterText>Not registered yet?</RegisterText>
-          <TogglePage href={'auth/register'}>Log in</TogglePage>
+          <TogglePage href={'auth/register'}>Sign in</TogglePage>
         </WrapToggle>
       </WrapperAuth>
     </Wrapper>
