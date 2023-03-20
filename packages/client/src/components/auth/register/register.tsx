@@ -2,8 +2,7 @@ import axios from 'axios'
 import { Form, Formik, FormikHelpers } from 'formik'
 import { useRouter } from 'next/navigation'
 
-import { AuthService } from 'src/api'
-import { Button, FormikField } from 'src/components'
+import { Button, FormikField, AuthService } from 'src/components'
 import { registerSchema } from 'src/scheme'
 
 import {
