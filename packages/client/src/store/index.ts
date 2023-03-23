@@ -1,20 +1,20 @@
-import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { useDispatch } from 'react-redux'
-import storage from 'redux-persist/lib/storage'
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { persistStore } from 'redux-persist'
 import {
-  persistReducer,
   FLUSH,
-  REHYDRATE,
   PAUSE,
   PERSIST,
+  persistReducer,
   PURGE,
   REGISTER,
+  REHYDRATE,
 } from 'redux-persist'
+import storage from 'redux-persist/lib/storage'
 
 const rootReducer = combineReducers({
   // basket: basketReducer,
-  // goods: goodsReducer,
+  goods: goodsReducer,
   // productFilters: productFiltersReducer,
 })
 
@@ -41,3 +41,5 @@ export const persistor = persistStore(store)
 export type AppDispatch = typeof store.dispatch
 export const useAppDispatch: () => AppDispatch = useDispatch
 export type TypeRootState = ReturnType<typeof store.getState>
+
+export * from './user'

@@ -1,4 +1,5 @@
 import { ApiMethods } from 'src/types'
+
 import { BaseService } from '../base'
 import { ICategory } from './res-types'
 

@@ -2,11 +2,11 @@ import Cookies from 'js-cookie'
 
 import { ApiMethods } from 'src/types'
 import { IUser } from 'src/types'
+import { AuthLogin, AuthRegister } from 'src/types'
 
 import { getContentType } from '../api.helper'
 import { BaseService } from '../base'
 import { saveTokensInStorage, saveUserInStorage } from './auth.helper'
-import { AuthLogin, AuthRegister } from './req-types'
 
 export class AuthService extends BaseService {
   public static async getNewTokens() {

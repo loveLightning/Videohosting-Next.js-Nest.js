@@ -2,47 +2,48 @@ import { createSlice } from '@reduxjs/toolkit'
 
 import { IUser } from 'src/types'
 
-import { fetchGoods, fetchProduct } from './actions'
+import { fetchLogin, fetchRegister } from './actions'
 
 export interface UserState {
-  user?: IUser
+  user: IUser
   loading: boolean
   error: string
 }
 
-const initialState: UserState = {
+const initialState = {
+  user: {},
   loading: false,
   error: '',
-}
+} as UserState
 
 const toolkitSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(fetchGoods.pending, (state) => {
+    builder.addCase(fetchLogin.pending, (state) => {
       state.error = ''
       state.loading = true
     }),
-      builder.addCase(fetchGoods.fulfilled, (state, action) => {
-        state.goods.data = action.payload
-        state.goods.loading = false
+      builder.addCase(fetchLogin.fulfilled, (state, action) => {
+        state.user = action.payload
+        state.loading = false
       }),
-      builder.addCase(fetchGoods.rejected, (state) => {
-        state.goods.error = 'error'
-        state.goods.loading = false
+      builder.addCase(fetchLogin.rejected, (state) => {
+        state.error = 'error'
+        state.loading = false
       })
-    builder.addCase(fetchProduct.pending, (state) => {
-      state.product.error = ''
-      state.product.loading = true
+    builder.addCase(fetchRegister.pending, (state) => {
+      state.error = ''
+      state.loading = true
     }),
-      builder.addCase(fetchProduct.fulfilled, (state, action) => {
-        state.product.data = action.payload
-        state.product.loading = false
+      builder.addCase(fetchRegister.fulfilled, (state, action) => {
+        state.user = action.payload
+        state.loading = false
       }),
-      builder.addCase(fetchProduct.rejected, (state) => {
-        state.product.error = 'error'
-        state.product.loading = false
+      builder.addCase(fetchRegister.rejected, (state) => {
+        state.error = 'error'
+        state.loading = false
       })
   },
 })

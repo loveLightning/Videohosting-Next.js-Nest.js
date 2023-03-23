@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie'
 
-import { IUser } from './res-types'
+import { IUser } from 'src/types'
 
 export const getAccessToken = () => {
   return Cookies.get('accessToken') || null

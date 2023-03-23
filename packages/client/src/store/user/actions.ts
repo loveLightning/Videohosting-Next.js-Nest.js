@@ -1,34 +1,45 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 
-export const fetchGoods = createAsyncThunk(
-  'goods/fetchGoods',
-  async (category: string, { rejectWithValue }) => {
-    try {
-      const response = await fetch(
-        'https://fakestoreapi.com/products/' +
-          (category ? 'category/' + category : ''),
-      )
-      const data = await response.json()
+import { AuthService } from 'src/api'
+import { AuthLogin, AuthRegister, IUser } from 'src/types'
 
-      return data
+export const fetchLogin = createAsyncThunk(
+  'auth/login',
+  async (data: AuthLogin, { rejectWithValue }) => {
+    try {
+      const response: IUser = await AuthService.login(data)
+
+      return response
     } catch (error) {
       return rejectWithValue(error)
     }
   },
 )
 
-export const fetchProduct = createAsyncThunk(
-  'goods/fetchProduct',
-  async (id: string, { rejectWithValue }) => {
+export const fetchRegister = createAsyncThunk(
+  'auth/register',
+  async (data: AuthRegister, { rejectWithValue }) => {
     try {
-      if (id) {
-        const response = await fetch(`https://fakestoreapi.com/products/${id}`)
-        const data = await response.json()
+      const response: IUser = await AuthService.register(data)
 
-        return data
-      }
+      return response
     } catch (error) {
       return rejectWithValue(error)
     }
   },
 )
+
+// export const fetchIsCheckAuth = createAsyncThunk(
+//   'auth/register',
+//   async (_, { rejectWithValue }) => {
+//     try {
+//       const response = await AuthService.getNewTokens()
+
+//       return response.data
+//     } catch (error) {
+//       removeFromStorage()
+
+//       return rejectWithValue(error)
+//     }
+//   },
+// )
