@@ -1,5 +1,6 @@
 import Cookies from 'js-cookie'
-import { IUser, UserTypes } from './res-types'
+
+import { IUser } from './res-types'
 
 export const getAccessToken = () => {
   return Cookies.get('accessToken') || null
@@ -21,7 +22,7 @@ export const removeFromStorage = () => {
 }
 
 export const saveUserInStorage = (data: IUser) => {
-  const { accessJwt, refreshJwt } = data
-  saveTokensInStorage(accessJwt, refreshJwt)
+  const { accessToken, refreshToken } = data
+  saveTokensInStorage(accessToken, refreshToken)
   localStorage.setItem('user', JSON.stringify(data.user))
 }

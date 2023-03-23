@@ -5,7 +5,3 @@ export interface AuthRegister {
 }
 
 export type AuthLogin = Omit<AuthRegister, 'name'>
-
-export interface UpdateName {
-  name: string
-}

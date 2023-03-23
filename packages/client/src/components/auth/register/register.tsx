@@ -92,7 +92,7 @@ export const Register = () => {
         </Formik>
         <WrapToggle>
           <RegisterText>Not registered yet?</RegisterText>
-          <TogglePage href={'auth/login'}>Sign up</TogglePage>
+          <TogglePage href={'/auth/login'}>Sign up</TogglePage>
         </WrapToggle>
       </WrapperAuth>
     </Wrapper>

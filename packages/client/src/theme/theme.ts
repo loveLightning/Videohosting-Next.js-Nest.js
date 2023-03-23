@@ -17,6 +17,11 @@ export const GlobalStyles = createGlobalStyle`
     color: ${colors.black};
   }
 
+  body {
+    padding: 0;
+    margin: 0;
+  }
+
   a {
     text-decoration: none;
   }
