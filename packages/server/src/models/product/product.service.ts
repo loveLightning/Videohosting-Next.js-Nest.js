@@ -68,6 +68,7 @@ export class ProductService {
       orderBy: prismaSort,
       skip,
       take: perPage,
+      select: returnProductObj,
     })
 
     return {

@@ -6,7 +6,7 @@ import { AuthLogin, AuthRegister } from 'src/types'
 
 import { getContentType } from '../api.helper'
 import { BaseService } from '../base'
-import { saveTokensInStorage, saveUserInStorage } from './auth.helper'
+import { StorageService } from '../storage'
 
 export class AuthService extends BaseService {
   public static async getNewTokens() {
@@ -23,10 +23,10 @@ export class AuthService extends BaseService {
 
     if (response.data.accessToken) {
       const { accessToken, refreshToken } = response.data
-      saveTokensInStorage(accessToken, refreshToken)
+      StorageService.saveTokensInStorage(accessToken, refreshToken)
     }
 
-    return response
+    return response.data
   }
 
   public static async register(data: AuthRegister) {
@@ -36,7 +36,7 @@ export class AuthService extends BaseService {
       data,
     })
 
-    if (response.data.accessToken) saveUserInStorage(response.data)
+    if (response.data.accessToken) StorageService.saveToStorage(response.data)
 
     return response.data
   }
@@ -48,7 +48,19 @@ export class AuthService extends BaseService {
       data,
     })
 
-    if (response.data.accessToken) saveUserInStorage(response.data)
+    if (response.data.accessToken) StorageService.saveToStorage(response.data)
+
+    return response.data
+  }
+
+  public static async verifyToken(accessToken: string) {
+    const response = await this.fetch<{ verify: boolean }>({
+      url: ApiMethods.VerifyToken,
+      method: 'POST',
+      data: {
+        accessToken,
+      },
+    })
 
     return response.data
   }

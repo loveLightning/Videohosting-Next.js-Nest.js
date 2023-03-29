@@ -1,17 +1,16 @@
 import React from 'react'
+import { FieldInputProps } from 'formik'
 import styled from 'styled-components'
 
 import { FormikErrorMessage } from 'src/components'
 
-interface Props {
+type Props<T> = {
   name: string
   type: string
-  onChange: (e: React.ChangeEvent<any>) => void
-  onBlur?: (e: any) => void
   value: string
   label?: string
   rest?: React.CSSProperties
-}
+} & FieldInputProps<T>
 
 const Container = styled.div`
   margin-bottom: 15px;
@@ -28,7 +27,7 @@ const Input = styled.input`
   outline: none;
 `
 
-export const FormikField = ({
+export const FormikField = <T,>({
   name,
   type,
   label,
@@ -36,7 +35,7 @@ export const FormikField = ({
   onChange,
   onBlur,
   ...rest
-}: Props) => {
+}: Props<T>) => {
   return (
     <Container>
       <label htmlFor={name}>{label}</label>

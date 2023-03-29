@@ -1,3 +1,6 @@
+import { IOrder } from './order'
+import { IProduct } from './product'
+
 export interface IUser {
   user: UserTypes
   accessToken: string
@@ -7,4 +10,17 @@ export interface IUser {
 export interface UserTypes {
   id: number
   email: string
+}
+
+export interface IProfile {
+  id: number
+  email: string
+  name: string
+  avatarPath: string
+  phone: string
+}
+
+export interface IFullProfile extends IProfile {
+  favorites: IProduct[]
+  orders: IOrder[]
 }

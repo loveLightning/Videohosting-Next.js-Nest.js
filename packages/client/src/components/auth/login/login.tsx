@@ -1,9 +1,10 @@
 import axios from 'axios'
-import { Form, Formik, FormikHelpers } from 'formik'
+import { Form, Formik } from 'formik'
 import { useRouter } from 'next/navigation'
 
-import { AuthService, Button, FormikField } from 'src/components'
+import { Button, FormikField } from 'src/components'
 import { loginSchema } from 'src/scheme'
+import { fetchLogin, useAppDispatch } from 'src/store'
 
 import {
   RegisterText,
@@ -26,21 +27,17 @@ const initialValues: InitialValuesTypes = {
 
 export const Login = () => {
   const router = useRouter()
+  const dispatch = useAppDispatch()
 
   const onSubmit = async (
     values: InitialValuesTypes,
-    formikHelpers: FormikHelpers<InitialValuesTypes>,
+    // formikHelpers: FormikHelpers<InitialValuesTypes>,
   ) => {
     try {
-      await AuthService.login(values)
-      localStorage.setItem('token', '')
+      dispatch(fetchLogin(values))
       router.push('/')
     } catch (err) {
       if (axios.isAxiosError(err)) {
-        if (err.response?.status === 404) {
-          formikHelpers.setFieldError('email', 'Wrong address or password')
-          formikHelpers.setFieldError('password', 'Wrong address or password')
-        }
       }
     }
   }
@@ -84,7 +81,7 @@ export const Login = () => {
         </Formik>
         <WrapToggle>
           <RegisterText>Not registered yet?</RegisterText>
-          <TogglePage href={'/auth/register'}>Sign in</TogglePage>
+          <TogglePage href={'/auth/register'}>Sign up</TogglePage>
         </WrapToggle>
       </WrapperAuth>
     </Wrapper>

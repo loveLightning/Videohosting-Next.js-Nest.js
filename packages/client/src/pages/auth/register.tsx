@@ -1,7 +1,10 @@
-import { Register } from "src/components";
+import { NextHead, Register } from 'src/components'
 
 export default function RegisterPage() {
   return (
-    <Register />
+    <>
+      <NextHead title="Sign up" />
+      <Register />
+    </>
   )
 }

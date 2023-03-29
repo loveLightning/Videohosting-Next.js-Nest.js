@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { Provider } from 'react-redux'
 import {
   Hydrate,
@@ -9,12 +8,13 @@ import type { AppProps } from 'next/app'
 import { PersistGate } from 'redux-persist/integration/react'
 import { ThemeProvider } from 'styled-components'
 
+import { NextPageAuth } from 'src/providers'
 import { persistor, store } from 'src/store'
 import { AppTheme, GlobalStyles } from 'src/theme'
 
-export default function App({ Component, pageProps }: AppProps) {
-  const [queryClient] = useState(() => new QueryClient())
+const queryClient = new QueryClient()
 
+export default function App({ Component, pageProps }: AppProps & NextPageAuth) {
   return (
     <QueryClientProvider client={queryClient}>
       <Hydrate state={pageProps.dehydratedState}>

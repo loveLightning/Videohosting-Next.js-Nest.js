@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 
-import { AuthService } from 'src/api'
+import { AuthService, StorageService } from 'src/api'
 import { AuthLogin, AuthRegister, IUser } from 'src/types'
 
 export const fetchLogin = createAsyncThunk(
@@ -29,17 +29,17 @@ export const fetchRegister = createAsyncThunk(
   },
 )
 
-// export const fetchIsCheckAuth = createAsyncThunk(
-//   'auth/register',
-//   async (_, { rejectWithValue }) => {
-//     try {
-//       const response = await AuthService.getNewTokens()
+export const fetchCheckAuth = createAsyncThunk(
+  'auth/access-token',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response: IUser = await AuthService.getNewTokens()
 
-//       return response.data
-//     } catch (error) {
-//       removeFromStorage()
+      return response
+    } catch (error) {
+      StorageService.removeFromStorage()
 
-//       return rejectWithValue(error)
-//     }
-//   },
-// )
+      return rejectWithValue(error)
+    }
+  },
+)

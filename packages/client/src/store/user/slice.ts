@@ -1,17 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit'
 
+import { StorageService } from 'src/api'
 import { IUser } from 'src/types'
 
-import { fetchLogin, fetchRegister } from './actions'
+import { fetchCheckAuth, fetchLogin, fetchRegister } from './actions'
 
 export interface UserState {
-  user: IUser
+  data: IUser
   loading: boolean
   error: string
 }
 
 const initialState = {
-  user: {},
+  data: StorageService.getSaveUser(),
   loading: false,
   error: '',
 } as UserState
@@ -26,7 +27,7 @@ const toolkitSlice = createSlice({
       state.loading = true
     }),
       builder.addCase(fetchLogin.fulfilled, (state, action) => {
-        state.user = action.payload
+        state.data = action.payload
         state.loading = false
       }),
       builder.addCase(fetchLogin.rejected, (state) => {
@@ -38,13 +39,16 @@ const toolkitSlice = createSlice({
       state.loading = true
     }),
       builder.addCase(fetchRegister.fulfilled, (state, action) => {
-        state.user = action.payload
+        state.data = action.payload
         state.loading = false
       }),
       builder.addCase(fetchRegister.rejected, (state) => {
         state.error = 'error'
         state.loading = false
       })
+    builder.addCase(fetchCheckAuth.fulfilled, (state, action) => {
+      state.data = action.payload
+    })
   },
 })
 

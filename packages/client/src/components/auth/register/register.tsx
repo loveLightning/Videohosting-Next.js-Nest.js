@@ -1,8 +1,9 @@
 import axios from 'axios'
-import { Form, Formik, FormikHelpers } from 'formik'
+import { Form, Formik } from 'formik'
 import { useRouter } from 'next/navigation'
 
-import { Button, FormikField, AuthService } from 'src/components'
+import { AuthService } from 'src/api'
+import { Button, FormikField } from 'src/components'
 import { registerSchema } from 'src/scheme'
 
 import {
@@ -31,16 +32,13 @@ export const Register = () => {
 
   const onSubmit = async (
     values: InitialValuesTypes,
-    formikHelpers: FormikHelpers<InitialValuesTypes>,
+    // formikHelpers: FormikHelpers<InitialValuesTypes>,
   ) => {
     try {
       await AuthService.register(values)
       push('/')
     } catch (err) {
       if (axios.isAxiosError(err)) {
-        if (err.response?.status === 409) {
-          formikHelpers.setFieldError('email', 'This email already exist')
-        }
       }
     }
   }
@@ -92,7 +90,7 @@ export const Register = () => {
         </Formik>
         <WrapToggle>
           <RegisterText>Not registered yet?</RegisterText>
-          <TogglePage href={'/auth/login'}>Sign up</TogglePage>
+          <TogglePage href={'/auth/login'}>Sign in</TogglePage>
         </WrapToggle>
       </WrapperAuth>
     </Wrapper>

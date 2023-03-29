@@ -2,6 +2,7 @@ export enum ApiMethods {
   Login = 'auth/login',
   Register = 'auth/register',
   AccessToken = 'auth/access-token',
+  VerifyToken = 'auth/verify-token',
 
   Categories = 'categories',
   BySlugCategory = 'categories/by-slug',

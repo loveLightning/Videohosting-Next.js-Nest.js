@@ -12,10 +12,12 @@ import {
 } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 
+import cartReducer from './cart/slice'
+import userReducer from './user/slice'
+
 const rootReducer = combineReducers({
-  // basket: basketReducer,
-  goods: goodsReducer,
-  // productFilters: productFiltersReducer,
+  user: userReducer,
+  cart: cartReducer,
 })
 
 const persistConfig = {
@@ -43,3 +45,5 @@ export const useAppDispatch: () => AppDispatch = useDispatch
 export type TypeRootState = ReturnType<typeof store.getState>
 
 export * from './user'
+export * from './cart'
+export * from './hooks'

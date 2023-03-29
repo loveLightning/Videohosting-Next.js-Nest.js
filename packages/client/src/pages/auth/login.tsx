@@ -1,7 +1,10 @@
-import { Login } from "src/components";
+import { Login, NextHead } from 'src/components'
 
 export default function LoginPage() {
   return (
-    <Login />
+    <>
+      <NextHead title="Sign in" />
+      <Login />
+    </>
   )
 }

@@ -23,7 +23,7 @@ export class AuthService {
 
     if (!user) throw new NotFoundException('User not found')
 
-    const isValid = verify(user.password, pass)
+    const isValid = await verify(user.password, pass)
 
     if (!isValid) throw new UnauthorizedException('Invalid password')
 
@@ -45,7 +45,6 @@ export class AuthService {
     const { email } = userDto
 
     const user = await this.usersService.findForEmail(email)
-
     const tokens = await this.createTokens(user.id, user.email)
 
     return {
@@ -70,6 +69,16 @@ export class AuthService {
     return {
       user: this.returnUserFields(user),
       ...tokens,
+    }
+  }
+
+  async verifyToken(accessToken: string) {
+    const result = await this.jwtService.verifyAsync(accessToken)
+
+    if (!result) throw new UnauthorizedException('Unauthorized')
+
+    return {
+      verify: true,
     }
   }
 

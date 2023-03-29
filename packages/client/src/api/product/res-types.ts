@@ -1,5 +1,3 @@
-import { number, string } from 'yup'
-
 export enum EnumProductSort {
   HIGH_PRICE,
   LOWE_PRICE,
@@ -8,8 +6,10 @@ export enum EnumProductSort {
 }
 
 export interface IProductSort {
-  searchTerm: EnumProductSort
-  sort: string
+  searchTerm?: EnumProductSort
+  sort?: string
+  page?: number
+  perPage?: number
 }
 
 export interface IProduct {
