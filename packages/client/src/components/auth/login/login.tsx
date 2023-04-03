@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { Form, Formik } from 'formik'
+import { Form, Formik, FormikHelpers } from 'formik'
 import { useRouter } from 'next/navigation'
 
 import { Button, FormikField } from 'src/components'
@@ -31,13 +31,16 @@ export const Login = () => {
 
   const onSubmit = async (
     values: InitialValuesTypes,
-    // formikHelpers: FormikHelpers<InitialValuesTypes>,
+    formikHelpers: FormikHelpers<InitialValuesTypes>,
   ) => {
     try {
-      dispatch(fetchLogin(values))
-      router.push('/')
-    } catch (err) {
-      if (axios.isAxiosError(err)) {
+      await dispatch(fetchLogin(values)).unwrap()
+    } catch (error) {
+      if (error && axios.isAxiosError(error)) {
+        if (error.response?.status === 401 || error.response?.status === 404) {
+          formikHelpers.setFieldError('password', error.response?.data.message)
+          formikHelpers.setFieldError('email', error.response?.data.message)
+        }
       }
     }
   }

@@ -45,7 +45,7 @@ export class UsersService {
     })
 
     if (!user) {
-      throw new NotFoundException('User not found')
+      throw new NotFoundException('Email not found')
     }
 
     return user
@@ -58,8 +58,12 @@ export class UsersService {
       },
     })
 
-    if (existUser) {
+    if (existUser && existUser.isActivated) {
       throw new HttpException('User already exist', HttpStatus.CONFLICT)
+    }
+
+    if (existUser && !existUser.isActivated) {
+      return existUser
     }
 
     return await this.prisma.user.create({
@@ -69,6 +73,7 @@ export class UsersService {
         name: faker.name.firstName(),
         avatarPath: faker.image.avatar(),
         phone: faker.phone.number('+7 (###) ###-##-##'),
+        activationLink: '',
       },
     })
   }
@@ -101,7 +106,7 @@ export class UsersService {
   async toggleFavorite(userId: number, productId: number): Promise<any> {
     const user = await this.findForId(userId)
 
-    if (!user) throw new NotFoundException('User not found')
+    if (!user) throw new NotFoundException('Email not found')
     const isExists = user.favorites.some((el) => el.id === userId)
 
     await this.prisma.user.update({

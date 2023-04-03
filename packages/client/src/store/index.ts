@@ -1,15 +1,7 @@
 import { useDispatch } from 'react-redux'
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { persistStore } from 'redux-persist'
-import {
-  FLUSH,
-  PAUSE,
-  PERSIST,
-  persistReducer,
-  PURGE,
-  REGISTER,
-  REHYDRATE,
-} from 'redux-persist'
+import { persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 
 import cartReducer from './cart/slice'
@@ -23,7 +15,8 @@ const rootReducer = combineReducers({
 const persistConfig = {
   key: 'root',
   storage,
-  whiteList: ['cart'],
+  whitelist: ['cart'],
+  blackList: ['user'],
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
@@ -32,9 +25,7 @@ export const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-      },
+      serializableCheck: false,
     }),
 })
 

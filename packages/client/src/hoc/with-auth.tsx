@@ -1,37 +1,39 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
+import Cookies from 'js-cookie'
 import { useRouter } from 'next/router'
 
-import { AuthService, StorageService } from 'src/api'
+import {
+  fetchCheckAuth,
+  useAppDispatch,
+  useAppSelector,
+  userSelector,
+} from 'src/store'
 
-export const withAuth = (WrappedComponent: React.ComponentType) => {
-  // eslint-disable-next-line react/display-name, @typescript-eslint/no-explicit-any
-  return (props: any) => {
-    const router = useRouter()
-    const [verified, setVerified] = useState(false)
+export const withAuth = <T extends JSX.IntrinsicAttributes>(
+  WrappedComponent: React.ComponentType<T>,
+) => {
+  // eslint-disable-next-line react/display-name
+  return function (props: T) {
+    const { replace } = useRouter()
+    const dispatch = useAppDispatch()
+    const user = useAppSelector(userSelector)
 
-    const verifyToken = async () => {
-      const accessToken = StorageService.getAccessToken()
-
-      if (!accessToken) {
-        router.replace('/auth/login')
-      } else {
-        const { verify } = await AuthService.verifyToken(accessToken)
-
-        if (verify) {
-          setVerified(verify)
-        } else {
-          StorageService.removeFromStorage()
-          router.replace('/auth/login')
-        }
+    const verifyToken = () => {
+      if (!user.isAuth) {
+        replace('/auth/login')
       }
     }
 
     useEffect(() => {
+      if (Cookies.get('accessToken')) {
+        dispatch(fetchCheckAuth())
+      }
+
       verifyToken()
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    if (verified) {
+    if (user.isAuth && user.user.user.isActivated) {
       return <WrappedComponent {...props} />
     } else {
       return null

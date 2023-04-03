@@ -37,8 +37,8 @@ export class CategoryService {
   async create(): Promise<any> {
     return this.prisma.category.create({
       data: {
-        name: '',
-        slug: '',
+        name: 'Computers',
+        slug: 'Computers',
       },
     })
   }

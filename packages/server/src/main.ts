@@ -3,11 +3,12 @@ import { NestFactory } from '@nestjs/core'
 import { AppModule } from './models/app/app.module'
 import { PrismaService } from './services/prisma/prisma.service'
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
+import * as cookieParser from 'cookie-parser'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     cors: {
-      origin: 'http://localhost:3000',
+      origin: process.env.CLIENT_URL,
       credentials: true,
     },
   })
@@ -16,6 +17,7 @@ async function bootstrap() {
       transform: true, 
     } */),
   )
+  app.use(cookieParser())
 
   const config = new DocumentBuilder()
     .setTitle('Cats example')

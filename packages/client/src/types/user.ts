@@ -10,6 +10,7 @@ export interface IUser {
 export interface UserTypes {
   id: number
   email: string
+  isActivated: boolean
 }
 
 export interface IProfile {

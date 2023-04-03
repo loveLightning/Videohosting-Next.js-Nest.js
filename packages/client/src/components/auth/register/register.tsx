@@ -1,10 +1,17 @@
 import axios from 'axios'
-import { Form, Formik } from 'formik'
-import { useRouter } from 'next/navigation'
+import { Form, Formik, FormikHelpers } from 'formik'
+import { useRouter } from 'next/router'
+import styled from 'styled-components'
 
-import { AuthService } from 'src/api'
 import { Button, FormikField } from 'src/components'
 import { registerSchema } from 'src/scheme'
+import {
+  fetchRegister,
+  useAppDispatch,
+  useAppSelector,
+  userSelector,
+} from 'src/store'
+import { fetchLogout } from 'src/store/user/actions'
 
 import {
   RegisterText,
@@ -28,25 +35,36 @@ const initialValues: InitialValuesTypes = {
 }
 
 export const Register = () => {
-  const { push } = useRouter()
+  const { user } = useAppSelector(userSelector)
+
+  const dispatch = useAppDispatch()
+  const router = useRouter()
+
+  const { isActivated } = user.user ?? ''
+  // console.log(user)
 
   const onSubmit = async (
     values: InitialValuesTypes,
-    // formikHelpers: FormikHelpers<InitialValuesTypes>,
+    formikHelpers: FormikHelpers<InitialValuesTypes>,
   ) => {
     try {
-      await AuthService.register(values)
-      push('/')
-    } catch (err) {
-      if (axios.isAxiosError(err)) {
+      await dispatch(fetchRegister(values)).unwrap()
+    } catch (error) {
+      if (error && axios.isAxiosError(error)) {
+        if (error.response?.status === 409) {
+          formikHelpers.setFieldError('email', error.response?.data.message)
+        }
       }
     }
   }
+
+  console.log(router.query)
 
   return (
     <Wrapper>
       <WrapperAuth>
         <Title>Register</Title>
+
         <Formik
           enableReinitialize
           initialValues={initialValues}
@@ -71,6 +89,7 @@ export const Register = () => {
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 />
+
                 <FormikField
                   value={formik.values.password}
                   label="Password"
@@ -79,15 +98,27 @@ export const Register = () => {
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 />
+
                 <Button
                   disabled={!(formik.dirty && formik.isValid)}
                   style={{ width: '100%', marginTop: 30 }}>
-                  Log in
+                  Register
                 </Button>
               </Form>
             )
           }}
         </Formik>
+
+        {user.user && !isActivated && (
+          <WrapConfirm>
+            <TextConfirm>You have to confirm your email</TextConfirm>
+
+            <Note onClick={async () => await dispatch(fetchLogout())}>
+              Register another mail
+            </Note>
+          </WrapConfirm>
+        )}
+
         <WrapToggle>
           <RegisterText>Not registered yet?</RegisterText>
           <TogglePage href={'/auth/login'}>Sign in</TogglePage>
@@ -96,3 +127,20 @@ export const Register = () => {
     </Wrapper>
   )
 }
+
+const WrapConfirm = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+`
+
+const TextConfirm = styled.div`
+  color: ${({ theme }) => theme.black};
+  font-size: 24px;
+  margin-bottom: 100px;
+`
+
+const Note = styled.p`
+  color: ${({ theme }) => theme.blue};
+`

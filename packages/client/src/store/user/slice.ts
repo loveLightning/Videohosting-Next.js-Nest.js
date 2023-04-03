@@ -1,18 +1,24 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import { StorageService } from 'src/api'
 import { IUser } from 'src/types'
 
-import { fetchCheckAuth, fetchLogin, fetchRegister } from './actions'
+import {
+  fetchCheckAuth,
+  fetchLogin,
+  fetchLogout,
+  fetchRegister,
+} from './actions'
 
 export interface UserState {
-  data: IUser
+  user: IUser
   loading: boolean
-  error: string
+  error: unknown
+  isAuth: boolean
 }
 
 const initialState = {
-  data: StorageService.getSaveUser(),
+  user: {},
+  isAuth: false,
   loading: false,
   error: '',
 } as UserState
@@ -25,29 +31,54 @@ const toolkitSlice = createSlice({
     builder.addCase(fetchLogin.pending, (state) => {
       state.error = ''
       state.loading = true
+    })
+    builder.addCase(fetchLogin.fulfilled, (state, action) => {
+      state.user = action.payload
+      state.isAuth = true
+      state.loading = false
+    })
+    builder.addCase(fetchLogin.rejected, (state, action) => {
+      state.error = action.payload
+      state.loading = false
     }),
-      builder.addCase(fetchLogin.fulfilled, (state, action) => {
-        state.data = action.payload
-        state.loading = false
-      }),
-      builder.addCase(fetchLogin.rejected, (state) => {
-        state.error = 'error'
-        state.loading = false
+      builder.addCase(fetchRegister.pending, (state) => {
+        state.error = ''
+        state.loading = true
       })
-    builder.addCase(fetchRegister.pending, (state) => {
-      state.error = ''
-      state.loading = true
+    builder.addCase(fetchRegister.fulfilled, (state, action) => {
+      state.user = action.payload
+      state.isAuth = true
+      state.loading = false
+    })
+    builder.addCase(fetchRegister.rejected, (state, action) => {
+      state.error = action.payload
+      state.loading = false
     }),
-      builder.addCase(fetchRegister.fulfilled, (state, action) => {
-        state.data = action.payload
-        state.loading = false
-      }),
-      builder.addCase(fetchRegister.rejected, (state) => {
-        state.error = 'error'
-        state.loading = false
+      builder.addCase(fetchLogout.pending, (state) => {
+        state.error = ''
+        state.loading = true
+      })
+    builder.addCase(fetchLogout.fulfilled, (state) => {
+      state.user = {} as IUser
+      state.isAuth = false
+      state.loading = false
+    })
+    builder.addCase(fetchLogout.rejected, (state, action) => {
+      state.error = action.payload
+      state.loading = false
+    }),
+      builder.addCase(fetchCheckAuth.pending, (state) => {
+        state.error = ''
+        state.loading = true
       })
     builder.addCase(fetchCheckAuth.fulfilled, (state, action) => {
-      state.data = action.payload
+      state.user = action.payload
+      state.isAuth = true
+      state.loading = false
+    })
+    builder.addCase(fetchCheckAuth.rejected, (state, action) => {
+      state.error = action.payload
+      state.loading = false
     })
   },
 })

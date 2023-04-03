@@ -8,6 +8,7 @@ import { JwtStrategy } from './jwt.strategy'
 import { LocalStrategy } from './local.strategy'
 import { PassportModule } from '@nestjs/passport'
 import { UsersService } from '../user/user.service'
+import { MailService } from '../mail/mail.service'
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { UsersService } from '../user/user.service'
     JwtStrategy,
     LocalStrategy,
     UsersService,
+    MailService,
   ],
 })
 export class AuthModule {}

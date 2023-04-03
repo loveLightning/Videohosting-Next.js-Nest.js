@@ -7,18 +7,30 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Token {
+  id           Int      @id @default(autoincrement())
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  refreshToken String   @map("refresh_token")
+  user         User?
+}
+
 model User {
-  createdAt  DateTime  @default(now()) @map("created_at")
-  updatedAt  DateTime  @updatedAt @map("updated_at")
-  email      String    @unique
-  password   String
-  name       String    @unique
-  avatarPath String    @default("/upload/default-avatar.png") @map("avatar_path")
-  phone      String    @default("")
-  id         Int       @id @default(autoincrement())
-  orders     Order[]
-  favorites  Product[]
-  reviews    Review[]
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+  email          String    @unique
+  password       String
+  name           String
+  avatarPath     String    @default("/upload/default-avatar.png") @map("avatar_path")
+  phone          String    @default("")
+  id             Int       @id @default(autoincrement())
+  isActivated    Boolean   @default(false)
+  activationLink String
+  orders         Order[]
+  favorites      Product[]
+  reviews        Review[]
+  token          Token?    @relation(fields: [tokenId], references: [id])
+  tokenId        Int?      @unique
 }
 
 model Product {

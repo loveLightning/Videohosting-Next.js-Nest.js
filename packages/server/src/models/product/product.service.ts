@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
-import { Prisma, Product } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 import { titleToSlug } from 'src/common/utils/slug'
 import { PrismaService } from 'src/services/prisma/prisma.service'
 import { PaginationService } from '../pagination/pagination.service'
@@ -151,10 +151,10 @@ export class ProductService {
   async createProduct() {
     const product = await this.prisma.product.create<Prisma.ProductCreateArgs>({
       data: {
-        description: '',
-        name: '',
-        price: 0,
-        slug: '',
+        description: 'ddassdsads',
+        name: 'ddsdassaddasas',
+        price: 1122,
+        slug: 'dddassdss',
       },
     })
     return product.id
