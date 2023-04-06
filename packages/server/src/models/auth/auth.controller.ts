@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
   Param,
   Post,
   Redirect,
@@ -11,8 +12,7 @@ import {
 } from '@nestjs/common'
 import { AuthService } from './auth.service'
 import { RegisterDto, LoginDto } from './dtos/auth.dto'
-import { AccessTokenDto, RefreshTokenDto } from './dtos/token.dto'
-import { JwtAuthGuard } from './jwt-auth.guard'
+import { JwtGuard } from './jwt.guard'
 import { LocalAuthGuard } from './local-auth.guard'
 import { Response, Request } from 'express'
 import { CurrentUser } from 'src/common/decorators/user.decorators'
@@ -21,7 +21,7 @@ import { CurrentUser } from 'src/common/decorators/user.decorators'
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  // @HttpCode(200)
+  @HttpCode(200)
   @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(
@@ -38,7 +38,7 @@ export class AuthController {
     return userData
   }
 
-  // @HttpCode(200)
+  @HttpCode(200)
   @Post('register')
   async register(
     @Body() userDto: RegisterDto,
@@ -54,7 +54,7 @@ export class AuthController {
     return userData
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtGuard)
   @Post('logout')
   async logout(
     @Res({ passthrough: true }) response: Response,
@@ -64,8 +64,7 @@ export class AuthController {
     response.clearCookie('refreshToken')
   }
 
-  // @HttpCode(200)
-  @UseGuards(JwtAuthGuard)
+  @HttpCode(200)
   @Get('refresh')
   async refreshToken(@Req() request: Request) {
     const { refreshToken } = request.cookies
@@ -76,5 +75,11 @@ export class AuthController {
   @Get('activate/:token')
   async activateAccount(@Param('token') token: string) {
     await this.authService.activateAccount(token)
+  }
+
+  @UseGuards(JwtGuard)
+  @Get('users')
+  async getAllUsers() {
+    return this.authService.getAllUsers()
   }
 }

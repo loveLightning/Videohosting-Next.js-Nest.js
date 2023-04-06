@@ -8,7 +8,7 @@ import { returnCategoryObj } from './return-category.object'
 @Injectable()
 export class CategoryService {
   constructor(private readonly prisma: PrismaService) {}
-  async findById(categoryId: number): Promise<any> {
+  async findById(categoryId: number) {
     const category = this.prisma.category.findUnique({
       where: {
         id: categoryId,
@@ -21,7 +21,7 @@ export class CategoryService {
     return category
   }
 
-  async findBySlug(slug: string): Promise<any> {
+  async findBySlug(slug: string) {
     const category = this.prisma.category.findUnique({
       where: {
         slug,
@@ -34,16 +34,16 @@ export class CategoryService {
     return category
   }
 
-  async create(): Promise<any> {
+  async create() {
     return this.prisma.category.create({
       data: {
-        name: 'Computers',
-        slug: 'Computers',
+        name: 'Fruits',
+        slug: 'Fruits',
       },
     })
   }
 
-  async update(categoryId: number, categoryDto: CategoryDto): Promise<any> {
+  async update(categoryId: number, categoryDto: CategoryDto) {
     const category = this.findById(categoryId)
 
     return this.prisma.category.update({
@@ -57,7 +57,7 @@ export class CategoryService {
     })
   }
 
-  async delete(categoryId: number): Promise<Category> {
+  async delete(categoryId: number) {
     return this.prisma.category.delete({
       where: {
         id: categoryId,
@@ -65,7 +65,7 @@ export class CategoryService {
     })
   }
 
-  async getAll(): Promise<any> {
+  async getAll() {
     return this.prisma.category.findMany({
       select: returnCategoryObj,
     })

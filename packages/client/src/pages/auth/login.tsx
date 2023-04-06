@@ -1,6 +1,7 @@
 import { Login, NextHead } from 'src/components'
+import { withAuth } from 'src/hoc'
 
-export default function LoginPage() {
+function LoginPage() {
   return (
     <>
       <NextHead title="Sign in" />
@@ -8,3 +9,5 @@ export default function LoginPage() {
     </>
   )
 }
+
+export default withAuth(LoginPage)

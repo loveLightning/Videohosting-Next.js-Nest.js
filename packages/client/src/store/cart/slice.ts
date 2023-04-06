@@ -38,13 +38,13 @@ const toolkitSlice = createSlice({
       if (item) type === 'plus' ? item.quantity++ : item.quantity--
     },
 
-    reset: (state) => {
+    resetCart: (state) => {
       state.items = []
     },
   },
 })
 
-export const { addToCart, changeQuantity, removeFromCart, reset } =
+export const { addToCart, changeQuantity, removeFromCart, resetCart } =
   toolkitSlice.actions
 
 export default toolkitSlice.reducer

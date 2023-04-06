@@ -26,7 +26,9 @@ const initialState = {
 const toolkitSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {},
+  reducers: {
+    resetUser: () => initialState,
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchLogin.pending, (state) => {
       state.error = ''
@@ -77,10 +79,14 @@ const toolkitSlice = createSlice({
       state.loading = false
     })
     builder.addCase(fetchCheckAuth.rejected, (state, action) => {
+      state.user = {} as IUser
+      state.isAuth = false
       state.error = action.payload
       state.loading = false
     })
   },
 })
+
+export const { resetUser } = toolkitSlice.actions
 
 export default toolkitSlice.reducer

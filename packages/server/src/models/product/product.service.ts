@@ -66,8 +66,8 @@ export class ProductService {
     const products = await this.prisma.product.findMany({
       where: prismaSearchTermFilter,
       orderBy: prismaSort,
-      skip,
-      take: perPage,
+      // skip,
+      // take: perPage,
       select: returnProductObj,
     })
 
@@ -151,10 +151,51 @@ export class ProductService {
   async createProduct() {
     const product = await this.prisma.product.create<Prisma.ProductCreateArgs>({
       data: {
-        description: 'ddassdsads',
-        name: 'ddsdassaddasas',
-        price: 1122,
-        slug: 'dddassdss',
+        description: 'sdasdasscs dasda dsad',
+        name: 'Thing 6',
+        price: 11222,
+        slug: 'Thing 6',
+        images: [
+          'https://cdn.vox-cdn.com/uploads/chorus_asset/file/24059001/226270_iPHONE_14_PHO_akrales_0788_sq.jpg',
+        ],
+        category: {
+          create: {
+            name: 'gadgetes 5',
+            slug: 'gadgetes 5',
+          },
+        },
+
+        reviews: {
+          create: [
+            {
+              rating: 5,
+              text: 'It is amazing',
+              user: {
+                connect: {
+                  id: 1,
+                },
+              },
+            },
+            {
+              rating: 4,
+              text: 'It is amadssdzing',
+              user: {
+                connect: {
+                  id: 1,
+                },
+              },
+            },
+            {
+              rating: 2,
+              text: 'It is  dsd dsamazing',
+              user: {
+                connect: {
+                  id: 1,
+                },
+              },
+            },
+          ],
+        },
       },
     })
     return product.id

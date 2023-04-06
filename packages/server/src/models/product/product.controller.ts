@@ -9,7 +9,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common'
-import { JwtAuthGuard } from '../auth/jwt-auth.guard'
+import { JwtGuard } from '../auth/jwt.guard'
 import { GetAllProductDto } from './dtos/get-all-product.dto'
 import { ProductDto } from './dtos/product.dto'
 import { ProductService } from './product.service'
@@ -39,13 +39,13 @@ export class ProductController {
   }
 
   @Post()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtGuard)
   async createProduct() {
     return this.productService.createProduct()
   }
 
   @Put(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtGuard)
   async updateProduct(
     @Param('id') productId: string,
     @Body() productDto: ProductDto,
@@ -54,13 +54,12 @@ export class ProductController {
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtGuard)
   async deleteProduct(@Param('id') id: string) {
     return this.productService.deleteProduct(+id)
   }
 
   @Get(':id')
-  @UseGuards(JwtAuthGuard)
   async getById(@Param('id') id: string) {
     return this.productService.getById(+id)
   }

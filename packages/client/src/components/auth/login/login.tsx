@@ -1,10 +1,16 @@
+import { useState } from 'react'
 import axios from 'axios'
 import { Form, Formik, FormikHelpers } from 'formik'
-import { useRouter } from 'next/navigation'
+import styled from 'styled-components'
 
-import { Button, FormikField } from 'src/components'
+import { Button, FormikField, Modal } from 'src/components'
 import { loginSchema } from 'src/scheme'
-import { fetchLogin, useAppDispatch } from 'src/store'
+import {
+  fetchLogin,
+  useAppDispatch,
+  useAppSelector,
+  userSelector,
+} from 'src/store'
 
 import {
   RegisterText,
@@ -26,8 +32,12 @@ const initialValues: InitialValuesTypes = {
 }
 
 export const Login = () => {
-  const router = useRouter()
   const dispatch = useAppDispatch()
+
+  const [showModal, setShowModal] = useState(false)
+  const [isErrorConfirm, setIsErrorConfirm] = useState()
+
+  const { loading } = useAppSelector(userSelector)
 
   const onSubmit = async (
     values: InitialValuesTypes,
@@ -40,6 +50,11 @@ export const Login = () => {
         if (error.response?.status === 401 || error.response?.status === 404) {
           formikHelpers.setFieldError('password', error.response?.data.message)
           formikHelpers.setFieldError('email', error.response?.data.message)
+        }
+
+        if (error.response?.status === 403) {
+          setIsErrorConfirm(error.response?.data.message)
+          setShowModal(true)
         }
       }
     }
@@ -75,8 +90,9 @@ export const Login = () => {
                 />
                 <Button
                   disabled={!(formik.dirty && formik.isValid)}
-                  style={{ width: '100%', marginTop: 30 }}>
-                  Log in
+                  style={{ width: '100%', marginTop: 30 }}
+                  isLoading={loading}>
+                  log in
                 </Button>
               </Form>
             )
@@ -86,7 +102,21 @@ export const Login = () => {
           <RegisterText>Not registered yet?</RegisterText>
           <TogglePage href={'/auth/register'}>Sign up</TogglePage>
         </WrapToggle>
+        {showModal && (
+          <Modal
+            onClose={() => setShowModal(false)}
+            isShow={showModal}
+            style={{ width: 400, height: 200 }}>
+            <DescError>{isErrorConfirm}</DescError>
+          </Modal>
+        )}
       </WrapperAuth>
     </Wrapper>
   )
 }
+
+const DescError = styled.p`
+  font-size: 16px;
+  font-family: ${({ theme }) => theme.roboto400};
+  text-align: center;
+`

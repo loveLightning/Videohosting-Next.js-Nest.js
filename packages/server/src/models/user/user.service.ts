@@ -17,7 +17,7 @@ import { UserDto } from './user.dto'
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async findForEmail(email: string): Promise<any> {
+  async findForEmail(email: string) {
     return await this.prisma.user.findUnique({
       where: {
         email,

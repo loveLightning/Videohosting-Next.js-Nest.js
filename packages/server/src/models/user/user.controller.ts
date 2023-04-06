@@ -10,20 +10,20 @@ import {
 import { UserDto } from './user.dto'
 import { UsersService } from './user.service'
 import { CurrentUser } from 'src/common/decorators/user.decorators'
-import { JwtAuthGuard } from '../auth/jwt-auth.guard'
+import { JwtGuard } from '../auth/jwt.guard'
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get('profile')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtGuard)
   async getProfile(@CurrentUser('id') userId: number) {
     return this.usersService.findForId(userId)
   }
 
   @Put('profile')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtGuard)
   async updateProfile(
     @CurrentUser('id') userId: number,
     @Body() userDto: UserDto,
@@ -32,7 +32,7 @@ export class UsersController {
   }
 
   @Patch('profile/favorites/:productId')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtGuard)
   async toggleFavorite(
     @CurrentUser('id') userId: number,
     @Param('productId') productId: string,

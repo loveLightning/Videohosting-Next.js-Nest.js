@@ -58,7 +58,7 @@ export class ProductsService extends BaseService {
   public static async getById(id: string) {
     return await this.fetch<IProduct[]>({
       method: 'GET',
-      url: `${ApiMethods.Reviews}/${id}`,
+      url: `${ApiMethods.Products}/${id}`,
     })
   }
 }

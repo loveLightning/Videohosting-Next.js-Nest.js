@@ -1,6 +1,5 @@
 import axios from 'axios'
 import { Form, Formik, FormikHelpers } from 'formik'
-import { useRouter } from 'next/router'
 import styled from 'styled-components'
 
 import { Button, FormikField } from 'src/components'
@@ -11,7 +10,7 @@ import {
   useAppSelector,
   userSelector,
 } from 'src/store'
-import { fetchLogout } from 'src/store/user/actions'
+import { fetchLogout } from 'src/store'
 
 import {
   RegisterText,
@@ -35,13 +34,11 @@ const initialValues: InitialValuesTypes = {
 }
 
 export const Register = () => {
-  const { user } = useAppSelector(userSelector)
+  const { user, isAuth, loading } = useAppSelector(userSelector)
 
   const dispatch = useAppDispatch()
-  const router = useRouter()
 
   const { isActivated } = user.user ?? ''
-  // console.log(user)
 
   const onSubmit = async (
     values: InitialValuesTypes,
@@ -58,58 +55,59 @@ export const Register = () => {
     }
   }
 
-  console.log(router.query)
-
   return (
     <Wrapper>
       <WrapperAuth>
         <Title>Register</Title>
 
-        <Formik
-          enableReinitialize
-          initialValues={initialValues}
-          onSubmit={onSubmit}
-          validationSchema={registerSchema}>
-          {(formik) => {
-            return (
-              <Form>
-                <FormikField
-                  value={formik.values.name}
-                  label="Name"
-                  name="name"
-                  type="text"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                <FormikField
-                  value={formik.values.email}
-                  label="Email"
-                  name="email"
-                  type="email"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
+        {!isAuth && !isActivated && (
+          <Formik
+            enableReinitialize
+            initialValues={initialValues}
+            onSubmit={onSubmit}
+            validationSchema={registerSchema}>
+            {(formik) => {
+              return (
+                <Form>
+                  <FormikField
+                    value={formik.values.name}
+                    label="Name"
+                    name="name"
+                    type="text"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                  />
+                  <FormikField
+                    value={formik.values.email}
+                    label="Email"
+                    name="email"
+                    type="email"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                  />
 
-                <FormikField
-                  value={formik.values.password}
-                  label="Password"
-                  name="password"
-                  type="password"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
+                  <FormikField
+                    value={formik.values.password}
+                    label="Password"
+                    name="password"
+                    type="password"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                  />
 
-                <Button
-                  disabled={!(formik.dirty && formik.isValid)}
-                  style={{ width: '100%', marginTop: 30 }}>
-                  Register
-                </Button>
-              </Form>
-            )
-          }}
-        </Formik>
+                  <Button
+                    disabled={!(formik.dirty && formik.isValid)}
+                    style={{ width: '100%', marginTop: 30 }}
+                    isLoading={loading}>
+                    Register
+                  </Button>
+                </Form>
+              )
+            }}
+          </Formik>
+        )}
 
-        {user.user && !isActivated && (
+        {isAuth && !isActivated && (
           <WrapConfirm>
             <TextConfirm>You have to confirm your email</TextConfirm>
 
@@ -143,4 +141,5 @@ const TextConfirm = styled.div`
 
 const Note = styled.p`
   color: ${({ theme }) => theme.blue};
+  cursor: pointer;
 `

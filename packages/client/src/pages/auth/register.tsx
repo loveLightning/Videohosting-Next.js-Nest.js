@@ -1,6 +1,7 @@
 import { NextHead, Register } from 'src/components'
+import { withAuth } from 'src/hoc'
 
-export default function RegisterPage() {
+function RegisterPage() {
   return (
     <>
       <NextHead title="Sign up" />
@@ -8,3 +9,5 @@ export default function RegisterPage() {
     </>
   )
 }
+
+export default withAuth(RegisterPage)

@@ -8,7 +8,7 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common'
-import { JwtAuthGuard } from '../auth/jwt-auth.guard'
+import { JwtGuard } from '../auth/jwt.guard'
 import { CategoryDto } from './category.dto'
 import { CategoryService } from './category.service'
 
@@ -17,7 +17,7 @@ export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
   @Put(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtGuard)
   async update(
     @Param('id') categoryId: string,
     @Body() categoryDto: CategoryDto,
@@ -26,31 +26,28 @@ export class CategoryController {
   }
 
   @Post()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtGuard)
   async create() {
     return this.categoryService.create()
   }
 
   @Get()
-  @UseGuards(JwtAuthGuard)
   async getAll() {
     return this.categoryService.getAll()
   }
 
   @Get(':id')
-  @UseGuards(JwtAuthGuard)
   async findById(@Param('id') categoryId: string) {
     return this.categoryService.findById(+categoryId)
   }
 
   @Get('/by-slug:slug')
-  @UseGuards(JwtAuthGuard)
   async findBySlug(@Param('slug') slug: string) {
     return this.categoryService.findBySlug(slug)
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtGuard)
   async delete(@Param('id') categoryId: string) {
     return this.categoryService.delete(+categoryId)
   }

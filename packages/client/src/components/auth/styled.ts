@@ -41,3 +41,10 @@ export const WrapToggle = styled.div`
 export const TogglePage = styled(Link)`
   color: ${({ theme }) => theme.blue};
 `
+
+export const WrapperLoader = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  background-color: ${({ theme }) => theme.light_blue};
+`

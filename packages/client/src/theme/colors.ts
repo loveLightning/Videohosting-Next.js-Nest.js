@@ -7,5 +7,7 @@ export const colors = {
     '#c7c7d2', //0
     '#f5f5f5', //1
     '#d4d4d4', //2
+    '#3b3333', //3
   ],
+  dark_blue: '#1e2225',
 }

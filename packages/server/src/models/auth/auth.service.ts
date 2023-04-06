@@ -31,6 +31,12 @@ export class AuthService {
 
     if (!isValid) throw new UnauthorizedException('Invalid password or email')
 
+    if (!user.isActivated)
+      throw new HttpException(
+        'You need to confirm your email address',
+        HttpStatus.FORBIDDEN,
+      )
+
     const { password, ...result } = user
     return result
   }
@@ -54,8 +60,8 @@ export class AuthService {
 
   async login(userDto: LoginDto) {
     const { email } = userDto
-    console.log('das')
     const user = await this.usersService.findForEmail(email)
+
     const tokens = await this.createTokens(user.id)
 
     await this.saveToken(user.id, tokens.refreshToken)
@@ -68,6 +74,7 @@ export class AuthService {
 
   async refreshToken(refreshToken: string) {
     if (!refreshToken) throw new UnauthorizedException()
+
     const result = await this.jwtService.verifyAsync(refreshToken)
 
     const user = await this.prisma.user.findUnique({
@@ -75,6 +82,7 @@ export class AuthService {
         id: result.id,
       },
     })
+
     if (!result || !user)
       throw new UnauthorizedException('Invalid refresh token')
 
@@ -122,12 +130,6 @@ export class AuthService {
 
     if (!user) throw new NotFoundException('An uncorrect link activation')
 
-    // if (user.isActivated)
-    //   throw new HttpException(
-    //     'This email has already been activated',
-    //     HttpStatus.CONFLICT,
-    //   )
-
     await this.prisma.user.update({
       where: {
         id,
@@ -144,6 +146,10 @@ export class AuthService {
         id,
       },
     })
+  }
+
+  async getAllUsers() {
+    return await this.prisma.user.findMany()
   }
 
   private async createTokens(userId: number) {

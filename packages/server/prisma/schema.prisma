@@ -24,13 +24,13 @@ model User {
   avatarPath     String    @default("/upload/default-avatar.png") @map("avatar_path")
   phone          String    @default("")
   id             Int       @id @default(autoincrement())
-  isActivated    Boolean   @default(false)
   activationLink String
+  isActivated    Boolean   @default(false)
+  tokenId        Int?      @unique
   orders         Order[]
   favorites      Product[]
   reviews        Review[]
   token          Token?    @relation(fields: [tokenId], references: [id])
-  tokenId        Int?      @unique
 }
 
 model Product {

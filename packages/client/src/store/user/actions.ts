@@ -11,7 +11,7 @@ export const fetchLogin = createAsyncThunk(
       const response = await AuthService.login(data)
 
       const { accessToken } = response.data
-      Cookies.set('token', accessToken)
+      Cookies.set('accessToken', accessToken)
 
       return response.data
     } catch (error) {
@@ -41,7 +41,6 @@ export const fetchCheckAuth = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await AuthService.checkAuth()
-
       const { accessToken } = response.data
 
       Cookies.set('accessToken', accessToken)

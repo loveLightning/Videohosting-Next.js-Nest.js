@@ -1,11 +1,14 @@
 import styled, { css } from 'styled-components'
 
+import { Loader } from 'src/components'
+
 export type ButtonProps = {
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void
   children?: React.ReactNode
   color?: 'primary' | 'secondary'
   disabled?: boolean
   rest?: React.CSSProperties
+  isLoading?: boolean
 } & Omit<React.HTMLAttributes<HTMLButtonElement>, 'type' | 'color'>
 
 const COLOR = {
@@ -43,6 +46,7 @@ export const Button = ({
   children,
   color = 'primary',
   disabled,
+  isLoading,
   ...rest
 }: ButtonProps) => {
   return (
@@ -52,7 +56,18 @@ export const Button = ({
       color={color}
       disabled={disabled}
       {...rest}>
-      {children}
+      {!isLoading ? (
+        children
+      ) : (
+        <WrapLoader>
+          <Loader width="1.5rem" height="1.5rem" />
+        </WrapLoader>
+      )}
     </Container>
   )
 }
+
+const WrapLoader = styled.div`
+  display: flex;
+  justify-content: center;
+`

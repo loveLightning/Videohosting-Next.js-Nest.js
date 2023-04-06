@@ -1,6 +1,12 @@
-import { Catalog } from 'src/components'
+import { Catalog, MainLayout } from 'src/components'
 import { IPaginationProduct } from 'src/types'
 
-export const Home = ({ products, length }: IPaginationProduct) => {
-  return <Catalog products={products} />
+export const Home = ({ length, products }: IPaginationProduct) => {
+  return (
+    <MainLayout>
+      {products?.length && (
+        <Catalog products={products} title="Freshed products" />
+      )}
+    </MainLayout>
+  )
 }

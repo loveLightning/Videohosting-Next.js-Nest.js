@@ -1,8 +1,6 @@
 import axios from 'axios'
 
-import { ApiMethods } from 'src/types'
-import { IUser } from 'src/types'
-import { AuthLogin, AuthRegister } from 'src/types'
+import { ApiMethods, AuthLogin, AuthRegister, IUser } from 'src/types'
 
 import { BaseService } from '../base'
 

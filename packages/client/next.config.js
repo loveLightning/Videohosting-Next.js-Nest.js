@@ -4,6 +4,39 @@ const nextConfig = {
   env: {
     SERVER_URL: process.env.SERVER_URL,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'cdn.vox-cdn.com',
+        port: '',
+        pathname: '',
+      },
+    ],
+  },
+  webpack(config) {
+    const fileLoaderRule = config.module.rules.find((rule) =>
+      rule.test?.test?.('.svg'),
+    )
+
+    config.module.rules.push(
+      {
+        ...fileLoaderRule,
+        test: /\.svg$/i,
+        resourceQuery: /url/, // *.svg?url
+      },
+      {
+        test: /\.svg$/i,
+        issuer: /\.[jt]sx?$/,
+        resourceQuery: { not: /url/ }, // exclude if *.svg?url
+        use: ['@svgr/webpack'],
+      },
+    )
+
+    fileLoaderRule.exclude = /\.svg$/i
+
+    return config
+  },
 }
 
 module.exports = nextConfig
