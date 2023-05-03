@@ -74,19 +74,20 @@ export class AuthService {
 
   async refreshToken(refreshToken: string) {
     if (!refreshToken) throw new UnauthorizedException()
-
     const result = await this.jwtService.verifyAsync(refreshToken)
-
     const user = await this.prisma.user.findUnique({
       where: {
         id: result.id,
       },
     })
 
-    if (!result || !user)
+    const tokenFromDb = await this.findToken(refreshToken)
+
+    if (!result || !user || !tokenFromDb)
       throw new UnauthorizedException('Invalid refresh token')
 
     const tokens = await this.createTokens(user.id)
+    await this.saveToken(user.id, tokens.refreshToken)
 
     return {
       user: this.returnUserFields(user),
@@ -164,6 +165,16 @@ export class AuthService {
     })
 
     return { accessToken, refreshToken }
+  }
+
+  private async findToken(refreshToken: string) {
+    const tokenData = await this.prisma.token.findFirst({
+      where: {
+        refreshToken,
+      },
+    })
+
+    return tokenData
   }
 
   private returnUserFields(user: User) {

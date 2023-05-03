@@ -1,4 +1,4 @@
-import { ApiMethods, IReview, IReviewDto } from 'src/types'
+import { ApiMethods, IRating, IReview, IReviewDto } from 'src/types'
 
 import { BaseService } from '../base'
 
@@ -11,9 +11,12 @@ export class ReviewsService extends BaseService {
   }
 
   public static async getAverageById(id: string | number) {
-    return await this.fetch<number>({
+    return await this.fetch<IRating>({
       method: 'GET',
-      url: `${ApiMethods.Reviews}/${id}`,
+      url: `${ApiMethods.Reviews}/average`,
+      params: {
+        data: id,
+      },
     })
   }
 

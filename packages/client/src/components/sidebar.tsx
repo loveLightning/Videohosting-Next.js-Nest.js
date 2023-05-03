@@ -1,11 +1,17 @@
 import { useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import styled from 'styled-components'
 
 import { CategoriesService } from 'src/api'
 import { Loader } from 'src/components'
 import { LogOutIcon } from 'src/icons'
-import { fetchLogout, useAppDispatch } from 'src/store'
+import {
+  fetchLogout,
+  useAppDispatch,
+  useAppSelector,
+  userSelector,
+} from 'src/store'
 
 export const Sidebar = () => {
   const { data: categories, isLoading } = useQuery(
@@ -15,6 +21,10 @@ export const Sidebar = () => {
       select: ({ data }) => data,
     },
   )
+  const { asPath } = useRouter()
+
+  const { user } = useAppSelector(userSelector)
+  const isUser = user?.user?.isActivated
   const dispatch = useAppDispatch()
 
   return (
@@ -22,30 +32,43 @@ export const Sidebar = () => {
       {isLoading && <Loader />}
       <WrapCateries>
         <NameOfSidebar>Categories:</NameOfSidebar>
+        <CategoryText active={!!(asPath && asPath === `/`)} href={'/'}>
+          All
+        </CategoryText>
         {categories?.length &&
           categories.map((el) => (
-            <CategoryText key={el.id} href={`/category/${el.slug}`}>
+            <CategoryText
+              active={!!(asPath && asPath === `/category/${el.slug}`)}
+              key={el.id}
+              href={`/category/${el.slug}`}>
               {el.name}
             </CategoryText>
           ))}
       </WrapCateries>
 
       {!categories?.length && <NotFound>Categories not found</NotFound>}
-      <LogOut onClick={async () => await dispatch(fetchLogout())}>
-        <LogOutIcon />
-        <LogOutText>Log out</LogOutText>
-      </LogOut>
+      {isUser && (
+        <LogOut onClick={async () => await dispatch(fetchLogout())}>
+          <LogOutIcon />
+          <LogOutText>Log out</LogOutText>
+        </LogOut>
+      )}
     </Wrapper>
   )
 }
 
 const Wrapper = styled.div`
   background-color: ${({ theme }) => theme.dark_blue};
-  height: calc(100vh - 90px);
+  height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   padding: 30px;
+  position: absolute;
+  left: 0;
+  right: 250px;
+  width: 250px;
+  top: 0;
+  bottom: 0;
 `
 
 const WrapCateries = styled.div`
@@ -61,9 +84,17 @@ const NameOfSidebar = styled.p`
   margin-bottom: 20px;
 `
 
-const CategoryText = styled(Link)`
-  color: ${({ theme }) => theme.white};
+interface CategoryTextStyled {
+  active: boolean
+}
+
+// eslint-disable-next-line prettier/prettier
+const CategoryText = styled(Link) <CategoryTextStyled>`
+  color: ${({ theme, active }) => (active ? theme.green[0] : theme.white)};
   cursor: pointer;
+  font-family: ${({ theme }) => theme.roboto400};
+  font-size: 18px;
+  margin-left: 15px;
 `
 
 const NotFound = styled.p``
@@ -76,6 +107,7 @@ const LogOut = styled.div`
   gap: 10px;
   cursor: pointer;
   width: fit-content;
+  margin-top: 50px;
 `
 
 const LogOutText = styled.p`

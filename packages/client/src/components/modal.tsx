@@ -10,7 +10,13 @@ interface Props {
   style?: CSSProperties
 }
 
-export const Modal = ({ onClose, children, title, ...style }: Props) => {
+export const Modal = ({
+  isShow,
+  onClose,
+  children,
+  title,
+  ...style
+}: Props) => {
   const [isBrowser, setIsBrowser] = useState(false)
 
   const modalWrapperRef = React.useRef<HTMLDivElement>(null)
@@ -39,7 +45,7 @@ export const Modal = ({ onClose, children, title, ...style }: Props) => {
     onClose()
   }
 
-  const modalContent = (
+  const modalContent = isShow ? (
     <StyledModalOverlay>
       <StyledModalWrapper ref={modalWrapperRef} {...style}>
         <StyledModal>
@@ -53,7 +59,7 @@ export const Modal = ({ onClose, children, title, ...style }: Props) => {
         </StyledModal>
       </StyledModalWrapper>
     </StyledModalOverlay>
-  )
+  ) : null
 
   if (isBrowser) {
     return ReactDOM.createPortal(

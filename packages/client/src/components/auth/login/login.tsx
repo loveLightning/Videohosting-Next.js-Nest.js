@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import axios from 'axios'
 import { Form, Formik, FormikHelpers } from 'formik'
+import { useRouter } from 'next/navigation'
 import styled from 'styled-components'
 
 import { Button, FormikField, Modal } from 'src/components'
 import { loginSchema } from 'src/scheme'
 import {
+  changeAuthMode,
   fetchLogin,
   useAppDispatch,
   useAppSelector,
@@ -33,6 +35,7 @@ const initialValues: InitialValuesTypes = {
 
 export const Login = () => {
   const dispatch = useAppDispatch()
+  const { replace } = useRouter()
 
   const [showModal, setShowModal] = useState(false)
   const [isErrorConfirm, setIsErrorConfirm] = useState()
@@ -45,6 +48,7 @@ export const Login = () => {
   ) => {
     try {
       await dispatch(fetchLogin(values)).unwrap()
+      replace('/')
     } catch (error) {
       if (error && axios.isAxiosError(error)) {
         if (error.response?.status === 401 || error.response?.status === 404) {
@@ -85,6 +89,7 @@ export const Login = () => {
                   label="Password"
                   name="password"
                   type="password"
+                  autoComplete="on"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 />
@@ -100,7 +105,9 @@ export const Login = () => {
         </Formik>
         <WrapToggle>
           <RegisterText>Not registered yet?</RegisterText>
-          <TogglePage href={'/auth/register'}>Sign up</TogglePage>
+          <TogglePage onClick={() => dispatch(changeAuthMode())}>
+            Sign up
+          </TogglePage>
         </WrapToggle>
         {showModal && (
           <Modal

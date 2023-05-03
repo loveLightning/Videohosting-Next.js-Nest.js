@@ -8,9 +8,9 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'cdn.vox-cdn.com',
+        hostname: '**',
         port: '',
-        pathname: '',
+        pathname: '**',
       },
     ],
   },

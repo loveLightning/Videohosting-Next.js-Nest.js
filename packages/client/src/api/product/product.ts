@@ -1,28 +1,30 @@
-import { ApiMethods, IPaginationProduct } from 'src/types'
+import { ApiMethods, IPaginationProduct, IProduct } from 'src/types'
 
 import { BaseService } from '../base'
-import { IProduct, IProductSort, UpdateProductTypes } from './res-types'
+import { IProductSort, UpdateProductTypes } from './res-types'
 
 export class ProductsService extends BaseService {
-  public static async getAll(dataQuery: IProductSort) {
-    return await this.fetch<IPaginationProduct>({
+  public static async getAll(dataQuery?: IProductSort) {
+    const { data } = await this.fetch<IPaginationProduct>({
       method: 'GET',
       url: ApiMethods.Products,
       params: dataQuery,
     })
+
+    return data
   }
 
   public static async getSimilar(id: string) {
     return await this.fetch<IProduct[]>({
       method: 'GET',
-      url: `${ApiMethods.Products}/${id}`,
+      url: `${ApiMethods.Products}/simular/${id}`,
     })
   }
 
   public static async getBySlug(slug: string) {
     return await this.fetch<IProduct[]>({
       method: 'GET',
-      url: `${ApiMethods.Products}/${slug}`,
+      url: `${ApiMethods.Products}/by-slug/${slug}`,
     })
   }
 

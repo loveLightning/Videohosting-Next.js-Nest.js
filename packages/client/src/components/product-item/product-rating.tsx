@@ -1,5 +1,6 @@
 import { Rating } from 'react-simple-star-rating'
 import { useQuery } from '@tanstack/react-query'
+import styled from 'styled-components'
 
 import { ReviewsService } from 'src/api'
 import { IProduct } from 'src/types'
@@ -9,27 +10,31 @@ interface Props {
 }
 
 export const ProductRating = ({ product }: Props) => {
-  // const { data: rating } = useQuery(
-  //   ['get product rating', product.id],
-  //   () => ReviewsService.getAverageById(product.id),
-  //   {
-  //     select: ({ data }) => data,
-  //   },
-  // )
+  const { data: rating } = useQuery(
+    ['get product rating', product.id],
+    () => ReviewsService.getAverageById(product.id),
+    {
+      select: ({ data }) => data,
+    },
+  )
 
   return (
-    <div>
+    <Wrapper>
       <Rating
         readonly
-        // initialValue={rating}
-        SVGstyle={{
-          display: 'inline-block',
-        }}
-        size={34}
-        allowFraction
+        initialValue={rating?.rating}
+        size={23}
         transition
+        allowFraction={true}
       />
-      <span>{product.reviews.length} reviews</span>
-    </div>
+
+      <span>{product?.reviews?.length} reviews</span>
+    </Wrapper>
   )
 }
+
+const Wrapper = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+`

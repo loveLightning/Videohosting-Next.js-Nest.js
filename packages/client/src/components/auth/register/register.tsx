@@ -1,16 +1,18 @@
 import axios from 'axios'
 import { Form, Formik, FormikHelpers } from 'formik'
+import { useRouter } from 'next/navigation'
 import styled from 'styled-components'
 
 import { Button, FormikField } from 'src/components'
 import { registerSchema } from 'src/scheme'
 import {
+  changeAuthMode,
+  fetchLogout,
   fetchRegister,
   useAppDispatch,
   useAppSelector,
   userSelector,
 } from 'src/store'
-import { fetchLogout } from 'src/store'
 
 import {
   RegisterText,
@@ -37,6 +39,7 @@ export const Register = () => {
   const { user, isAuth, loading } = useAppSelector(userSelector)
 
   const dispatch = useAppDispatch()
+  const { replace } = useRouter()
 
   const { isActivated } = user.user ?? ''
 
@@ -46,6 +49,10 @@ export const Register = () => {
   ) => {
     try {
       await dispatch(fetchRegister(values)).unwrap()
+
+      if (isActivated) {
+        replace('/')
+      }
     } catch (error) {
       if (error && axios.isAxiosError(error)) {
         if (error.response?.status === 409) {
@@ -91,6 +98,7 @@ export const Register = () => {
                     label="Password"
                     name="password"
                     type="password"
+                    autoComplete="on"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
@@ -109,7 +117,10 @@ export const Register = () => {
 
         {isAuth && !isActivated && (
           <WrapConfirm>
-            <TextConfirm>You have to confirm your email</TextConfirm>
+            <TextConfirm>
+              The message has been sent to the post office:
+            </TextConfirm>
+            <EmailText>{user.user.email}</EmailText>
 
             <Note onClick={async () => await dispatch(fetchLogout())}>
               Register another mail
@@ -119,7 +130,9 @@ export const Register = () => {
 
         <WrapToggle>
           <RegisterText>Not registered yet?</RegisterText>
-          <TogglePage href={'/auth/login'}>Sign in</TogglePage>
+          <TogglePage onClick={() => dispatch(changeAuthMode())}>
+            Sign in
+          </TogglePage>
         </WrapToggle>
       </WrapperAuth>
     </Wrapper>
@@ -136,10 +149,16 @@ const WrapConfirm = styled.div`
 const TextConfirm = styled.div`
   color: ${({ theme }) => theme.black};
   font-size: 24px;
-  margin-bottom: 100px;
+  margin-bottom: 40px;
 `
 
 const Note = styled.p`
   color: ${({ theme }) => theme.blue};
   cursor: pointer;
+`
+
+const EmailText = styled.p`
+  font-family: ${({ theme }) => theme.roboto500};
+  font-size: 20px;
+  margin-bottom: 100px;
 `

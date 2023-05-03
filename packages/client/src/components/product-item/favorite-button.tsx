@@ -1,12 +1,15 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useTheme } from 'styled-components'
 
 import { UsersService } from 'src/api'
-import { useProfile } from 'src/hooks'
+import { FavoritesIcon } from 'src/icons'
+// import { useProfile } from 'src/hooks'
 
 export const FavoriteButton: React.FC<{ productId: number }> = ({
   productId,
 }) => {
-  const { profile } = useProfile()
+  const { white } = useTheme()
+  // const { profile } = useProfile()
 
   const { invalidateQueries } = useQueryClient()
 
@@ -20,13 +23,17 @@ export const FavoriteButton: React.FC<{ productId: number }> = ({
     },
   )
 
-  const isExists = profile?.favorites.some((el) => el.id === productId)
+  // const isExists = profile?.favorites.some((el) => el.id === productId)
 
   return (
     <div>
-      <button onClick={() => mutate()}>
-        {isExists ? 'Remove from basket' : 'Add to basket'}
-      </button>
+      <FavoritesIcon width={20} height={20} />
+      {/* <Button
+        color="favorites"
+        style={{ width: '100%', color: white }}
+        onClick={() => mutate()}> */}
+      {/* {isExists ? 'Remove from favorites' : 'Add to favorites'} */}
+      {/* </Button> */}
     </div>
   )
 }

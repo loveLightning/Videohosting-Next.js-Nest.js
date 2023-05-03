@@ -4,7 +4,6 @@ import { useRouter } from 'next/router'
 
 import {
   fetchCheckAuth,
-  resetUser,
   useAppDispatch,
   useAppSelector,
   userSelector,
@@ -22,25 +21,29 @@ export const withAuth = <T extends object>(
 
     const verifyToken = useCallback(async () => {
       if (Cookies.get('accessToken')) {
-        await dispatch(fetchCheckAuth())
-      }
-
-      if (pathname === '/auth/login' || pathname === '/auth/register') {
-        if (isActivated && isAuth) {
+        try {
+          await dispatch(fetchCheckAuth())
           replace('/')
-        }
-      } else {
-        if (!isActivated || !isAuth) {
-          replace('auth/login')
-        }
-
-        if (!Cookies.get('accessToken')) {
-          if (isActivated || isAuth) {
-            dispatch(resetUser())
-          }
-        }
+          // eslint-disable-next-line prettier/prettier
+        } catch (error) { }
       }
-    }, [dispatch, isActivated, isAuth, pathname, replace])
+
+      // if (pathname === '/auth') {
+      //   if (isActivated && isAuth) {
+      //     replace('/')
+      //   }
+      // } else {
+      //   if (!isActivated || !isAuth) {
+      //     replace('auth')
+      //   }
+
+      //   if (!Cookies.get('accessToken')) {
+      //     if (isActivated || isAuth) {
+      //       dispatch(resetUser())
+      //     }
+      //   }
+      // }
+    }, [dispatch, replace])
 
     useEffect(() => {
       verifyToken()

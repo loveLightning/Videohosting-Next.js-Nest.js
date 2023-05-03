@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import styled from 'styled-components'
 
 export const Wrapper = styled.div`
@@ -38,8 +37,9 @@ export const WrapToggle = styled.div`
   margin-top: 20px;
 `
 
-export const TogglePage = styled(Link)`
-  color: ${({ theme }) => theme.blue};
+export const TogglePage = styled.p`
+  color: ${({ theme }) => theme.blue[0]};
+  cursor: pointer;
 `
 
 export const WrapperLoader = styled.div`

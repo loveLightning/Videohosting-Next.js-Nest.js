@@ -19,13 +19,11 @@ export class ReviewController {
   }
 
   @Get()
-  @UseGuards(JwtGuard)
   async getAllReview() {
     return this.reviewService.getAllReview()
   }
 
   @Get('average')
-  @UseGuards(JwtGuard)
   async getAverageProduct(@Body() productId: number) {
     return this.reviewService.getAverageProduct(productId)
   }

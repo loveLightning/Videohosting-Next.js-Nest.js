@@ -18,10 +18,12 @@ from {
 `
 
 const SpinnerBody = styled.div<SpinnerProps>`
-  height: ${(p) => (p.height ? p.height : '4rem')};
-  width: ${(p) => (p.width ? p.width : '4rem')};
-  border: ${(p) => (p.borderWidth ? p.borderWidth : '4px')} solid #d1d5db;
-  border-top-color: ${(p) => (p.borderColor ? p.borderColor : '#3b82f6')};
+  height: ${({ height }) => (height ? height : '4rem')};
+  width: ${({ width }) => (width ? width : '4rem')};
+  border: ${({ borderWidth }) => (borderWidth ? borderWidth : '4px')} solid;
+  border-color: ${({ theme }) => theme.grey[4]};
+  border-top-color: ${({ borderColor, theme }) =>
+    borderColor ? borderColor : theme.blue[1]};
   border-radius: 50%;
   animation: ${spinnerAnimation}
     ${(p) => (p.duration ? `${p.duration}ms` : '800ms')} linear infinite;

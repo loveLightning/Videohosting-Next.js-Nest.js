@@ -10,20 +10,22 @@ export const MainLayout = ({ children }: Props) => {
   return (
     <>
       <Header />
-      <GridTemplate>
+      <Wrapper>
         <Sidebar />
 
         <Main>{children}</Main>
-      </GridTemplate>
+      </Wrapper>
     </>
   )
 }
 
-const GridTemplate = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 4fr;
+const Wrapper = styled.div`
+  position: relative;
 `
 
 const Main = styled.section`
-  padding: 30px;
+  padding: 30px 30px 50px;
+  margin-left: 250px;
+  min-height: 100vh;
+  background: ${({ theme }) => theme.grey[1]};
 `

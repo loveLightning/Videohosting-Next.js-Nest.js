@@ -24,9 +24,9 @@ axiosBase.interceptors.response.use(
   },
   // eslint-disable-next-line promise/prefer-await-to-callbacks
   async (err) => {
-    const originalRequest = err.config
+    const originalRequest = err?.config
 
-    if (err.response.status == 401 && err.config && !err.config._isRetry) {
+    if (err?.response?.status == 401 && err.config && !err?.config?._isRetry) {
       originalRequest._isRetry = true
 
       try {

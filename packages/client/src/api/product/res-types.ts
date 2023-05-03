@@ -1,15 +1,11 @@
-export enum EnumProductSort {
-  HIGH_PRICE,
-  LOWE_PRICE,
-  NEWEST,
-  OLDEST,
-}
+import { EnumProductSort } from 'src/types'
 
 export interface IProductSort {
-  searchTerm?: EnumProductSort
-  sort?: string
+  searchTerm?: string
+  sort?: EnumProductSort
   page?: number
   perPage?: number
+  slug?: string
 }
 
 export interface IProduct {

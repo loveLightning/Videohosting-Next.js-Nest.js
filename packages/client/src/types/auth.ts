@@ -5,3 +5,8 @@ export interface AuthRegister {
 }
 
 export type AuthLogin = Omit<AuthRegister, 'name'>
+
+export enum AuthModeEnum {
+  SignIn,
+  SignUp,
+}

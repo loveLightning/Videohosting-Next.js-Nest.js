@@ -1,15 +1,14 @@
 import { IProduct } from './product'
 
 export interface ICartItem {
-  id: number
   product: IProduct
   quantity: number
-  price: number
 }
 
-export type IAddToCartPayload = Omit<ICartItem, 'id'>
+export type IAddToCartPayload = Omit<ICartItem, 'quantity'>
 
-export interface ICHangeQuantityPayload extends Pick<ICartItem, 'id'> {
+export interface ICHangeQuantityPayload {
+  id: number
   type: 'munus' | 'plus'
 }
 

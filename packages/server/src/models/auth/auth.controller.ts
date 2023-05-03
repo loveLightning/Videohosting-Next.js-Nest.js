@@ -16,6 +16,7 @@ import { JwtGuard } from './jwt.guard'
 import { LocalAuthGuard } from './local-auth.guard'
 import { Response, Request } from 'express'
 import { CurrentUser } from 'src/common/decorators/user.decorators'
+import { setCooke } from 'src/common/utils/set-cookie'
 
 @Controller('auth')
 export class AuthController {
@@ -29,11 +30,7 @@ export class AuthController {
     @Res({ passthrough: true }) response: Response,
   ) {
     const userData = await this.authService.login(userDto)
-    response.cookie('refreshToken', userData.refreshToken, {
-      maxAge: 30 * 24 * 60 * 60 * 1000,
-      httpOnly: true,
-      // secure: true, => if you use https
-    })
+    setCooke(response, userData.refreshToken)
 
     return userData
   }
@@ -45,11 +42,7 @@ export class AuthController {
     @Res({ passthrough: true }) response: Response,
   ) {
     const userData = await this.authService.register(userDto)
-    response.cookie('refreshToken', userData.refreshToken, {
-      maxAge: 30 * 24 * 60 * 60 * 1000,
-      httpOnly: true,
-      // secure: true, => if you use https
-    })
+    setCooke(response, userData.refreshToken)
 
     return userData
   }
@@ -62,13 +55,21 @@ export class AuthController {
   ) {
     await this.authService.logout(id)
     response.clearCookie('refreshToken')
+    response.clearCookie('accessToken')
   }
 
   @HttpCode(200)
   @Get('refresh')
-  async refreshToken(@Req() request: Request) {
+  async refreshToken(
+    @Req() request: Request,
+    @Res({ passthrough: true }) response: Response,
+  ) {
     const { refreshToken } = request.cookies
-    return this.authService.refreshToken(refreshToken)
+
+    const dataTokens = await this.authService.refreshToken(refreshToken)
+    setCooke(response, dataTokens.refreshToken)
+
+    return dataTokens
   }
 
   @Redirect(process.env.CLIENT_URL)

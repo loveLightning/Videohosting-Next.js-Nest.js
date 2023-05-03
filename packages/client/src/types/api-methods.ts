@@ -4,7 +4,6 @@ export enum ApiMethods {
   Refresh = 'auth/refresh',
   Logout = 'auth/logout',
   Categories = 'categories',
-  BySlugCategory = 'categories/by-slug',
   Reviews = 'reviews',
   Orders = 'orders',
   Products = 'products',

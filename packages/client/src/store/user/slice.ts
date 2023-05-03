@@ -9,16 +9,23 @@ import {
   fetchRegister,
 } from './actions'
 
+enum AuthModeEnum {
+  SignIn,
+  SignUp,
+}
+
 export interface UserState {
   user: IUser
   loading: boolean
   error: unknown
   isAuth: boolean
+  authMode: AuthModeEnum
 }
 
 const initialState = {
   user: {},
   isAuth: false,
+  authMode: AuthModeEnum.SignIn,
   loading: false,
   error: '',
 } as UserState
@@ -28,6 +35,13 @@ const toolkitSlice = createSlice({
   initialState,
   reducers: {
     resetUser: () => initialState,
+
+    changeAuthMode: (state) => {
+      state.authMode =
+        state.authMode === AuthModeEnum.SignIn
+          ? AuthModeEnum.SignUp
+          : AuthModeEnum.SignIn
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchLogin.pending, (state) => {
@@ -87,6 +101,6 @@ const toolkitSlice = createSlice({
   },
 })
 
-export const { resetUser } = toolkitSlice.actions
+export const { resetUser, changeAuthMode } = toolkitSlice.actions
 
 export default toolkitSlice.reducer

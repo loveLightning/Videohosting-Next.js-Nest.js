@@ -18,20 +18,19 @@ export class ProductService {
   ) {}
 
   async getAll(productsDto: GetAllProductDto = {}) {
-    const { searchTerm, sort } = productsDto
+    const { searchTerm, sort, slug } = productsDto
 
     const prismaSort: Prisma.ProductOrderByWithRelationInput[] = []
 
     if (sort === EnumProductSort.HIGH_PRICE) {
       prismaSort.push({ price: 'desc' })
-    } else if (sort === EnumProductSort.LOWE_PRICE) {
+    } else if (sort === EnumProductSort.LOW_PRICE) {
       prismaSort.push({ price: 'asc' })
     } else if (sort === EnumProductSort.NEWEST) {
-      prismaSort.push({ createdAt: 'asc' })
-    } else {
       prismaSort.push({ createdAt: 'desc' })
+    } else {
+      prismaSort.push({ createdAt: 'asc' })
     }
-
     const prismaSearchTermFilter: Prisma.ProductWhereInput = searchTerm
       ? {
           OR: [
@@ -59,23 +58,36 @@ export class ProductService {
         }
       : {}
 
+    const prismaSearchSlug: Prisma.ProductWhereInput = slug
+      ? {
+          slug,
+        }
+      : {}
     const { perPage, skip } = await this.paginationService.getPagination(
       productsDto,
     )
 
+    const productsCount = await this.prisma.product.count({
+      where: {
+        ...prismaSearchSlug,
+        ...prismaSearchTermFilter,
+      },
+    })
+
     const products = await this.prisma.product.findMany({
-      where: prismaSearchTermFilter,
+      where: {
+        ...prismaSearchSlug,
+        ...prismaSearchTermFilter,
+      },
       orderBy: prismaSort,
-      // skip,
-      // take: perPage,
+      skip: +skip,
+      take: +perPage,
       select: returnProductObj,
     })
 
     return {
       products,
-      length: await this.prisma.product.count({
-        where: prismaSearchTermFilter,
-      }),
+      length: productsCount,
     }
   }
 
@@ -151,17 +163,17 @@ export class ProductService {
   async createProduct() {
     const product = await this.prisma.product.create<Prisma.ProductCreateArgs>({
       data: {
-        description: 'sdasdasscs dasda dsad',
-        name: 'Thing 6',
-        price: 11222,
-        slug: 'Thing 6',
+        description: 'Products name',
+        name: 'Product item items',
+        price: 20,
+        slug: 'Product-item-items',
         images: [
           'https://cdn.vox-cdn.com/uploads/chorus_asset/file/24059001/226270_iPHONE_14_PHO_akrales_0788_sq.jpg',
         ],
         category: {
           create: {
-            name: 'gadgetes 5',
-            slug: 'gadgetes 5',
+            name: 'Product item items',
+            slug: 'Product-item-items',
           },
         },
 

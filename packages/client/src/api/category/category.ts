@@ -1,7 +1,7 @@
 import { ApiMethods } from 'src/types'
+import { ICategory } from 'src/types'
 
 import { BaseService } from '../base'
-import { ICategory } from './res-types'
 
 export class CategoriesService extends BaseService {
   public static async getAll() {
@@ -21,7 +21,7 @@ export class CategoriesService extends BaseService {
   public static async getBySlug(slug: string) {
     return await this.fetch<ICategory>({
       method: 'GET',
-      url: `${ApiMethods.BySlugCategory}/${slug}`,
+      url: `${ApiMethods.Categories}/by-slug/${slug}`,
     })
   }
 

@@ -1,57 +1,61 @@
 import { GetStaticPaths, GetStaticProps } from 'next'
+import { ParsedUrlQuery } from 'querystring'
 
-import { CategoriesService, ICategory, ProductsService } from 'src/api'
-import { Catalog, MainLayout } from 'src/components'
-import { withAuth } from 'src/hoc'
-import { IProduct } from 'src/types'
+import { CategoriesService, ProductsService } from 'src/api'
+import { Catalog, MainLayout, NextHead } from 'src/components'
+import { ICategory, IPaginationProduct } from 'src/types'
 
 interface Props {
-  products: IProduct[]
+  products: IPaginationProduct
   category: ICategory
 }
 
 const CategoryPage = ({ products, category }: Props) => {
-  console.log(products, category)
-
   return (
-    <MainLayout>
-      <Catalog products={products} title={category.name} />
-    </MainLayout>
+    <>
+      <NextHead
+        description={`category ${category.name}`}
+        title={`Amazon. ${category.name}`}
+      />
+      <MainLayout>
+        <Catalog products={products} title={category.name} />
+      </MainLayout>
+    </>
   )
+}
+
+interface Params extends ParsedUrlQuery {
+  slug: string
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const categories = await CategoriesService.getAll()
-
-  const paths = categories.data.map((category) => {
-    return {
-      params: {
-        slug: category.slug,
-      },
-    }
-  })
+  const { data } = await CategoriesService.getAll()
+  const paths = data.map((category) => ({
+    params: { slug: category.slug },
+  }))
 
   return {
-    fallback: false,
     paths,
+    fallback: 'blocking',
   }
 }
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const { data: products } = await ProductsService.getByCategory(
-    params?.slug as string,
-  )
-
-  const { data: category } = await CategoriesService.getBySlug(
-    params?.slug as string,
-  )
+export const getStaticProps: GetStaticProps = async (ctx) => {
+  const { slug } = ctx.params as Params
+  const products = await ProductsService.getAll({
+    page: 1,
+    perPage: 8,
+    slug,
+  })
+  const { data: category } = await CategoriesService.getBySlug(slug)
 
   return {
     props: {
       products,
       category,
     },
+    revalidate: 10,
   }
 }
 
-export default withAuth(CategoryPage)
+export default CategoryPage

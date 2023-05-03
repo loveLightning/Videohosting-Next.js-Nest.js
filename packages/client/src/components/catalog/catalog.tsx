@@ -1,34 +1,105 @@
-import styled from 'styled-components'
+import { ChangeEvent, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { useRouter } from 'next/router'
+import styled, { useTheme } from 'styled-components'
 
-import { IProduct } from 'src/types'
+import { ProductsService } from 'src/api'
+import { Button, Loader, Select } from 'src/components'
+import { EnumProductSort, IPaginationProduct } from 'src/types'
 
 import { ProductItem } from '../product-item'
 
 interface Props {
-  products: IProduct[]
+  products: IPaginationProduct
   title?: string
 }
 
 export const Catalog = ({ products, title }: Props) => {
+  const [modeSort, setModeSort] = useState<EnumProductSort>(
+    EnumProductSort.NEWEST,
+  )
+
+  const { black } = useTheme()
+
+  const { query } = useRouter()
+
+  const categorySlug = query.slug as string
+  const searchTerm = query.termSearch as string
+
+  const [currentPage, setCurrentPage] = useState(1)
+
+  const { data: sortingProducts, isLoading } = useQuery(
+    ['products', modeSort, currentPage, categorySlug, searchTerm],
+    () =>
+      ProductsService.getAll({
+        page: currentPage,
+        perPage: 8,
+        sort: modeSort,
+        slug: query.slug as string,
+        searchTerm,
+      }),
+    {
+      initialData: products,
+      keepPreviousData: true,
+    },
+  )
+  const allPages = Array.from(
+    { length: Math.ceil(sortingProducts.length / 8) },
+    (_, i) => i + 1,
+  )
+
+  const changeDropdown = (e: ChangeEvent<HTMLSelectElement>) => {
+    setModeSort(e.target.value as EnumProductSort)
+  }
+
+  if (isLoading) return <Loader />
+
   return (
     <>
       <Title>{title}</Title>
+      <WrapSelect>
+        <Select
+          label="Sorting by"
+          onChange={changeDropdown}
+          options={(
+            Object.keys(EnumProductSort) as Array<keyof typeof EnumProductSort>
+          ).map((el) => ({
+            value: EnumProductSort[el],
+            label: EnumProductSort[el],
+          }))}
+          value={modeSort}
+        />
+      </WrapSelect>
       <Wrap>
-        {products.length ? (
-          products.map((product) => (
+        {sortingProducts?.products.length ? (
+          sortingProducts.products.map((product) => (
             <ProductItem key={product.id} product={product} />
           ))
         ) : (
           <p>There are no products</p>
         )}
       </Wrap>
+      <Pagination>
+        {allPages.map((el) => (
+          <Button
+            onClick={() => setCurrentPage(el)}
+            style={{
+              borderRadius: '5px',
+              border: `1px ${black} solid`,
+            }}
+            color={el !== currentPage ? 'inactive' : 'primary'}
+            key={el}>
+            {el}
+          </Button>
+        ))}
+      </Pagination>
     </>
   )
 }
 
 const Wrap = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   grid-gap: 20px;
 `
 
@@ -36,4 +107,17 @@ const Title = styled.p`
   font-family: ${({ theme }) => theme.roboto500};
   font-size: 30px;
   margin-bottom: 40px;
+`
+
+const WrapSelect = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`
+
+const Pagination = styled.div`
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
 `

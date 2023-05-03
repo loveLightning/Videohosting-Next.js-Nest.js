@@ -3,6 +3,6 @@ export * from './selectors'
 export {
   fetchRegister,
   fetchLogin,
-  fetchCheckAuth,
   fetchLogout,
+  fetchCheckAuth,
 } from './actions'

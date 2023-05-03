@@ -5,7 +5,7 @@ import { Loader } from 'src/components'
 export type ButtonProps = {
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void
   children?: React.ReactNode
-  color?: 'primary' | 'secondary'
+  color?: 'primary' | 'secondary' | 'favorites' | 'inactive' | 'cart'
   disabled?: boolean
   rest?: React.CSSProperties
   isLoading?: boolean
@@ -13,14 +13,34 @@ export type ButtonProps = {
 
 const COLOR = {
   primary: css`
-    color: #fff;
-    background-color: ${({ theme }) => theme.blue};
+    color: ${({ theme }) => theme.white};
+    background-color: ${({ theme }) => theme.blue[0]};
   `,
   secondary: css`
-    color: #000;
-    background-color: ${({ theme }) => theme.blue};
+    color: ${({ theme }) => theme.black};
+    background-color: ${({ theme }) => theme.blue[0]};
+  `,
+  favorites: css`
+    color: ${({ theme }) => theme.black};
+    background-color: ${({ theme }) => theme.red[0]};
+  `,
+  cart: css`
+    color: ${({ theme }) => theme.red[0]};
+    background-color: ${({ theme }) => theme.red[1]};
+    transition: 0.4s ease all;
+    &:hover {
+      background-color: ${({ theme }) => theme.red[2]};
+    }
+  `,
+  inactive: css`
+    color: ${({ theme }) => theme.black};
+    background-color: ${({ theme }) => theme.white};
   `,
 }
+const WrapLoader = styled.div`
+  display: flex;
+  justify-content: center;
+`
 
 const DISABLED = css`
   cursor: not-allowed;
@@ -37,7 +57,7 @@ const Container = styled.button<ButtonProps>`
   outline: none;
   transition: all 0.2s;
   font-family: ${({ theme }) => theme.roboto500};
-  ${({ color }) => color && COLOR[color]}
+  ${({ color }) => color && COLOR[color] && COLOR[color]};
   ${({ disabled }) => disabled && DISABLED};
 `
 
@@ -66,8 +86,3 @@ export const Button = ({
     </Container>
   )
 }
-
-const WrapLoader = styled.div`
-  display: flex;
-  justify-content: center;
-`

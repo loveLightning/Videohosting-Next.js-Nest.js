@@ -21,7 +21,7 @@ const Input = styled.input`
   transition: 0.4s ease all;
   &:focus {
     background-color: ${({ theme }) => theme.white};
-    border: 1px solid ${({ theme }) => theme.blue};
+    border: 1px solid ${({ theme }) => theme.blue[0]};
   }
 `
 
