@@ -25,3 +25,8 @@ export interface IFullProfile extends IProfile {
   favorites: IProduct[]
   orders: IOrder[]
 }
+
+export interface IUpdateUser {
+  name?: string
+  phone?: string
+}

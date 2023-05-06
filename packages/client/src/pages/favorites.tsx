@@ -1,5 +1,7 @@
-const Favorites = () => {
-  return <div>favorites</div>
+import { FavoritesProducts } from 'src/components'
+
+const FavoritesPage = () => {
+  return <FavoritesProducts />
 }
 
-export default Favorites
+export default FavoritesPage

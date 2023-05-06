@@ -1,4 +1,4 @@
-import React, { CSSProperties, useCallback, useEffect, useState } from 'react'
+import React, { CSSProperties, useEffect, useState } from 'react'
 import ReactDOM from 'react-dom'
 import styled from 'styled-components'
 
@@ -10,33 +10,8 @@ interface Props {
   style?: CSSProperties
 }
 
-export const Modal = ({
-  isShow,
-  onClose,
-  children,
-  title,
-  ...style
-}: Props) => {
+export const Modal = ({ onClose, children, title, ...style }: Props) => {
   const [isBrowser, setIsBrowser] = useState(false)
-
-  const modalWrapperRef = React.useRef<HTMLDivElement>(null)
-
-  const backDropHandler = useCallback(
-    (e) => {
-      if (!modalWrapperRef?.current?.contains(e.target)) {
-        onClose()
-      }
-    },
-    [onClose],
-  )
-
-  useEffect(() => {
-    setIsBrowser(true)
-
-    window.addEventListener('click', backDropHandler)
-
-    return () => window.removeEventListener('click', backDropHandler)
-  }, [backDropHandler])
 
   const handleCloseClick = (
     e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
@@ -45,9 +20,13 @@ export const Modal = ({
     onClose()
   }
 
-  const modalContent = isShow ? (
-    <StyledModalOverlay>
-      <StyledModalWrapper ref={modalWrapperRef} {...style}>
+  useEffect(() => {
+    setIsBrowser(true)
+  }, [])
+
+  const modalContent = (
+    <StyledModalOverlay onClick={() => onClose()}>
+      <StyledModalWrapper {...style} onClick={(e) => e.stopPropagation()}>
         <StyledModal>
           <StyledModalHeader>
             <a href="#" onClick={(e) => handleCloseClick(e)}>
@@ -59,7 +38,7 @@ export const Modal = ({
         </StyledModal>
       </StyledModalWrapper>
     </StyledModalOverlay>
-  ) : null
+  )
 
   if (isBrowser) {
     return ReactDOM.createPortal(
@@ -84,6 +63,7 @@ const StyledModalHeader = styled.div`
 const StyledModalWrapper = styled.div`
   width: 500px;
   height: 600px;
+  position: relative;
 `
 
 const StyledModal = styled.div`
@@ -95,11 +75,11 @@ const StyledModal = styled.div`
 `
 
 const StyledModalOverlay = styled.div`
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;

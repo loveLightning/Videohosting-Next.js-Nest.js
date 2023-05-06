@@ -1,7 +1,7 @@
 import axios from 'axios'
 import Cookies from 'js-cookie'
 
-import { AuthService } from './auth'
+import { fetchCheckAuth, store } from 'src/store'
 
 export const axiosBase = axios.create({
   baseURL: process.env.SERVER_URL,
@@ -30,8 +30,8 @@ axiosBase.interceptors.response.use(
       originalRequest._isRetry = true
 
       try {
-        const response = await AuthService.checkAuth()
-        const { accessToken } = response.data
+        await store.dispatch(fetchCheckAuth())
+        const accessToken = store.getState().user.user.accessToken
         Cookies.set('accessToken', accessToken)
 
         return axiosBase.request(originalRequest)

@@ -2,10 +2,10 @@ import { useState } from 'react'
 import Cookies from 'js-cookie'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import styled from 'styled-components'
+import styled, { useTheme } from 'styled-components'
 
-import { Modal, SearchInput } from 'src/components'
-import { BasketIcon, FavoritesIcon, LogoIcon } from 'src/icons'
+import { Button, Modal, SearchInput } from 'src/components'
+import { BasketIcon, LogoIcon, ProfileIcon } from 'src/icons'
 import {
   cartSelector,
   fetchCheckAuth,
@@ -17,6 +17,7 @@ export const Header = () => {
   const { items } = useAppSelector(cartSelector)
   const dispatch = useAppDispatch()
   const { push } = useRouter()
+  const { white } = useTheme()
 
   const [isShowModal, setIsShowModal] = useState(false)
 
@@ -24,11 +25,14 @@ export const Header = () => {
     if (Cookies.get('accessToken')) {
       try {
         await dispatch(fetchCheckAuth())
-        push('/favorutes')
+        push('/profile/info')
+
+        return
       } catch (error) {
         setIsShowModal(true)
       }
     }
+    setIsShowModal(true)
   }
 
   return (
@@ -40,9 +44,9 @@ export const Header = () => {
           </Link>
           <SearchInput />
           <WrapPanel>
-            <WrapFavorites onClick={checkRedirect}>
+            {/* <WrapIcon onClick={checkRedirect}>
               <FavoritesIcon active={true} />
-            </WrapFavorites>
+            </WrapIcon> */}
 
             <Link href="/cart">
               <WrapBasket>
@@ -52,19 +56,26 @@ export const Header = () => {
                 <BasketIcon />
               </WrapBasket>
             </Link>
-            {/* <HeaderCart />
-              <HeaderProfile /> */}
+            <WrapIcon onClick={checkRedirect}>
+              <ProfileIcon fill={white} />
+            </WrapIcon>
           </WrapPanel>
         </WrapHeader>
       </Wrap>
 
       {isShowModal && (
         <Modal
-          title="Вo you want to log in"
+          title="Do you want to log in"
           onClose={() => setIsShowModal(false)}
           isShow={isShowModal}
           style={{ width: 400, height: 200 }}>
-          <Link href="/auth"></Link>
+          <WrapModal>
+            <Button onClick={() => push('/auth')}>Sign in</Button>
+
+            <Button color="cart" onClick={() => setIsShowModal(false)}>
+              Cancel
+            </Button>
+          </WrapModal>
         </Modal>
       )}
     </>
@@ -91,7 +102,7 @@ const WrapPanel = styled.div`
   gap: 30px;
 `
 
-const WrapFavorites = styled.div`
+const WrapIcon = styled.div`
   cursor: pointer;
 `
 
@@ -120,6 +131,15 @@ const CountBasket = styled.p`
   position: absolute;
   top: 50%;
   left: 50%;
-
   transform: translate(-50%, -50%);
+`
+
+const WrapModal = styled.div`
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 30px;
 `

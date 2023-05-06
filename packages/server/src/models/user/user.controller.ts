@@ -1,16 +1,25 @@
 import {
   Body,
   Controller,
+  FileTypeValidator,
   Get,
+  MaxFileSizeValidator,
   Param,
+  ParseFilePipe,
   Patch,
   Put,
+  Res,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common'
 import { UserDto } from './user.dto'
 import { UsersService } from './user.service'
 import { CurrentUser } from 'src/common/decorators/user.decorators'
 import { JwtGuard } from '../auth/jwt.guard'
+import { FileInterceptor, MulterModule } from '@nestjs/platform-express'
+import { storage } from 'src/common/utils/storage'
+import { Response } from 'express'
 
 @Controller('users')
 export class UsersController {
@@ -22,13 +31,40 @@ export class UsersController {
     return this.usersService.findForId(userId)
   }
 
-  @Put('profile')
+  @Get('profile/:filename')
+  async getPicture(@Param('filename') filename, @Res() res: Response) {
+    res.sendFile(filename, { root: './uploads' })
+  }
+
+  @Patch('profile')
   @UseGuards(JwtGuard)
-  async updateProfile(
+  async updateAvatar(
     @CurrentUser('id') userId: number,
     @Body() userDto: UserDto,
   ) {
+    console.log(userDto)
+
     return this.usersService.updateProfile(userId, userDto)
+  }
+
+  @Patch('profile/avatar')
+  @UseGuards(JwtGuard)
+  @UseInterceptors(FileInterceptor('file', storage))
+  async updateProfile(
+    @CurrentUser('id') userId: number,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new FileTypeValidator({ fileType: '.(png|jpeg|jpg)' }),
+          new MaxFileSizeValidator({ maxSize: 1024 * 1024 * 4 }),
+        ],
+      }),
+    )
+    file: Express.Multer.File,
+  ) {
+    const avatarPath = file ? file.filename : null
+
+    return this.usersService.updateAvatar(userId, avatarPath)
   }
 
   @Patch('profile/favorites/:productId')

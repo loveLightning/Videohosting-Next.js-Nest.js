@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common'
 import { PaginationService } from './pagination.service'
 import { PaginationController } from './pagination.controller'
 import { PrismaService } from 'src/services/prisma/prisma.service'
-import { JwtService } from '@nestjs/jwt'
 
 @Module({
   controllers: [PaginationController],

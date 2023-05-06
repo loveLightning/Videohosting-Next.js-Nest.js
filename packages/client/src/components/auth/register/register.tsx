@@ -104,6 +104,7 @@ export const Register = () => {
                   />
 
                   <Button
+                    type="submit"
                     disabled={!(formik.dirty && formik.isValid)}
                     style={{ width: '100%', marginTop: 30 }}
                     isLoading={loading}>

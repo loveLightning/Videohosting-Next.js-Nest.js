@@ -1,0 +1,6 @@
+export { ContentProfile } from './content-profile'
+export { InfoProfile } from './info-profile'
+export { OrdersProfile } from './orders-profile'
+export { FavoritesProfile } from './favorites-profile'
+export { EditingProfile } from './editing-profile'
+export * from './tabs-profile'

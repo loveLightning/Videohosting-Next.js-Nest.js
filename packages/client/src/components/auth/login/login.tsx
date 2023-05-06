@@ -94,6 +94,7 @@ export const Login = () => {
                   onBlur={formik.handleBlur}
                 />
                 <Button
+                  type="submit"
                   disabled={!(formik.dirty && formik.isValid)}
                   style={{ width: '100%', marginTop: 30 }}
                   isLoading={loading}>

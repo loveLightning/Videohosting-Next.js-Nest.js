@@ -13,13 +13,13 @@ interface Props {
 }
 
 export const ProductItem = ({ product }: Props) => {
+  const chooseAsFavorite = () => { }
+
   return (
     <Card>
       {product.images[0].length && (
         <ImageCard
-          src={
-            'https://images.unsplash.com/photo-1464375117522-1311d6a5b81f?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=2250&q=80'
-          }
+          src={product.images[0]}
           alt={product.name}
           width={0}
           height={0}
@@ -40,7 +40,7 @@ export const ProductItem = ({ product }: Props) => {
         <AddToCartButton product={product} />
       </WrapButton>
 
-      <WrapFavorites>
+      <WrapFavorites onClick={chooseAsFavorite}>
         <FavoriteButton productId={product.id} />
       </WrapFavorites>
     </Card>

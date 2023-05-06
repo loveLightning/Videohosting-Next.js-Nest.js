@@ -21,11 +21,16 @@ export const Sidebar = () => {
       select: ({ data }) => data,
     },
   )
-  const { asPath } = useRouter()
+  const { asPath, push } = useRouter()
 
   const { user } = useAppSelector(userSelector)
   const isUser = user?.user?.isActivated
   const dispatch = useAppDispatch()
+
+  const logOut = async () => {
+    await dispatch(fetchLogout())
+    push('/auth')
+  }
 
   return (
     <Wrapper>
@@ -48,7 +53,7 @@ export const Sidebar = () => {
 
       {!categories?.length && <NotFound>Categories not found</NotFound>}
       {isUser && (
-        <LogOut onClick={async () => await dispatch(fetchLogout())}>
+        <LogOut onClick={logOut}>
           <LogOutIcon />
           <LogOutText>Log out</LogOutText>
         </LogOut>

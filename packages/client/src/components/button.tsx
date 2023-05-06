@@ -9,6 +9,7 @@ export type ButtonProps = {
   disabled?: boolean
   rest?: React.CSSProperties
   isLoading?: boolean
+  type?: 'submit' | 'button' | 'reset'
 } & Omit<React.HTMLAttributes<HTMLButtonElement>, 'type' | 'color'>
 
 const COLOR = {
@@ -67,11 +68,12 @@ export const Button = ({
   color = 'primary',
   disabled,
   isLoading,
+  type,
   ...rest
 }: ButtonProps) => {
   return (
     <Container
-      type="submit"
+      type={type ? type : 'button'}
       onClick={onClick}
       color={color}
       disabled={disabled}

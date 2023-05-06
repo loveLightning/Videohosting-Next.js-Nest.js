@@ -22,7 +22,9 @@ export const withAuth = <T extends object>(
     const verifyToken = useCallback(async () => {
       if (Cookies.get('accessToken')) {
         try {
-          await dispatch(fetchCheckAuth())
+          const data = await dispatch(fetchCheckAuth())
+          console.log(data)
+
           replace('/')
           // eslint-disable-next-line prettier/prettier
         } catch (error) { }

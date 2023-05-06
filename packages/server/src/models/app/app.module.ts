@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
-import { JwtService } from '@nestjs/jwt'
 import { AuthModule } from '../auth/auth.module'
 import { CategoryModule } from '../category/category.module'
 import { MailModule } from '../mail/mail.module'
@@ -10,6 +9,8 @@ import { ProductModule } from '../product/product.module'
 import { ReviewModule } from '../review/review.module'
 import { StatisticsModule } from '../statistics/statistics.module'
 import { UsersModule } from '../user/user.module'
+import { ServeStaticModule } from '@nestjs/serve-static'
+import { join } from 'path'
 
 @Module({
   imports: [
@@ -24,6 +25,9 @@ import { UsersModule } from '../user/user.module'
     MailModule,
     ConfigModule.forRoot({
       isGlobal: true,
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'client'),
     }),
   ],
 })

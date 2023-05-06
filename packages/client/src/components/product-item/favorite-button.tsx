@@ -5,23 +5,25 @@ import { UsersService } from 'src/api'
 import { FavoritesIcon } from 'src/icons'
 // import { useProfile } from 'src/hooks'
 
-export const FavoriteButton: React.FC<{ productId: number }> = ({
-  productId,
-}) => {
-  const { white } = useTheme()
+interface Props {
+  productId: number
+}
+
+export const FavoriteButton: React.FC<Props> = ({ productId }) => {
+  // const { white } = useTheme()
   // const { profile } = useProfile()
 
-  const { invalidateQueries } = useQueryClient()
+  // const { invalidateQueries } = useQueryClient()
 
-  const { mutate } = useMutation(
-    ['toggle favorite'],
-    () => UsersService.toggleFavorites(productId),
-    {
-      onSuccess() {
-        invalidateQueries(['get profile'])
-      },
-    },
-  )
+  // const { mutate } = useMutation(
+  //   ['toggle favorite'],
+  //   () => UsersService.toggleFavorites(productId),
+  //   {
+  //     onSuccess() {
+  //       invalidateQueries(['get profile'])
+  //     },
+  //   },
+  // )
 
   // const isExists = profile?.favorites.some((el) => el.id === productId)
 
