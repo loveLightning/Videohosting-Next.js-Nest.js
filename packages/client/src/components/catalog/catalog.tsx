@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
 import styled, { useTheme } from 'styled-components'
 
-import { ProductsService } from 'src/api'
+import { ProductsService, UsersService } from 'src/api'
 import { Button, Loader, Select } from 'src/components'
 import { EnumProductSort, IPaginationProduct } from 'src/types'
 
@@ -48,6 +48,12 @@ export const Catalog = ({ products, title }: Props) => {
     (_, i) => i + 1,
   )
 
+  const { data: profile } = useQuery(
+    ['get profile from catalog'],
+    () => UsersService.getProfile(),
+    { select: ({ data }) => data },
+  )
+
   const changeDropdown = (e: ChangeEvent<HTMLSelectElement>) => {
     setModeSort(e.target.value as EnumProductSort)
   }
@@ -73,7 +79,11 @@ export const Catalog = ({ products, title }: Props) => {
       <Wrap>
         {sortingProducts?.products.length ? (
           sortingProducts.products.map((product) => (
-            <ProductItem key={product.id} product={product} />
+            <ProductItem
+              key={product.id}
+              product={product}
+              favorites={profile?.favorites}
+            />
           ))
         ) : (
           <p>There are no products</p>

@@ -1,6 +1,8 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import Image from 'next/image'
 import styled from 'styled-components'
 
+import { UsersService } from 'src/api'
 import { IProduct } from 'src/types'
 import { convertPrice } from 'src/utils'
 
@@ -10,10 +12,22 @@ import { ProductRating } from './product-rating'
 
 interface Props {
   product: IProduct
+  favorites: IProduct[] | undefined
 }
 
-export const ProductItem = ({ product }: Props) => {
-  const chooseAsFavorite = () => { }
+export const ProductItem = ({ product, favorites }: Props) => {
+  const queryClient = useQueryClient()
+  const { mutate } = useMutation(
+    (productId: number) => UsersService.toggleFavorites(productId),
+    {
+      onSuccess: () =>
+        queryClient.invalidateQueries(['get profile from catalog']),
+    },
+  )
+
+  const chooseAsFavorite = () => {
+    mutate(product.id)
+  }
 
   return (
     <Card>
@@ -41,7 +55,7 @@ export const ProductItem = ({ product }: Props) => {
       </WrapButton>
 
       <WrapFavorites onClick={chooseAsFavorite}>
-        <FavoriteButton productId={product.id} />
+        <FavoriteButton productId={product.id} favorites={favorites} />
       </WrapFavorites>
     </Card>
   )
@@ -78,6 +92,7 @@ const Price = styled.p`
 const ImageCard = styled(Image)`
   width: 100%;
   height: 100%;
+  user-select: none;
 `
 
 const WrapButton = styled.div`

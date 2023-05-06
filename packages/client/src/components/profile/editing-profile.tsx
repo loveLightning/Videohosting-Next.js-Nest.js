@@ -147,6 +147,7 @@ export const EditingProfile = ({ profile }: Props) => {
                 {errorMsgFile && (
                   <p style={{ color: red[0] }}>{errorMsgFile}</p>
                 )}
+
                 <Button onClick={uploadClick}>Set avatar</Button>
               </FileInput>
               {isShowModal && updateAvatarPreview && (
@@ -162,7 +163,6 @@ export const EditingProfile = ({ profile }: Props) => {
                       width={350}
                       height={350}
                       border={50}
-                      borderRadius={350 / 2}
                       scale={updateAvatarPreview.scale}
                       color={[0, 0, 0, 0.5]} // RGBA
                     />

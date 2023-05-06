@@ -1,35 +1,17 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useTheme } from 'styled-components'
-
-import { UsersService } from 'src/api'
 import { FavoritesIcon } from 'src/icons'
-// import { useProfile } from 'src/hooks'
+import { IProduct } from 'src/types'
 
 interface Props {
   productId: number
+  favorites: IProduct[] | undefined
 }
 
-export const FavoriteButton: React.FC<Props> = ({ productId }) => {
-  // const { white } = useTheme()
-  // const { profile } = useProfile()
-
-  // const { invalidateQueries } = useQueryClient()
-
-  // const { mutate } = useMutation(
-  //   ['toggle favorite'],
-  //   () => UsersService.toggleFavorites(productId),
-  //   {
-  //     onSuccess() {
-  //       invalidateQueries(['get profile'])
-  //     },
-  //   },
-  // )
-
-  // const isExists = profile?.favorites.some((el) => el.id === productId)
+export const FavoriteButton: React.FC<Props> = ({ productId, favorites }) => {
+  const isExists = favorites?.some((el) => el.id === productId)
 
   return (
     <div>
-      <FavoritesIcon width={20} height={20} />
+      <FavoritesIcon width={20} height={20} active={isExists} />
       {/* <Button
         color="favorites"
         style={{ width: '100%', color: white }}
