@@ -129,7 +129,7 @@ export class AuthService {
       },
     })
 
-    if (!user) throw new NotFoundException('An uncorrect link activation')
+    if (!user) throw new NotFoundException('An incorrect link activation')
 
     await this.prisma.user.update({
       where: {
@@ -147,10 +147,6 @@ export class AuthService {
         id,
       },
     })
-  }
-
-  async getAllUsers() {
-    return await this.prisma.user.findMany()
   }
 
   private async createTokens(userId: number) {

@@ -34,3 +34,13 @@ export enum EnumProductSort {
   NEWEST = 'newest',
   OLDEST = 'oldest',
 }
+
+export interface IProductSort {
+  searchTerm?: string
+  sort?: EnumProductSort
+  page?: number
+  perPage?: number
+  slug?: string
+}
+
+export type UpdateProductTypes = Omit<IProduct, 'id' | 'userId' | 'slug'>

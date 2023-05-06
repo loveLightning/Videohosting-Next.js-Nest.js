@@ -77,10 +77,4 @@ export class AuthController {
   async activateAccount(@Param('token') token: string) {
     await this.authService.activateAccount(token)
   }
-
-  @UseGuards(JwtGuard)
-  @Get('users')
-  async getAllUsers() {
-    return this.authService.getAllUsers()
-  }
 }

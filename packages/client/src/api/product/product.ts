@@ -1,7 +1,12 @@
-import { ApiMethods, IPaginationProduct, IProduct } from 'src/types'
+import {
+  ApiMethods,
+  IPaginationProduct,
+  IProduct,
+  IProductSort,
+  UpdateProductTypes,
+} from 'src/types'
 
 import { BaseService } from '../base'
-import { IProductSort, UpdateProductTypes } from './res-types'
 
 export class ProductsService extends BaseService {
   public static async getAll(dataQuery?: IProductSort) {
