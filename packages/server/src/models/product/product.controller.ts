@@ -13,6 +13,9 @@ import { JwtGuard } from '../auth/jwt.guard'
 import { GetAllProductDto } from './dtos/get-all-product.dto'
 import { ProductDto } from './dtos/product.dto'
 import { ProductService } from './product.service'
+import { Roles } from '../auth/roles.decorator'
+import { Role } from '@prisma/client'
+import { RolesGuard } from '../auth/role.guard'
 
 @Controller('products')
 export class ProductController {
@@ -40,6 +43,8 @@ export class ProductController {
 
   @Post()
   @UseGuards(JwtGuard)
+  @Roles(Role.ADMIN)
+  @UseGuards(JwtGuard, RolesGuard)
   async createProduct() {
     return this.productService.createProduct()
   }

@@ -32,7 +32,7 @@ model User {
   reviews        Review[]
   token          Token?    @relation(fields: [tokenId], references: [id])
   carts          Cart[]
-  role           String    @default("CLIENT")
+  role           Role      @default(CLIENT)
 }
 
 model Product {
