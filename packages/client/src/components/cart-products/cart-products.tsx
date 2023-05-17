@@ -1,65 +1,136 @@
 import React from 'react'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import styled from 'styled-components'
 
-import {
-  cartSelector,
-  changeQuantity,
-  removeFromCart,
-  resetCart,
-  useAppDispatch,
-  useAppSelector,
-} from 'src/store'
+import { CartService, OrdersService } from 'src/api'
+import { Button } from 'src/components'
+import { useAppSelector, userSelector } from 'src/store'
+import { RemoveCart, UpdateCart } from 'src/types'
 import { convertPrice } from 'src/utils'
 
 export const CartProducts = () => {
-  const { items } = useAppSelector(cartSelector)
-  const dispatch = useAppDispatch()
+  const queryClient = useQueryClient()
 
-  const sumOfPrice = items.reduce((acc, cur) => {
+  const {
+    user: { user },
+  } = useAppSelector(userSelector)
+
+  const { push } = useRouter()
+
+  const { data: cart } = useQuery(
+    ['get cart from basket'],
+    () => CartService.getCart(),
+    {
+      select: ({ data }) => data,
+      enabled: !!user?.isActivated,
+    },
+  )
+
+  const sumOfPrice = cart?.cartItems?.reduce((acc, cur) => {
     return acc + cur.product.price * cur.quantity
   }, 0)
+
+  const itemsCart = cart?.cartItems?.map((el) => ({
+    price: el.product.price,
+    quantity: el.quantity,
+    productId: el.productId,
+  }))
+
+  const mutateOrderAndPayment = useMutation(
+    ['create order and payment'],
+    () => OrdersService.placeOrder({ items: itemsCart || [] }),
+    {
+      onSuccess({ data }) {
+        // eslint-disable-next-line promise/catch-or-return, promise/prefer-await-to-then
+        push(data.confirmation.confirmation_url)
+      },
+    },
+  )
+
+  const mutateRemoveFromCart = useMutation(
+    ({ cartId, productId }: RemoveCart) =>
+      CartService.removeProduct(cartId, productId),
+    {
+      onSuccess() {
+        queryClient.invalidateQueries(['get cart from basket'])
+      },
+    },
+  )
+
+  const mutateUpdateCart = useMutation(
+    ({ cartId, productId, quantity }: UpdateCart) =>
+      CartService.updateQuantity(cartId, productId, quantity),
+    {
+      onSuccess() {
+        queryClient.invalidateQueries(['get cart from basket'])
+      },
+    },
+  )
+
+  const mutateResetCart = useMutation(
+    (cartId: number) => CartService.deleteCart(cartId),
+    {
+      onSuccess() {
+        queryClient.invalidateQueries(['get cart from basket'])
+      },
+    },
+  )
 
   return (
     <CartContainer>
       <CartTitle>Your Cart</CartTitle>
       <CartItemsContainer>
-        {items.length ? (
-          items.map((item) => (
-            <CartItem key={item.product.id}>
+        {cart?.cartItems?.length ? (
+          cart?.cartItems.map((item) => (
+            <CartItem key={item.id}>
               <CartItemImage
+                priority
                 src={item.product.images[0]}
                 alt={item.product.name}
                 height={150}
                 width={150}
               />
               <CartItemName>{item.product.name}</CartItemName>
+
               <CartItemPrice>
                 {convertPrice(item.product.price * item.quantity)}
               </CartItemPrice>
+
               <CartItemQuantity>
                 <CartItemQuantityButton
                   onClick={() =>
-                    dispatch(
-                      changeQuantity({ id: item.product.id, type: 'munus' }),
-                    )
+                    item.quantity > 1 &&
+                    mutateUpdateCart.mutate({
+                      cartId: cart.id,
+                      quantity: item.quantity - 1,
+                      productId: item.productId,
+                    })
                   }>
                   -
                 </CartItemQuantityButton>
+
                 <CartItemQuantityValue>{item.quantity}</CartItemQuantityValue>
+
                 <CartItemQuantityButton
                   onClick={() =>
-                    dispatch(
-                      changeQuantity({ id: item.product.id, type: 'plus' }),
-                    )
+                    mutateUpdateCart.mutate({
+                      cartId: cart.id,
+                      quantity: item.quantity + 1,
+                      productId: item.productId,
+                    })
                   }>
                   +
                 </CartItemQuantityButton>
               </CartItemQuantity>
               <button
                 onClick={() =>
-                  dispatch(removeFromCart({ id: item.product.id }))
+                  mutateRemoveFromCart.mutate({
+                    cartId: cart.id,
+                    productId: item.productId,
+                  })
                 }>
                 Remove
               </button>
@@ -70,15 +141,26 @@ export const CartProducts = () => {
         )}
       </CartItemsContainer>
 
-      <CartTotalContainer>
-        <CartTotalLabel>Total:</CartTotalLabel>
-        <CartTotalPrice>${sumOfPrice}</CartTotalPrice>
-      </CartTotalContainer>
-      {items.length ? (
-        <button onClick={() => dispatch(resetCart())}>Reset cart</button>
-      ) : null}
+      <Wrap>
+        {cart?.cartItems?.length ? (
+          <>
+            <CartTotalContainer>
+              <CartTotalLabel>Total:</CartTotalLabel>
+              <CartTotalPrice>{sumOfPrice}</CartTotalPrice>
+            </CartTotalContainer>
+            <Button
+              color="cart"
+              onClick={() => mutateResetCart.mutate(cart.id)}>
+              Reset cart
+            </Button>
+            <Button onClick={() => mutateOrderAndPayment.mutate()}>
+              Place order
+            </Button>
+          </>
+        ) : null}
 
-      <Link href="/">Back to home</Link>
+        <Link href="/">Back to home</Link>
+      </Wrap>
     </CartContainer>
   )
 }
@@ -160,4 +242,10 @@ const CartTotalLabel = styled.span`
 const CartTotalPrice = styled.span`
   font-size: 24px;
   font-weight: bold;
+`
+
+const Wrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
 `

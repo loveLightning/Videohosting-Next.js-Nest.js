@@ -60,7 +60,7 @@ export const EditingProfile = ({ profile }: Props) => {
     })
 
   const [isLoading, setIsLoading] = useState(false)
-  const imageUrl = PROFILE_IMAGE_URL(profile.avatarPath)
+  const imageUrl = PROFILE_IMAGE_URL(profile?.avatarPath)
   const [isShowModal, setIsShowModal] = useState(false)
   const [errorMsgFile, setErrorMsgFile] = useState('')
   const { red } = useTheme()
@@ -91,6 +91,7 @@ export const EditingProfile = ({ profile }: Props) => {
 
         return
       }
+
       setErrorMsgFile('')
       const fileReader = new FileReader()
       fileReader.readAsDataURL(files[0])
@@ -137,7 +138,11 @@ export const EditingProfile = ({ profile }: Props) => {
         {(formik) => {
           return (
             <Form>
-              <PreviewImage file={imageUrl} />
+              {imageUrl ? (
+                <PreviewImage file={imageUrl} />
+              ) : (
+                <p>You dont have an image</p>
+              )}
 
               <FileInput
                 ref={inputRef}

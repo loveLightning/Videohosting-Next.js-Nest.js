@@ -1,32 +1,59 @@
+import { useState } from 'react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import styled, { useTheme } from 'styled-components'
 
+import { CartService } from 'src/api'
+import { ModalUnauth } from 'src/components'
 import { Button } from 'src/components'
-import {
-  addToCart,
-  cartSelector,
-  removeFromCart,
-  useAppDispatch,
-  useAppSelector,
-} from 'src/store'
-import { IProduct } from 'src/types'
+import { useAppSelector, userSelector } from 'src/store'
+import { IProduct, RemoveCart, RootCart } from 'src/types'
 
 interface Props {
   product: IProduct
+  cart: RootCart | undefined
 }
 
-export const AddToCartButton = ({ product }: Props) => {
+export const AddToCartButton = ({ product, cart }: Props) => {
   const { white } = useTheme()
+  const queryClient = useQueryClient()
+  const [isShowModal, setIsShowModal] = useState(false)
+  const {
+    user: { user },
+  } = useAppSelector(userSelector)
 
-  const { items } = useAppSelector(cartSelector)
-  const currentElement = items.find((el) => el.product.id === product.id)
+  const currentEl = cart?.cartItems?.find((el) => el.product.id === product.id)
 
-  const dispatch = useAppDispatch()
+  const mutationAddToCart = useMutation(
+    (productId: number) => CartService.addProduct(productId),
+    {
+      onSuccess: () => queryClient.invalidateQueries(['get cart from catalog']),
+    },
+  )
 
-  const editCartProducts = () => {
-    if (currentElement) {
-      dispatch(removeFromCart({ id: currentElement.product.id }))
+  const mutationRemoveFromCart = useMutation(
+    ({ cartId, productId }: RemoveCart) =>
+      CartService.removeProduct(cartId, productId),
+    {
+      onSuccess: () => queryClient.invalidateQueries(['get cart from catalog']),
+    },
+  )
+
+  const editCartProducts = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation()
+
+    if (!user?.isActivated) {
+      setIsShowModal(true)
+
+      return
+    }
+
+    if (currentEl && cart?.id) {
+      mutationRemoveFromCart.mutate({
+        cartId: cart.id,
+        productId: product.id,
+      })
     } else {
-      dispatch(addToCart({ product }))
+      mutationAddToCart.mutate(product.id)
     }
   }
 
@@ -35,11 +62,13 @@ export const AddToCartButton = ({ product }: Props) => {
       <Button
         color="cart"
         style={{ width: '100%', color: white }}
-        onClick={editCartProducts}>
+        onClick={(e) => editCartProducts(e)}>
         <TextCart>
-          {currentElement ? 'Remove from basket' : 'Add to basket'}
+          {currentEl ? 'Remove from basket' : 'Add to basket'}
         </TextCart>
       </Button>
+
+      <ModalUnauth isShowModal={isShowModal} setIsShowModal={setIsShowModal} />
     </div>
   )
 }

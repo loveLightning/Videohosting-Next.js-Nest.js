@@ -9,7 +9,7 @@ export class StatisticsService {
     const user = await this.userService.findForId(userId, {
       orders: {
         select: {
-          item: true,
+          items: true,
         },
       },
       reviews: true,

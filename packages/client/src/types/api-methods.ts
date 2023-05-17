@@ -10,4 +10,5 @@ export enum ApiMethods {
   Statistics = 'statistics',
   Users = 'users',
   Pagination = 'pagination',
+  Cart = 'cart',
 }

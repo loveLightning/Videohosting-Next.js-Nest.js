@@ -37,21 +37,28 @@ export const Sidebar = () => {
       {isLoading && <Loader />}
       <WrapCateries>
         <NameOfSidebar>Categories:</NameOfSidebar>
-        <CategoryText active={!!(asPath && asPath === `/`)} href={'/'}>
+
+        <CategoryText
+          active={asPath && asPath === `/` ? 'true' : 'false'}
+          href={'/'}>
           All
         </CategoryText>
-        {categories?.length &&
+        {categories?.length ? (
           categories.map((el) => (
             <CategoryText
-              active={!!(asPath && asPath === `/category/${el.slug}`)}
+              active={
+                asPath && asPath === `/category/${el.slug}` ? 'true' : 'false'
+              }
               key={el.id}
               href={`/category/${el.slug}`}>
               {el.name}
             </CategoryText>
-          ))}
+          ))
+        ) : (
+          <NotFound>Categories not found</NotFound>
+        )}
       </WrapCateries>
 
-      {!categories?.length && <NotFound>Categories not found</NotFound>}
       {isUser && (
         <LogOut onClick={logOut}>
           <LogOutIcon />
@@ -90,19 +97,22 @@ const NameOfSidebar = styled.p`
 `
 
 interface CategoryTextStyled {
-  active: boolean
+  active: 'true' | 'false'
 }
 
 // eslint-disable-next-line prettier/prettier
 const CategoryText = styled(Link) <CategoryTextStyled>`
-  color: ${({ theme, active }) => (active ? theme.green[0] : theme.white)};
+  color: ${({ theme, active }) =>
+    active === 'true' ? theme.green[0] : theme.white};
   cursor: pointer;
   font-family: ${({ theme }) => theme.roboto400};
   font-size: 18px;
   margin-left: 15px;
 `
 
-const NotFound = styled.p``
+const NotFound = styled.p`
+  color: ${({ theme }) => theme.white};
+`
 
 const LogOut = styled.div`
   color: ${({ theme }) => theme.white};

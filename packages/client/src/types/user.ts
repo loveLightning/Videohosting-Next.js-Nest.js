@@ -1,4 +1,3 @@
-import { IOrder } from './order'
 import { IProduct } from './product'
 
 export interface IUser {
@@ -23,7 +22,6 @@ export interface IProfile {
 
 export interface IFullProfile extends IProfile {
   favorites: IProduct[]
-  orders: IOrder[]
 }
 
 export interface IUpdateUser {

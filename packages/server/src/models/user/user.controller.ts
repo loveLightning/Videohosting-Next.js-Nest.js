@@ -17,7 +17,7 @@ import { UserDto } from './user.dto'
 import { UsersService } from './user.service'
 import { CurrentUser } from 'src/common/decorators/user.decorators'
 import { JwtGuard } from '../auth/jwt.guard'
-import { FileInterceptor, MulterModule } from '@nestjs/platform-express'
+import { FileInterceptor } from '@nestjs/platform-express'
 import { storage } from 'src/common/utils/storage'
 import { Response } from 'express'
 
@@ -42,8 +42,6 @@ export class UsersController {
     @CurrentUser('id') userId: number,
     @Body() userDto: UserDto,
   ) {
-    console.log(userDto)
-
     return this.usersService.updateProfile(userId, userDto)
   }
 

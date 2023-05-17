@@ -1,5 +1,4 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
-import { Category } from '@prisma/client'
 import { titleToSlug } from 'src/common/utils/slug'
 import { PrismaService } from 'src/services/prisma/prisma.service'
 import { CategoryDto } from './category.dto'

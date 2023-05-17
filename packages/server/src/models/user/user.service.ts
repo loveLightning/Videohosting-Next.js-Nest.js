@@ -68,10 +68,11 @@ export class UsersService {
 
     return await this.prisma.user.create({
       data: {
+        role: 'CLIENT' as const,
         email: userDto.email,
         password: await hash(userDto.password),
         name: faker.name.firstName(),
-        avatarPath: faker.image.avatar(),
+        avatarPath: '',
         phone: faker.phone.number('+7 (###) ###-##-##'),
         activationLink: '',
       },

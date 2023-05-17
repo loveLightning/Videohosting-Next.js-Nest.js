@@ -7,6 +7,7 @@ import styled from 'styled-components'
 import { UsersService } from 'src/api'
 import { Container, Tabs } from 'src/components'
 import { PROFILE_IMAGE_URL } from 'src/constants'
+import { useAppSelector, userSelector } from 'src/store'
 
 import { EditingProfile } from './editing-profile'
 import { FavoritesProfile } from './favorites-profile'
@@ -15,11 +16,15 @@ import { OrdersProfile } from './orders-profile'
 import { tabsProfile } from './tabs-profile'
 
 export const ContentProfile = () => {
+  const {
+    user: { user },
+  } = useAppSelector(userSelector)
   const { data: profile } = useQuery(
     ['get profile'],
     () => UsersService.getProfile(),
     {
       select: ({ data }) => data,
+      enabled: !!user?.isActivated,
     },
   )
 
@@ -29,7 +34,7 @@ export const ContentProfile = () => {
     if (profile && query) {
       switch (query.profile) {
         case 'orders': {
-          return <OrdersProfile orders={profile.orders} />
+          return <OrdersProfile />
         }
 
         case 'favorites': {

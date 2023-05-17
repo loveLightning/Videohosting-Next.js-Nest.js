@@ -76,8 +76,10 @@ export class ProductService {
 
     const products = await this.prisma.product.findMany({
       where: {
-        ...prismaSearchSlug,
         ...prismaSearchTermFilter,
+        category: {
+          ...prismaSearchSlug,
+        },
       },
       orderBy: prismaSort,
       skip: +skip,
@@ -163,17 +165,22 @@ export class ProductService {
   async createProduct() {
     const product = await this.prisma.product.create<Prisma.ProductCreateArgs>({
       data: {
-        description: 'Products name',
-        name: 'Product item items',
+        description: 'Products names',
+        name: 'namessss s',
         price: 20,
-        slug: 'Product-item-items',
+        slug: 'namessss-s',
         images: [
           'https://cdn.vox-cdn.com/uploads/chorus_asset/file/24059001/226270_iPHONE_14_PHO_akrales_0788_sq.jpg',
         ],
         category: {
-          create: {
-            name: 'Product item items',
-            slug: 'Product-item-items',
+          connectOrCreate: {
+            where: {
+              name: 'products itemsss',
+            },
+            create: {
+              name: 'products itemsss',
+              slug: 'products-itemsss',
+            },
           },
         },
 

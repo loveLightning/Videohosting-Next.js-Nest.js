@@ -11,6 +11,7 @@ import { StatisticsModule } from '../statistics/statistics.module'
 import { UsersModule } from '../user/user.module'
 import { ServeStaticModule } from '@nestjs/serve-static'
 import { join } from 'path'
+import { CartModule } from '../cart/cart.module'
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { join } from 'path'
     ReviewModule,
     StatisticsModule,
     MailModule,
+    CartModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),

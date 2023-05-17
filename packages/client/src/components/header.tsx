@@ -1,38 +1,54 @@
 import { useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import Cookies from 'js-cookie'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import styled, { useTheme } from 'styled-components'
 
-import { Button, Modal, SearchInput } from 'src/components'
+import { CartService } from 'src/api'
+import { ModalUnauth, SearchInput } from 'src/components'
 import { BasketIcon, LogoIcon, ProfileIcon } from 'src/icons'
 import {
-  cartSelector,
   fetchCheckAuth,
   useAppDispatch,
   useAppSelector,
+  userSelector,
 } from 'src/store'
 
 export const Header = () => {
-  const { items } = useAppSelector(cartSelector)
   const dispatch = useAppDispatch()
   const { push } = useRouter()
   const { white } = useTheme()
 
+  const {
+    user: { user },
+  } = useAppSelector(userSelector)
+
   const [isShowModal, setIsShowModal] = useState(false)
 
-  const checkRedirect = async () => {
+  const { data: cart } = useQuery(
+    ['get cart from catalog'],
+    () => CartService.getCart(),
+    {
+      select: ({ data }) => data,
+      enabled: !!user?.isActivated,
+    },
+  )
+
+  const checkRedirect = async (path: string) => {
     if (Cookies.get('accessToken')) {
       try {
-        await dispatch(fetchCheckAuth())
-        push('/profile/info')
+        await dispatch(fetchCheckAuth()).unwrap()
+
+        push(path)
 
         return
       } catch (error) {
         setIsShowModal(true)
       }
+    } else {
+      setIsShowModal(true)
     }
-    setIsShowModal(true)
   }
 
   return (
@@ -48,36 +64,24 @@ export const Header = () => {
               <FavoritesIcon active={true} />
             </WrapIcon> */}
 
-            <Link href="/cart">
-              <WrapBasket>
+            <WrapBasket onClick={() => checkRedirect('/cart')}>
+              {cart && (
                 <WrapCount>
-                  <CountBasket>{items.length}</CountBasket>
+                  <CountBasket>{cart?.cartItems?.length}</CountBasket>
                 </WrapCount>
-                <BasketIcon />
-              </WrapBasket>
-            </Link>
-            <WrapIcon onClick={checkRedirect}>
+              )}
+
+              <BasketIcon />
+            </WrapBasket>
+
+            <WrapIcon onClick={() => checkRedirect('/profile/info')}>
               <ProfileIcon fill={white} />
             </WrapIcon>
           </WrapPanel>
         </WrapHeader>
       </Wrap>
 
-      {isShowModal && (
-        <Modal
-          title="Do you want to log in"
-          onClose={() => setIsShowModal(false)}
-          isShow={isShowModal}
-          style={{ width: 400, height: 200 }}>
-          <WrapModal>
-            <Button onClick={() => push('/auth')}>Sign in</Button>
-
-            <Button color="cart" onClick={() => setIsShowModal(false)}>
-              Cancel
-            </Button>
-          </WrapModal>
-        </Modal>
-      )}
+      <ModalUnauth isShowModal={isShowModal} setIsShowModal={setIsShowModal} />
     </>
   )
 }
@@ -132,14 +136,4 @@ const CountBasket = styled.p`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-`
-
-const WrapModal = styled.div`
-  position: absolute;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  bottom: 0;
-  display: flex;
-  align-items: center;
-  gap: 30px;
 `

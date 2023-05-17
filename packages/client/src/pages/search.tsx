@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 
 import { ProductsService } from 'src/api'
 import { Catalog, MainLayout, NextHead } from 'src/components'
+import { withAuth } from 'src/hoc'
 
 const SearchPage = () => {
   const { query } = useRouter()

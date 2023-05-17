@@ -13,7 +13,7 @@ export class ReviewController {
   async leaveReview(
     @Param('productId') productId: string,
     @Body() reviewDto: ReviewDto,
-    @CurrentUser('id') userId,
+    @CurrentUser('id') userId: number,
   ) {
     return this.reviewService.leaveReview(reviewDto, userId, +productId)
   }

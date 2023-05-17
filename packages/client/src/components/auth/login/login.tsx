@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import axios from 'axios'
 import { Form, Formik, FormikHelpers } from 'formik'
-import { useRouter } from 'next/navigation'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
 import styled from 'styled-components'
 
 import { Button, FormikField, Modal } from 'src/components'
@@ -18,6 +19,7 @@ import {
   RegisterText,
   Title,
   TogglePage,
+  WrapGoHome,
   Wrapper,
   WrapperAuth,
   WrapToggle,
@@ -110,6 +112,9 @@ export const Login = () => {
             Sign up
           </TogglePage>
         </WrapToggle>
+        <WrapGoHome>
+          <Link href="/">Go to products</Link>
+        </WrapGoHome>
         {showModal && (
           <Modal
             onClose={() => setShowModal(false)}

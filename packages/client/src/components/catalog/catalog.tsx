@@ -3,8 +3,9 @@ import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
 import styled, { useTheme } from 'styled-components'
 
-import { ProductsService, UsersService } from 'src/api'
+import { CartService, ProductsService, UsersService } from 'src/api'
 import { Button, Loader, Select } from 'src/components'
+import { useAppSelector, userSelector } from 'src/store'
 import { EnumProductSort, IPaginationProduct } from 'src/types'
 
 import { ProductItem } from '../product-item'
@@ -22,6 +23,9 @@ export const Catalog = ({ products, title }: Props) => {
   const { black } = useTheme()
 
   const { query } = useRouter()
+  const {
+    user: { user },
+  } = useAppSelector(userSelector)
 
   const categorySlug = query.slug as string
   const searchTerm = query.termSearch as string
@@ -43,15 +47,28 @@ export const Catalog = ({ products, title }: Props) => {
       keepPreviousData: true,
     },
   )
+
   const allPages = Array.from(
     { length: Math.ceil(sortingProducts.length / 8) },
     (_, i) => i + 1,
   )
 
+  const { data: cart } = useQuery(
+    ['get cart from catalog'],
+    () => CartService.getCart(),
+    {
+      select: ({ data }) => data,
+      enabled: !!user?.isActivated,
+    },
+  )
+
   const { data: profile } = useQuery(
     ['get profile from catalog'],
     () => UsersService.getProfile(),
-    { select: ({ data }) => data },
+    {
+      select: ({ data }) => data,
+      enabled: !!user?.isActivated,
+    },
   )
 
   const changeDropdown = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -81,6 +98,7 @@ export const Catalog = ({ products, title }: Props) => {
           sortingProducts.products.map((product) => (
             <ProductItem
               key={product.id}
+              cart={cart}
               product={product}
               favorites={profile?.favorites}
             />

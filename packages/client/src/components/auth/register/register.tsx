@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { Form, Formik, FormikHelpers } from 'formik'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import styled from 'styled-components'
 
@@ -18,6 +19,7 @@ import {
   RegisterText,
   Title,
   TogglePage,
+  WrapGoHome,
   Wrapper,
   WrapperAuth,
   WrapToggle,
@@ -135,6 +137,9 @@ export const Register = () => {
             Sign in
           </TogglePage>
         </WrapToggle>
+        <WrapGoHome>
+          <Link href="/">Go to products</Link>
+        </WrapGoHome>
       </WrapperAuth>
     </Wrapper>
   )
@@ -156,6 +161,7 @@ const TextConfirm = styled.div`
 const Note = styled.p`
   color: ${({ theme }) => theme.blue};
   cursor: pointer;
+  color: ${({ theme }) => theme.blue[0]};
 `
 
 const EmailText = styled.p`

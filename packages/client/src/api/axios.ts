@@ -10,7 +10,8 @@ export const axiosBase = axios.create({
 
 axiosBase.interceptors.request.use(
   async (config) => {
-    config.headers['Authorization'] = `Bearer ${Cookies.get('accessToken')}`
+    config.headers = config.headers ?? {}
+    config.headers.Authorization = `Bearer ${Cookies.get('accessToken')}`
 
     return config
   },

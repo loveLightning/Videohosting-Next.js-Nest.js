@@ -48,3 +48,9 @@ export const WrapperLoader = styled.div`
   left: 50%;
   background-color: ${({ theme }) => theme.light_blue};
 `
+
+export const WrapGoHome = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+`

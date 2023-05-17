@@ -1,0 +1,27 @@
+{
+  "name": "common",
+  "version": "1.0.0",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "workspaces": {
+    "nohoist": [
+      "**"
+    ]
+  },
+  "scripts": {
+    "build": "tsc —build tsconfig.json"
+  },
+  "description": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/lodash": "4.14.184",
+    "typescript": "4.7.4"
+  },
+  "dependencies": {
+    "@reduxjs/toolkit": "1.8.3",
+    "axios": "0.27.2",
+    "date-fns": "2.29.2",
+    "lodash": "4.17.21"
+  }
+}

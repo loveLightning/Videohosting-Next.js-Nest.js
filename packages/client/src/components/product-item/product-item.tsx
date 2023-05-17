@@ -1,9 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 import styled from 'styled-components'
 
 import { UsersService } from 'src/api'
-import { IProduct } from 'src/types'
+import { useAppSelector, userSelector } from 'src/store'
+import { IProduct, RootCart } from 'src/types'
 import { convertPrice } from 'src/utils'
 
 import { AddToCartButton } from './add-to-cart-button'
@@ -12,11 +14,18 @@ import { ProductRating } from './product-rating'
 
 interface Props {
   product: IProduct
-  favorites: IProduct[] | undefined
+  favorites?: IProduct[] | undefined
+  cart: RootCart | undefined
 }
 
-export const ProductItem = ({ product, favorites }: Props) => {
+export const ProductItem = ({ product, favorites, cart }: Props) => {
   const queryClient = useQueryClient()
+  const { push } = useRouter()
+
+  const {
+    user: { user },
+  } = useAppSelector(userSelector)
+
   const { mutate } = useMutation(
     (productId: number) => UsersService.toggleFavorites(productId),
     {
@@ -25,12 +34,8 @@ export const ProductItem = ({ product, favorites }: Props) => {
     },
   )
 
-  const chooseAsFavorite = () => {
-    mutate(product.id)
-  }
-
   return (
-    <Card>
+    <Card onClick={() => push(`/product/${product.slug}`)}>
       {product.images[0].length && (
         <ImageCard
           src={product.images[0]}
@@ -51,12 +56,18 @@ export const ProductItem = ({ product, favorites }: Props) => {
       <WrapButton>
         <Price>{convertPrice(product.price)}</Price>
 
-        <AddToCartButton product={product} />
+        <AddToCartButton product={product} cart={cart} />
       </WrapButton>
 
-      <WrapFavorites onClick={chooseAsFavorite}>
-        <FavoriteButton productId={product.id} favorites={favorites} />
-      </WrapFavorites>
+      {user?.isActivated && (
+        <WrapFavorites
+          onClick={(e) => {
+            e.stopPropagation()
+            mutate(product.id)
+          }}>
+          <FavoriteButton productId={product.id} favorites={favorites} />
+        </WrapFavorites>
+      )}
     </Card>
   )
 }
@@ -74,6 +85,7 @@ const Category = styled.p`
 `
 
 const Card = styled.div`
+  cursor: pointer;
   display: flex;
   flex-direction: column;
   padding: 15px;

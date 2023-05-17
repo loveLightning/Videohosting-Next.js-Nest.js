@@ -14,7 +14,7 @@ export const Modal = ({ onClose, children, title, ...style }: Props) => {
   const [isBrowser, setIsBrowser] = useState(false)
 
   const handleCloseClick = (
-    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
     e.preventDefault()
     onClose()
@@ -29,9 +29,7 @@ export const Modal = ({ onClose, children, title, ...style }: Props) => {
       <StyledModalWrapper {...style} onClick={(e) => e.stopPropagation()}>
         <StyledModal>
           <StyledModalHeader>
-            <a href="#" onClick={(e) => handleCloseClick(e)}>
-              &times;
-            </a>
+            <div onClick={(e) => handleCloseClick(e)}>&times;</div>
           </StyledModalHeader>
           {title && <StyledModalTitle>{title}</StyledModalTitle>}
           <StyledModalBody>{children}</StyledModalBody>
@@ -58,6 +56,7 @@ const StyledModalHeader = styled.div`
   display: flex;
   justify-content: flex-end;
   font-size: 25px;
+  cursor: pointer;
 `
 
 const StyledModalWrapper = styled.div`
