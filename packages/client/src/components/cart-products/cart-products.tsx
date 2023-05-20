@@ -1,11 +1,11 @@
 import React from 'react'
+import { CartService, OrdersService } from '@amazon/common/src'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import styled from 'styled-components'
 
-import { CartService, OrdersService } from 'src/api'
 import { Button } from 'src/components'
 import { useAppSelector, userSelector } from 'src/store'
 import { RemoveCart, UpdateCart } from 'src/types'

@@ -1,9 +1,9 @@
 import { ChangeEvent, useState } from 'react'
+import { CartService, ProductsService, UsersService } from '@amazon/common/src'
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
 import styled, { useTheme } from 'styled-components'
 
-import { CartService, ProductsService, UsersService } from 'src/api'
 import { Button, Loader, Select } from 'src/components'
 import { useAppSelector, userSelector } from 'src/store'
 import { EnumProductSort, IPaginationProduct } from 'src/types'

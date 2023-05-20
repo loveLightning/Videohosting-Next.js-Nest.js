@@ -12,6 +12,8 @@ import { UsersModule } from '../user/user.module'
 import { ServeStaticModule } from '@nestjs/serve-static'
 import { join } from 'path'
 import { CartModule } from '../cart/cart.module'
+import { PassportModule } from '@nestjs/passport'
+import { JwtModule, JwtService } from '@nestjs/jwt'
 
 @Module({
   imports: [

@@ -1,8 +1,6 @@
+import { AuthLogin, AuthService, Role } from '@amazon/common/src'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import Cookies from 'js-cookie'
-
-import { AuthService } from 'src/api'
-import { AuthLogin, AuthRegister } from 'src/types'
 
 export const fetchLogin = createAsyncThunk(
   'auth/login',
@@ -10,24 +8,10 @@ export const fetchLogin = createAsyncThunk(
     try {
       const response = await AuthService.login(data)
 
-      const { accessToken } = response.data
-      Cookies.set('accessToken', accessToken)
-
-      return response.data
-    } catch (error) {
-      return rejectWithValue(error)
-    }
-  },
-)
-
-export const fetchRegister = createAsyncThunk(
-  'auth/register',
-  async (data: AuthRegister, { rejectWithValue }) => {
-    try {
-      const response = await AuthService.register(data)
-
-      const { accessToken } = response.data
-      Cookies.set('accessToken', accessToken)
+      if (Role.ADMIN === response.data.user.role) {
+        const { accessToken } = response.data
+        Cookies.set('accessToken', accessToken)
+      }
 
       return response.data
     } catch (error) {

@@ -1,3 +1,9 @@
+import { MainLayout } from 'src/components'
+
 export default function Home() {
-  return <></>
+  return (
+    <MainLayout>
+      <div></div>
+    </MainLayout>
+  )
 }

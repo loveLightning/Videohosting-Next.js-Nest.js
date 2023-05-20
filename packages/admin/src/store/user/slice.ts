@@ -1,31 +1,18 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { IUser } from '@amazon/common/src'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-import { IUser } from 'src/types'
-
-import {
-  fetchCheckAuth,
-  fetchLogin,
-  fetchLogout,
-  fetchRegister,
-} from './actions'
-
-enum AuthModeEnum {
-  SignIn,
-  SignUp,
-}
+import { fetchCheckAuth, fetchLogin, fetchLogout } from './actions'
 
 export interface UserState {
   user: IUser
   loading: boolean
   error: unknown
   isAuth: boolean
-  authMode: AuthModeEnum
 }
 
 const initialState = {
   user: {},
   isAuth: false,
-  authMode: AuthModeEnum.SignIn,
   loading: false,
   error: '',
 } as UserState
@@ -35,12 +22,8 @@ const toolkitSlice = createSlice({
   initialState,
   reducers: {
     resetUser: () => initialState,
-
-    changeAuthMode: (state) => {
-      state.authMode =
-        state.authMode === AuthModeEnum.SignIn
-          ? AuthModeEnum.SignUp
-          : AuthModeEnum.SignIn
+    setUser(state: UserState, { payload }: PayloadAction<IUser>) {
+      state.user = payload
     },
   },
   extraReducers: (builder) => {
@@ -54,19 +37,6 @@ const toolkitSlice = createSlice({
       state.loading = false
     })
     builder.addCase(fetchLogin.rejected, (state, action) => {
-      state.error = action.payload
-      state.loading = false
-    }),
-      builder.addCase(fetchRegister.pending, (state) => {
-        state.error = ''
-        state.loading = true
-      })
-    builder.addCase(fetchRegister.fulfilled, (state, action) => {
-      state.user = action.payload
-      state.isAuth = true
-      state.loading = false
-    })
-    builder.addCase(fetchRegister.rejected, (state, action) => {
       state.error = action.payload
       state.loading = false
     }),
@@ -101,6 +71,6 @@ const toolkitSlice = createSlice({
   },
 })
 
-export const { resetUser, changeAuthMode } = toolkitSlice.actions
+export const { resetUser, setUser } = toolkitSlice.actions
 
 export default toolkitSlice.reducer

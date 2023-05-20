@@ -1,8 +1,8 @@
 import { Rating } from 'react-simple-star-rating'
+import { ReviewsService } from '@amazon/common/src'
 import { useQuery } from '@tanstack/react-query'
 import styled from 'styled-components'
 
-import { ReviewsService } from 'src/api'
 import { IProduct } from 'src/types'
 
 interface Props {

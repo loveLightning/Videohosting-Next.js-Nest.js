@@ -1,9 +1,9 @@
+import { UsersService } from '@amazon/common/src'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import styled from 'styled-components'
 
-import { UsersService } from 'src/api'
 import { useAppSelector, userSelector } from 'src/store'
 import { IProduct, RootCart } from 'src/types'
 import { convertPrice } from 'src/utils'
@@ -15,7 +15,7 @@ import { ProductRating } from './product-rating'
 interface Props {
   product: IProduct
   favorites?: IProduct[] | undefined
-  cart: RootCart | undefined
+  cart?: RootCart | undefined
 }
 
 export const ProductItem = ({ product, favorites, cart }: Props) => {

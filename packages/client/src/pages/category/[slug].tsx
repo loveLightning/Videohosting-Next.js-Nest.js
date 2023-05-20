@@ -1,7 +1,7 @@
+import { CategoriesService, ProductsService } from '@amazon/common/src'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { ParsedUrlQuery } from 'querystring'
 
-import { CategoriesService, ProductsService } from 'src/api'
 import { Catalog, MainLayout, NextHead } from 'src/components'
 import { ICategory, IPaginationProduct } from 'src/types'
 
@@ -10,7 +10,7 @@ interface Props {
   category: ICategory
 }
 
-const CategoryPage = ({ products, category }: Props) => {
+const CategoryPage = ({ category, products }: Props) => {
   return (
     <>
       <NextHead
@@ -30,6 +30,7 @@ interface Params extends ParsedUrlQuery {
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const { data } = await CategoriesService.getAll()
+
   const paths = data.map((category) => ({
     params: { slug: category.slug },
   }))
@@ -42,11 +43,13 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
   const { slug } = ctx.params as Params
+
   const products = await ProductsService.getAll({
     page: 1,
     perPage: 8,
     slug,
   })
+
   const { data: category } = await CategoriesService.getBySlug(slug)
 
   return {

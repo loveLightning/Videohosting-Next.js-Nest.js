@@ -12,12 +12,6 @@ export const FavoriteButton: React.FC<Props> = ({ productId, favorites }) => {
   return (
     <div>
       <FavoritesIcon width={20} height={20} active={isExists} />
-      {/* <Button
-        color="favorites"
-        style={{ width: '100%', color: white }}
-        onClick={() => mutate()}> */}
-      {/* {isExists ? 'Remove from favorites' : 'Add to favorites'} */}
-      {/* </Button> */}
     </div>
   )
 }

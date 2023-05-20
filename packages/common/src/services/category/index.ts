@@ -1,1 +1,0 @@
-export { CategoriesService } from './category'

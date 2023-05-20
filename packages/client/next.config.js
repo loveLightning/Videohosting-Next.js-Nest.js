@@ -1,15 +1,9 @@
 /** @type {import('next').NextConfig} */
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 
 const nextConfig = {
-  transpilePackages: ['@amazon/common', 'lodash-es'],
+  transpilePackages: ['@amazon/common'],
   reactStrictMode: true,
-  env: {
-    SERVER_URL: process.env.SERVER_URL,
-  },
-  experimental: {
-    externalDir: true,
-  },
+
   images: {
     remotePatterns: [
       {
@@ -21,7 +15,7 @@ const nextConfig = {
       {
         protocol: 'http',
         hostname: 'localhost',
-        port: '3001',
+        port: '4000',
         pathname: '/**',
       },
     ],

@@ -3,11 +3,11 @@ import 'react-phone-input-2/lib/style.css'
 import { ChangeEvent, createRef, useRef, useState } from 'react'
 import AvatarEditor from 'react-avatar-editor'
 import PhoneInput from 'react-phone-input-2'
+import { UsersService } from '@amazon/common/src'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Form, Formik } from 'formik'
 import styled, { useTheme } from 'styled-components'
 
-import { UsersService } from 'src/api'
 import {
   Button,
   FileInput,

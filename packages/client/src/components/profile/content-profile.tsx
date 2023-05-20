@@ -1,10 +1,10 @@
+import { UsersService } from '@amazon/common/src'
 import { useQuery } from '@tanstack/react-query'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import styled from 'styled-components'
 
-import { UsersService } from 'src/api'
 import { Container, Tabs } from 'src/components'
 import { PROFILE_IMAGE_URL } from 'src/constants'
 import { useAppSelector, userSelector } from 'src/store'

@@ -1,6 +1,6 @@
+import { ProductsService } from '@amazon/common/src'
 import { GetStaticProps } from 'next'
 
-import { ProductsService } from 'src/api'
 import { Catalog, MainLayout, NextHead } from 'src/components'
 import { IPaginationProduct } from 'src/types'
 

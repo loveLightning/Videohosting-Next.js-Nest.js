@@ -1,9 +1,9 @@
+import { CategoriesService } from '@amazon/common/src'
 import { useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import styled from 'styled-components'
 
-import { CategoriesService } from 'src/api'
 import { Loader } from 'src/components'
 import { LogOutIcon } from 'src/icons'
 import {

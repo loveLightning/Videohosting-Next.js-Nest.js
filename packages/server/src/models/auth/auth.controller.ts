@@ -16,7 +16,7 @@ import { JwtGuard } from './jwt.guard'
 import { LocalAuthGuard } from './local-auth.guard'
 import { Response, Request } from 'express'
 import { CurrentUser } from 'src/common/decorators/user.decorators'
-import { setCooke } from 'src/common/utils/set-cookie'
+import { setCookie } from 'src/common/utils/set-cookie'
 
 @Controller('auth')
 export class AuthController {
@@ -30,7 +30,7 @@ export class AuthController {
     @Res({ passthrough: true }) response: Response,
   ) {
     const userData = await this.authService.login(userDto)
-    setCooke(response, userData.refreshToken)
+    setCookie(response, userData.refreshToken)
 
     return userData
   }
@@ -42,7 +42,7 @@ export class AuthController {
     @Res({ passthrough: true }) response: Response,
   ) {
     const userData = await this.authService.register(userDto)
-    setCooke(response, userData.refreshToken)
+    setCookie(response, userData.refreshToken)
 
     return userData
   }
@@ -58,16 +58,17 @@ export class AuthController {
     response.clearCookie('accessToken')
   }
 
-  @HttpCode(200)
   @Get('refresh')
   async refreshToken(
     @Req() request: Request,
     @Res({ passthrough: true }) response: Response,
   ) {
+    console.log('dss')
+
     const { refreshToken } = request.cookies
 
     const dataTokens = await this.authService.refreshToken(refreshToken)
-    setCooke(response, dataTokens.refreshToken)
+    setCookie(response, dataTokens.refreshToken)
 
     return dataTokens
   }

@@ -1,11 +1,11 @@
 import { useState } from 'react'
+import { CartService } from '@amazon/common/src'
 import { useQuery } from '@tanstack/react-query'
 import Cookies from 'js-cookie'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import styled, { useTheme } from 'styled-components'
 
-import { CartService } from 'src/api'
 import { ModalUnauth, SearchInput } from 'src/components'
 import { BasketIcon, LogoIcon, ProfileIcon } from 'src/icons'
 import {

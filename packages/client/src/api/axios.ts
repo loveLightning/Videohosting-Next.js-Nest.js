@@ -1,17 +1,16 @@
-// import { axiosBase } from '@amazon/common/src/services/axios'
-import axios from 'axios'
+import { axiosBase } from '@amazon/common/src'
 import Cookies from 'js-cookie'
 
 import { fetchCheckAuth, store } from 'src/store'
 
-export const axiosBase = axios.create({
-  baseURL: process.env.SERVER_URL,
-  withCredentials: true,
-})
+export const api = axiosBase
+
+axiosBase.defaults.baseURL = 'http://localhost:4000'
 
 axiosBase.interceptors.request.use(
   async (config) => {
     config.headers = config.headers ?? {}
+
     config.headers.Authorization = `Bearer ${Cookies.get('accessToken')}`
 
     return config

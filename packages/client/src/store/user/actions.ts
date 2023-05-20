@@ -1,7 +1,7 @@
+import { AuthService } from '@amazon/common/src'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import Cookies from 'js-cookie'
 
-import { AuthService } from 'src/api'
 import { AuthLogin, AuthRegister } from 'src/types'
 
 export const fetchLogin = createAsyncThunk(

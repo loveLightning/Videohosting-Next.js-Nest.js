@@ -1,8 +1,8 @@
 import { useState } from 'react'
+import { CartService } from '@amazon/common/src'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import styled, { useTheme } from 'styled-components'
 
-import { CartService } from 'src/api'
 import { ModalUnauth } from 'src/components'
 import { Button } from 'src/components'
 import { useAppSelector, userSelector } from 'src/store'

@@ -1,12 +1,11 @@
 import { Rating } from 'react-simple-star-rating'
+import { ProductsService, ReviewsService } from '@amazon/common/src'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Form, Formik, FormikHelpers } from 'formik'
 import Image from 'next/image'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 import styled from 'styled-components'
 
-import { ProductsService, ReviewsService } from 'src/api'
 import { Button } from 'src/components'
 import { PROFILE_IMAGE_URL } from 'src/constants'
 import { leaveReviewSchema } from 'src/scheme'
@@ -30,6 +29,7 @@ const initialValues: InitialValuesTypes = {
 
 export const ProductCard = () => {
   const {
+    back,
     query: { slug },
   } = useRouter()
 
@@ -75,7 +75,7 @@ export const ProductCard = () => {
 
   return (
     <Card>
-      <Link href="/">Go back</Link>
+      <GoBack onClick={() => back()}>Go back</GoBack>
       {product && (
         <>
           <div
@@ -176,6 +176,11 @@ export const ProductCard = () => {
 
 const Card = styled.div`
   margin-bottom: 30px;
+`
+
+const GoBack = styled.p`
+  color: ${({ theme }) => theme.blue[0]};
+  cursor: pointer;
 `
 
 const Title = styled.h3`

@@ -1,4 +1,3 @@
-export { axiosBase } from './axios'
 export { BaseService } from './base'
 export * from './auth'
 export * from './order'

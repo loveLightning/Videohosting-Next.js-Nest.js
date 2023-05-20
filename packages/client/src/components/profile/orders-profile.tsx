@@ -1,7 +1,7 @@
+import { OrdersService } from '@amazon/common/src'
 import { useQuery } from '@tanstack/react-query'
 import styled from 'styled-components'
 
-import { OrdersService } from 'src/api'
 import { convertPrice } from 'src/utils'
 
 export const OrdersProfile = () => {
