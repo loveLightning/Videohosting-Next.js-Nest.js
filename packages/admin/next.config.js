@@ -3,6 +3,9 @@
 const nextConfig = {
   transpilePackages: ['@amazon/common'],
   reactStrictMode: true,
+  publicRuntimeConfig: {
+    backendUrl: process.env.SERVER_URL,
+  },
   images: {
     remotePatterns: [
       {

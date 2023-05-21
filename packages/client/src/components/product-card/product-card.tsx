@@ -93,7 +93,7 @@ export const ProductCard = () => {
             />
             <Title>Name: {product.name}</Title>
             <Desc>Description: {product.description}</Desc>
-            <Item>Category: {product.category.name}</Item>
+            <Item>Category: {product.category?.name || 'Not found'}</Item>
             <Item>Price: {product.price}</Item>
           </div>
 
@@ -143,7 +143,7 @@ export const ProductCard = () => {
                 <div>
                   {review.user.avatarPath && (
                     <Image
-                      src={PROFILE_IMAGE_URL(review.user.avatarPath)}
+                      src={PROFILE_IMAGE_URL(review.user.avatarPath, 'profile')}
                       alt="avatar"
                       height={50}
                       width={50}

@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "react-avatar-editor": "^13.0.0",
     "@amazon/common": "1.0.0",
     "@tanstack/react-query": "^4.28.0",
     "axios": "^1.3.4",

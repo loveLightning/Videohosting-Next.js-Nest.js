@@ -1,5 +1,3 @@
-import axios from 'axios'
-
 import { AuthLogin, AuthRegister, IUser } from 'src/types'
 
 import { ApiMethods } from '../enums'
@@ -7,9 +5,9 @@ import { BaseService } from './base'
 
 export class AuthService extends BaseService {
   public static async checkAuth() {
-    return await axios.get<IUser>(ApiMethods.Refresh, {
-      baseURL: process.env.NEXT_PUBLIC_SERVER_URL,
-      withCredentials: true,
+    return await this.fetch<IUser>({
+      url: ApiMethods.Refresh,
+      method: 'GET',
     })
   }
 

@@ -1,7 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Provider } from 'react-redux'
 import { AuthService, IUser } from '@amazon/common/src'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import {
+  Hydrate,
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import Cookies from 'js-cookie'
 import { NextApiRequest, NextApiResponse } from 'next'
@@ -70,20 +74,21 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
-          <ThemeProvider theme={AppTheme}>
-            <GlobalStyles />
+      <Hydrate>
+        <Provider store={store}>
+          <PersistGate loading={null} persistor={persistor}>
+            <ThemeProvider theme={AppTheme}>
+              <GlobalStyles />
 
-            <WrappedComponent
-              Component={Component}
-              pageProps={pageProps}
-              user={user}
-            />
-            <Component {...pageProps} />
-          </ThemeProvider>
-        </PersistGate>
-      </Provider>
+              <WrappedComponent
+                Component={Component}
+                pageProps={pageProps}
+                user={user}
+              />
+            </ThemeProvider>
+          </PersistGate>
+        </Provider>
+      </Hydrate>
     </QueryClientProvider>
   )
 }

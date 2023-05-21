@@ -1,4 +1,4 @@
-import { UsersService } from '@amazon/common/src'
+import { convertPrice, UsersService } from '@amazon/common/src'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
@@ -6,7 +6,6 @@ import styled from 'styled-components'
 
 import { useAppSelector, userSelector } from 'src/store'
 import { IProduct, RootCart } from 'src/types'
-import { convertPrice } from 'src/utils'
 
 import { AddToCartButton } from './add-to-cart-button'
 import { FavoriteButton } from './favorite-button'
@@ -49,7 +48,7 @@ export const ProductItem = ({ product, favorites, cart }: Props) => {
       )}
 
       <Title>{product.name}</Title>
-      <Category>Category: {product.category?.name}</Category>
+      <Category>Category: {product.category?.name || 'Not found'}</Category>
 
       <ProductRating product={product} />
 

@@ -3,7 +3,11 @@ import 'react-phone-input-2/lib/style.css'
 import { ChangeEvent, createRef, useRef, useState } from 'react'
 import AvatarEditor from 'react-avatar-editor'
 import PhoneInput from 'react-phone-input-2'
-import { UsersService } from '@amazon/common/src'
+import {
+  checkFileSize,
+  checkFormatFile,
+  UsersService,
+} from '@amazon/common/src'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Form, Formik } from 'formik'
 import styled, { useTheme } from 'styled-components'
@@ -15,11 +19,7 @@ import {
   Modal,
   PreviewImage,
 } from 'src/components'
-import {
-  checkFileSize,
-  checkFormatFile,
-  PROFILE_IMAGE_URL,
-} from 'src/constants'
+import { PROFILE_IMAGE_URL } from 'src/constants'
 import { editingProfileSchema } from 'src/scheme'
 import { IFullProfile, IUpdateUser } from 'src/types'
 
@@ -40,7 +40,7 @@ interface Props {
 export const EditingProfile = ({ profile }: Props) => {
   const queryClient = useQueryClient()
   const mutationProfile = useMutation(
-    (formData: IUpdateUser) => UsersService.updateProfile(formData),
+    (data: IUpdateUser) => UsersService.updateProfile(data),
     {
       onSuccess: () => queryClient.invalidateQueries(['get profile']),
     },
@@ -60,7 +60,7 @@ export const EditingProfile = ({ profile }: Props) => {
     })
 
   const [isLoading, setIsLoading] = useState(false)
-  const imageUrl = PROFILE_IMAGE_URL(profile?.avatarPath)
+  const imageUrl = PROFILE_IMAGE_URL(profile?.avatarPath, 'profile')
   const [isShowModal, setIsShowModal] = useState(false)
   const [errorMsgFile, setErrorMsgFile] = useState('')
   const { red } = useTheme()
@@ -115,6 +115,7 @@ export const EditingProfile = ({ profile }: Props) => {
       if (blob) {
         formData.append('file', blob)
       }
+
       mutationAvatar.mutate(formData)
       setIsShowModal(false)
     })

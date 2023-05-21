@@ -42,7 +42,7 @@ export class UsersController {
     @CurrentUser('id') userId: number,
     @Body() userDto: UserDto,
   ) {
-    return this.usersService.updateProfile(userId, userDto)
+    await this.usersService.updateProfile(userId, userDto)
   }
 
   @Patch('profile/avatar')

@@ -1,13 +1,7 @@
-import { ApiMethods } from 'src/types'
+import { ApiMethods } from '@amazon/common/src'
+import getConfig from 'next/config'
 
-import { SUPPORTED_FORMATS } from './regex'
+const { publicRuntimeConfig } = getConfig()
 
-export const PROFILE_IMAGE_URL = (file: string) =>
-  file &&
-  `${process.env.NEXT_PUBLIC_SERVER_URL}/${ApiMethods.Users}/profile/${file}`
-
-export const checkFileSize = (file: File) =>
-  !file || file.length === 0 || file.size <= 1024 * 1024
-
-export const checkFormatFile = (file: File) =>
-  SUPPORTED_FORMATS.includes(file.type)
+export const PROFILE_IMAGE_URL = (file: string, path: string) =>
+  `${publicRuntimeConfig.backendUrl}/${ApiMethods.Users}/${path}/${file}`

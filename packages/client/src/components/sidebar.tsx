@@ -21,7 +21,7 @@ export const Sidebar = () => {
       select: ({ data }) => data,
     },
   )
-  const { asPath, push } = useRouter()
+  const { asPath, push, query } = useRouter()
 
   const { user } = useAppSelector(userSelector)
   const isUser = user?.user?.isActivated
@@ -47,7 +47,7 @@ export const Sidebar = () => {
           categories.map((el) => (
             <CategoryText
               active={
-                asPath && asPath === `/category/${el.slug}` ? 'true' : 'false'
+                query.slug && query.slug === `${el.slug}` ? 'true' : 'false'
               }
               key={el.id}
               href={`/category/${el.slug}`}>
@@ -108,6 +108,7 @@ const CategoryText = styled(Link) <CategoryTextStyled>`
   font-family: ${({ theme }) => theme.roboto400};
   font-size: 18px;
   margin-left: 15px;
+  word-break: break-all;
 `
 
 const NotFound = styled.p`

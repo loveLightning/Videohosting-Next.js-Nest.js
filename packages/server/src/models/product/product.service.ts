@@ -9,6 +9,7 @@ import {
   returnFullOfproductObj,
   returnProductObj,
 } from './return.product.object'
+import { CreateProductDto } from './dtos/create-product.dto'
 
 @Injectable()
 export class ProductService {
@@ -162,59 +163,58 @@ export class ProductService {
     return products
   }
 
-  async createProduct() {
+  async createProduct(productPath: string, createProductDto: CreateProductDto) {
+    const { category, desc, name, price } = createProductDto
     const product = await this.prisma.product.create<Prisma.ProductCreateArgs>({
       data: {
-        description: 'Products names',
-        name: 'namessss s',
-        price: 20,
-        slug: 'namessss-s',
-        images: [
-          'https://cdn.vox-cdn.com/uploads/chorus_asset/file/24059001/226270_iPHONE_14_PHO_akrales_0788_sq.jpg',
-        ],
+        description: desc,
+        name: name,
+        price: price,
+        slug: titleToSlug(name),
+        images: [productPath],
         category: {
           connectOrCreate: {
             where: {
-              name: 'products itemsss',
+              name: category,
             },
             create: {
-              name: 'products itemsss',
-              slug: 'products-itemsss',
+              name: category,
+              slug: titleToSlug(category),
             },
           },
         },
 
-        reviews: {
-          create: [
-            {
-              rating: 5,
-              text: 'It is amazing',
-              user: {
-                connect: {
-                  id: 1,
-                },
-              },
-            },
-            {
-              rating: 4,
-              text: 'It is amadssdzing',
-              user: {
-                connect: {
-                  id: 1,
-                },
-              },
-            },
-            {
-              rating: 2,
-              text: 'It is  dsd dsamazing',
-              user: {
-                connect: {
-                  id: 1,
-                },
-              },
-            },
-          ],
-        },
+        // reviews: {
+        //   create: [
+        //     {
+        //       rating: 5,
+        //       text: 'It is amazing',
+        //       user: {
+        //         connect: {
+        //           id: 1,
+        //         },
+        //       },
+        //     },
+        //     {
+        //       rating: 4,
+        //       text: 'It is amadssdzing',
+        //       user: {
+        //         connect: {
+        //           id: 1,
+        //         },
+        //       },
+        //     },
+        //     {
+        //       rating: 2,
+        //       text: 'It is  dsd dsamazing',
+        //       user: {
+        //         connect: {
+        //           id: 1,
+        //         },
+        //       },
+        //     },
+        //   ],
+        // },
       },
     })
     return product.id

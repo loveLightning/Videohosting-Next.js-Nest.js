@@ -63,8 +63,6 @@ export class AuthController {
     @Req() request: Request,
     @Res({ passthrough: true }) response: Response,
   ) {
-    console.log('dss')
-
     const { refreshToken } = request.cookies
 
     const dataTokens = await this.authService.refreshToken(refreshToken)

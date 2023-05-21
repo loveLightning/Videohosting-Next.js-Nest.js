@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common'
 import { titleToSlug } from 'src/common/utils/slug'
 import { PrismaService } from 'src/services/prisma/prisma.service'
 import { CategoryDto } from './category.dto'
@@ -33,35 +38,47 @@ export class CategoryService {
     return category
   }
 
-  async create() {
+  async create(categoryDto: CategoryDto) {
+    const { name } = categoryDto
+    const slug = titleToSlug(name)
+
+    const existingCategory = await this.findBySlug(slug)
+
+    if (existingCategory) {
+      throw new HttpException('Category already exist', HttpStatus.CONFLICT)
+    }
+
     return this.prisma.category.create({
       data: {
-        name: 'Fruits',
-        slug: 'Fruits',
+        name: name.trim(),
+        slug,
       },
     })
   }
 
   async update(categoryId: number, categoryDto: CategoryDto) {
-    const category = this.findById(categoryId)
+    const { name } = categoryDto
+    const slug = titleToSlug(name)
 
+    const existingCategory = await this.findBySlug(slug)
+
+    if (existingCategory) {
+      throw new HttpException('Category already exist', HttpStatus.CONFLICT)
+    }
     return this.prisma.category.update({
       where: {
         id: categoryId,
       },
       data: {
-        name: categoryDto.name,
+        name: name.trim(),
         slug: titleToSlug(categoryDto.name),
       },
     })
   }
 
   async delete(categoryId: number) {
-    return this.prisma.category.delete({
-      where: {
-        id: categoryId,
-      },
-    })
+    await this.prisma.product.deleteMany({ where: { categoryId } })
+    await this.prisma.category.delete({ where: { id: categoryId } })
   }
 
   async getAll() {

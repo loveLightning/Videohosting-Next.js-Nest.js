@@ -1,4 +1,5 @@
 import {
+  AddProduct,
   IPaginationProduct,
   IProduct,
   IProductSort,
@@ -19,7 +20,7 @@ export class ProductsService extends BaseService {
     return data
   }
 
-  public static async getSimilar(id: string) {
+  public static async getSimilar(id: string | number) {
     return await this.fetch<IProduct[]>({
       method: 'GET',
       url: `${ApiMethods.Products}/simular/${id}`,
@@ -40,14 +41,15 @@ export class ProductsService extends BaseService {
     })
   }
 
-  public static async create() {
+  public static async create(data: AddProduct) {
     return await this.fetch<IProduct[]>({
       method: 'POST',
       url: ApiMethods.Products,
+      data,
     })
   }
 
-  public static async update(id: string, data: UpdateProductTypes) {
+  public static async update(id: string | number, data: UpdateProductTypes) {
     return await this.fetch<IProduct[]>({
       method: 'PUT',
       url: `${ApiMethods.Products}/${id}`,
@@ -55,14 +57,14 @@ export class ProductsService extends BaseService {
     })
   }
 
-  public static async delete(id: string) {
+  public static async delete(id: string | number) {
     return await this.fetch<IProduct[]>({
       method: 'DELETE',
       url: `${ApiMethods.Products}/${id}`,
     })
   }
 
-  public static async getById(id: string) {
+  public static async getById(id: string | number) {
     return await this.fetch<IProduct[]>({
       method: 'GET',
       url: `${ApiMethods.Products}/${id}`,

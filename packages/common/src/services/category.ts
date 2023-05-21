@@ -11,7 +11,7 @@ export class CategoriesService extends BaseService {
     })
   }
 
-  public static async getById(id: string) {
+  public static async getById(id: string | number) {
     return await this.fetch<ICategory>({
       method: 'GET',
       url: `${ApiMethods.Categories}/${id}`,
@@ -25,21 +25,24 @@ export class CategoriesService extends BaseService {
     })
   }
 
-  public static async create() {
+  public static async create(name: string) {
     return await this.fetch<ICategory>({
       method: 'Post',
       url: ApiMethods.Categories,
+      data: {
+        name: name.trim(),
+      },
     })
   }
 
-  public static async delete(id: string) {
+  public static async delete(id: string | number) {
     return await this.fetch<ICategory>({
       method: 'DELETE',
       url: `${ApiMethods.Categories}/${id}`,
     })
   }
 
-  public static async update(id: string, name: string) {
+  public static async update(id: string | number, name: string) {
     return await this.fetch<ICategory>({
       method: 'PUT',
       url: `${ApiMethods.Categories}/${id}`,

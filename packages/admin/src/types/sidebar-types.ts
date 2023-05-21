@@ -10,10 +10,10 @@ export const sidebarData: ISidebar[] = [
   },
   {
     title: 'Categories',
-    href: 'categories',
+    href: '/categories',
   },
   {
     title: 'Products',
-    href: 'products',
+    href: '/products',
   },
 ]

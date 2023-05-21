@@ -11,6 +11,7 @@ type Props<T> = {
   label?: string
   rest?: React.CSSProperties
   autoComplete?: string
+  placeholder?: string
 } & FieldInputProps<T>
 
 const Container = styled.div`
@@ -34,8 +35,8 @@ export const FormikField = <T,>({
   label,
   value,
   onChange,
-  onBlur,
   autoComplete,
+  placeholder,
   ...rest
 }: Props<T>) => {
   return (
@@ -44,11 +45,10 @@ export const FormikField = <T,>({
       <Input
         value={value}
         onChange={onChange}
-        onBlur={onBlur}
         type={type}
         name={name}
         id={name}
-        placeholder={label}
+        placeholder={placeholder ? placeholder : label}
         autoComplete={autoComplete}
         {...rest}
       />

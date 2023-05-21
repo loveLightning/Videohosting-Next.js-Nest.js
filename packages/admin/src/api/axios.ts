@@ -5,7 +5,7 @@ import { fetchCheckAuth, store } from 'src/store'
 
 export const api = axiosBase
 
-axiosBase.defaults.baseURL = process.env.NEXT_PUBLIC_SERVER_URL
+axiosBase.defaults.baseURL = process.env.SERVER_URL
 
 axiosBase.interceptors.request.use(
   async (config) => {

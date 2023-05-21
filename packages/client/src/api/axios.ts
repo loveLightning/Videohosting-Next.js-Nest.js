@@ -1,13 +1,16 @@
 import { axiosBase } from '@amazon/common/src'
 import Cookies from 'js-cookie'
+import getConfig from 'next/config'
+
+const { publicRuntimeConfig } = getConfig()
 
 import { fetchCheckAuth, store } from 'src/store'
 
 export const api = axiosBase
 
-axiosBase.defaults.baseURL = 'http://localhost:4000'
+api.defaults.baseURL = publicRuntimeConfig.backendUrl
 
-axiosBase.interceptors.request.use(
+api.interceptors.request.use(
   async (config) => {
     config.headers = config.headers ?? {}
 
@@ -19,7 +22,7 @@ axiosBase.interceptors.request.use(
   (error) => Promise.reject(error),
 )
 
-axiosBase.interceptors.response.use(
+api.interceptors.response.use(
   (res) => {
     return res
   },
@@ -35,7 +38,7 @@ axiosBase.interceptors.response.use(
         const accessToken = store.getState().user.user.accessToken
         Cookies.set('accessToken', accessToken)
 
-        return axiosBase.request(originalRequest)
+        return api.request(originalRequest)
       } catch (error) {}
     }
 

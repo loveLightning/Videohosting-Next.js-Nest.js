@@ -44,3 +44,11 @@ export interface IProductSort {
 }
 
 export type UpdateProductTypes = Omit<IProduct, 'id' | 'userId' | 'slug'>
+
+export interface AddProduct {
+  name: string
+  desc: string
+  price: string
+  category: string
+  file: File | null
+}

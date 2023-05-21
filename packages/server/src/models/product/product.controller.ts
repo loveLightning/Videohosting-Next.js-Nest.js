@@ -2,20 +2,28 @@ import {
   Body,
   Controller,
   Delete,
+  FileTypeValidator,
   Get,
+  MaxFileSizeValidator,
   Param,
+  ParseFilePipe,
   Post,
   Put,
   Query,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common'
 import { JwtGuard } from '../auth/jwt.guard'
 import { GetAllProductDto } from './dtos/get-all-product.dto'
 import { ProductDto } from './dtos/product.dto'
 import { ProductService } from './product.service'
 import { Roles } from '../auth/roles.decorator'
-import { Role } from '@prisma/client'
 import { RolesGuard } from '../auth/role.guard'
+import { FileInterceptor } from '@nestjs/platform-express'
+import { storage } from 'src/common/utils/storage'
+import { CreateProductDto } from './dtos/create-product.dto'
+import { Role } from '@prisma/client'
 
 @Controller('products')
 export class ProductController {
@@ -45,8 +53,22 @@ export class ProductController {
   @UseGuards(JwtGuard)
   @Roles(Role.ADMIN)
   @UseGuards(JwtGuard, RolesGuard)
-  async createProduct() {
-    return this.productService.createProduct()
+  @UseInterceptors(FileInterceptor('file', storage))
+  async createProduct(
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new FileTypeValidator({ fileType: '.(png|jpeg|jpg)' }),
+          new MaxFileSizeValidator({ maxSize: 1024 * 1024 * 4 }),
+        ],
+      }),
+    )
+    file: Express.Multer.File,
+    @Body() createProductDto: CreateProductDto,
+  ) {
+    const productPath = file ? file.filename : null
+
+    return this.productService.createProduct(productPath, createProductDto)
   }
 
   @Put(':id')

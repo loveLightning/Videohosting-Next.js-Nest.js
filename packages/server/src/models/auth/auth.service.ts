@@ -6,7 +6,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
-import { User } from '@prisma/client'
+import { Role, User } from '@prisma/client'
 import { verify } from 'argon2'
 import { PrismaService } from 'src/services/prisma/prisma.service'
 import { UsersService } from '../user/user.service'
@@ -43,7 +43,7 @@ export class AuthService {
 
   async register(userDto: RegisterDto) {
     const user = await this.usersService.create(userDto)
-    const tokens = await this.createTokens(user.id)
+    const tokens = await this.createTokens(user.id, user.role)
 
     await this.mailService.sendActivationEmail(
       userDto.email,
@@ -62,7 +62,7 @@ export class AuthService {
     const { email } = userDto
     const user = await this.usersService.findForEmail(email)
 
-    const tokens = await this.createTokens(user.id)
+    const tokens = await this.createTokens(user.id, user.role)
 
     await this.saveToken(user.id, tokens.refreshToken)
 
@@ -86,7 +86,7 @@ export class AuthService {
     if (!result || !user || !tokenFromDb)
       throw new UnauthorizedException('Invalid refresh token')
 
-    const tokens = await this.createTokens(user.id)
+    const tokens = await this.createTokens(user.id, user.role)
     await this.saveToken(user.id, tokens.refreshToken)
 
     return {
@@ -149,8 +149,8 @@ export class AuthService {
     })
   }
 
-  private async createTokens(userId: number) {
-    const payload = { id: userId }
+  private async createTokens(userId: number, role: Role) {
+    const payload = { id: userId, role }
 
     const accessToken = this.jwtService.sign(payload, {
       expiresIn: '1h',

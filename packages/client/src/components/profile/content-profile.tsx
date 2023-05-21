@@ -71,7 +71,7 @@ export const ContentProfile = () => {
         <NameUser>{profile?.name}</NameUser>
         {profile?.avatarPath && (
           <PhotoProfile
-            src={PROFILE_IMAGE_URL(profile.avatarPath)}
+            src={PROFILE_IMAGE_URL(profile.avatarPath, 'profile')}
             alt="avatar"
             priority
             height={300}

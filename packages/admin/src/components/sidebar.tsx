@@ -21,18 +21,19 @@ export const Sidebar = () => {
     await dispatch(fetchLogout())
     push('/auth')
   }
-  console.log(asPath)
 
   return (
     <Wrapper>
       <WrapCateries>
         {sidebarData?.map((el) => (
-          <CategoryText
-            key={el.href}
-            active={asPath && asPath === `${el.href}` ? 'true' : 'false'}
-            href={el.href}>
-            {el.title}
-          </CategoryText>
+          <Link href={el.href} key={el.href}>
+            <CategoryText
+              active={
+                el.href === '/' ? asPath === '/' : asPath.startsWith(el.href)
+              }>
+              {el.title}
+            </CategoryText>
+          </Link>
         ))}
       </WrapCateries>
 
@@ -65,18 +66,17 @@ const WrapCateries = styled.div`
   gap: 7px;
 `
 
-interface CategoryTextStyled {
-  active: 'true' | 'false'
+interface CategoryTextProps {
+  active: boolean
 }
 
-// eslint-disable-next-line prettier/prettier
-const CategoryText = styled(Link) <CategoryTextStyled>`
-  color: ${({ theme, active }) =>
-    active === 'true' ? theme.green[0] : theme.white};
+const CategoryText = styled.p<CategoryTextProps>`
+  color: ${({ theme, active }) => (active ? theme.green[0] : theme.white)};
   cursor: pointer;
   font-family: ${({ theme }) => theme.roboto400};
   font-size: 18px;
   margin-left: 15px;
+  word-break: break-all;
 `
 
 const LogOut = styled.div`
