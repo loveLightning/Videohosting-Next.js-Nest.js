@@ -1,7 +1,15 @@
-import { convertPrice, IProduct } from '@amazon/common/src'
+import {
+  ApiMethods,
+  convertPrice,
+  IProduct,
+  ProductsService,
+} from '@amazon/common/src'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import styled from 'styled-components'
+
+import { GET_IMAGE_URL } from 'src/utils'
 
 interface Props {
   product: IProduct
@@ -9,12 +17,28 @@ interface Props {
 
 export const ProductCard = ({ product }: Props) => {
   const { push } = useRouter()
+  const queryClient = useQueryClient()
+
+  const { mutate } = useMutation((id: number) => ProductsService.delete(id), {
+    onSuccess() {
+      queryClient.invalidateQueries(['get all products'])
+    },
+  })
+
+  const deleteByCategory = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation()
+    mutate(product.id)
+  }
 
   return (
     <Card onClick={() => push(`/product/${product.slug}`)}>
       {product.images[0].length && (
         <ImageCard
-          src={product.images[0]}
+          src={GET_IMAGE_URL(
+            ApiMethods.Products,
+            'products',
+            product.images[0],
+          )}
           alt={product.name}
           width={0}
           height={0}
@@ -30,6 +54,10 @@ export const ProductCard = ({ product }: Props) => {
       <WrapButton>
         <Price>{convertPrice(product.price)}</Price>
       </WrapButton>
+
+      <WrapRemove onClick={(e) => deleteByCategory(e)}>
+        <Remove>&times;</Remove>
+      </WrapRemove>
     </Card>
   )
 }
@@ -72,4 +100,25 @@ const ImageCard = styled(Image)`
 
 const WrapButton = styled.div`
   margin-top: auto;
+`
+
+const WrapRemove = styled.div`
+  background-color: ${({ theme }) => theme.grey[0]};
+  min-width: 30px;
+  min-height: 30px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border-radius: 50%;
+  z-index: 1;
+  cursor: pointer;
+`
+
+const Remove = styled.div`
+  display: flex;
+  font-size: 20px;
+  justify-content: center;
+  align-items: center;
+  color: ${({ theme }) => theme.black};
+  min-height: 26px;
 `

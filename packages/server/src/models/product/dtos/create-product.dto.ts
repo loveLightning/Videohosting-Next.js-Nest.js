@@ -7,8 +7,8 @@ export class CreateProductDto {
   @IsString()
   public readonly desc: string
 
-  @IsNumber()
-  public readonly price: number
+  @IsString()
+  public readonly price: string
 
   @IsString()
   public readonly category: string

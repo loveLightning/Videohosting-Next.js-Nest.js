@@ -4,6 +4,7 @@ import { ChangeEvent, createRef, useRef, useState } from 'react'
 import AvatarEditor from 'react-avatar-editor'
 import PhoneInput from 'react-phone-input-2'
 import {
+  ApiMethods,
   checkFileSize,
   checkFormatFile,
   UsersService,
@@ -19,7 +20,7 @@ import {
   Modal,
   PreviewImage,
 } from 'src/components'
-import { PROFILE_IMAGE_URL } from 'src/constants'
+import { GET_IMAGE_URL } from 'src/constants'
 import { editingProfileSchema } from 'src/scheme'
 import { IFullProfile, IUpdateUser } from 'src/types'
 
@@ -60,7 +61,11 @@ export const EditingProfile = ({ profile }: Props) => {
     })
 
   const [isLoading, setIsLoading] = useState(false)
-  const imageUrl = PROFILE_IMAGE_URL(profile?.avatarPath, 'profile')
+  const imageUrl = GET_IMAGE_URL(
+    ApiMethods.Users,
+    'profile',
+    profile?.avatarPath,
+  )
   const [isShowModal, setIsShowModal] = useState(false)
   const [errorMsgFile, setErrorMsgFile] = useState('')
   const { red } = useTheme()

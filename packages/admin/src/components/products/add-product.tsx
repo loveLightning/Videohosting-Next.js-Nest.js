@@ -67,6 +67,11 @@ export const AddProducts = () => {
 
     try {
       await ProductsService.create(formData)
+      formikHelpers.resetForm()
+      setUpdateAvatarPreview({
+        img: '',
+        scale: 1,
+      })
     } catch (error) {
       if (error && axios.isAxiosError(error)) {
         if (error.response?.status === 409) {
@@ -82,7 +87,7 @@ export const AddProducts = () => {
     e: ChangeEvent<HTMLInputElement>,
     setFieldValue: (
       field: string,
-      value: any,
+      value: File | null,
       shouldValidate?: boolean,
     ) => void,
   ) => {

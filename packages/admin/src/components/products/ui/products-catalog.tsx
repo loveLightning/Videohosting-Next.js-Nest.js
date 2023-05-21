@@ -34,7 +34,7 @@ export const ProductsCatalog = ({
             </AddWrapper>
           </AddProducts>
         </Link>
-        {products?.products.length ? (
+        {products?.products?.length ? (
           products.products.map((product) => (
             <React.Fragment key={product.id}>
               <ProductCard product={product} />

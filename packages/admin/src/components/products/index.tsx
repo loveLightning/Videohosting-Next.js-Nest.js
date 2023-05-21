@@ -27,13 +27,11 @@ export const Products = () => {
 
   return (
     <>
-      {sortingProducts.length && (
-        <ProductsCatalog
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          products={sortingProducts}
-        />
-      )}
+      <ProductsCatalog
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        products={sortingProducts}
+      />
     </>
   )
 }

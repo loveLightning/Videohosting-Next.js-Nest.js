@@ -10,6 +10,7 @@ import {
   Post,
   Put,
   Query,
+  Res,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -24,6 +25,7 @@ import { FileInterceptor } from '@nestjs/platform-express'
 import { storage } from 'src/common/utils/storage'
 import { CreateProductDto } from './dtos/create-product.dto'
 import { Role } from '@prisma/client'
+import { Response } from 'express'
 
 @Controller('products')
 export class ProductController {
@@ -49,11 +51,16 @@ export class ProductController {
     return this.productService.getByCategory(categorySlug)
   }
 
+  @Get('products/:filename')
+  async getPicture(@Param('filename') filename, @Res() res: Response) {
+    res.sendFile(filename, { root: './uploads/products' })
+  }
+
   @Post()
   @UseGuards(JwtGuard)
   @Roles(Role.ADMIN)
   @UseGuards(JwtGuard, RolesGuard)
-  @UseInterceptors(FileInterceptor('file', storage))
+  @UseInterceptors(FileInterceptor('file', storage('products')))
   async createProduct(
     @UploadedFile(
       new ParseFilePipe({
@@ -66,6 +73,8 @@ export class ProductController {
     file: Express.Multer.File,
     @Body() createProductDto: CreateProductDto,
   ) {
+    console.log(createProductDto)
+
     const productPath = file ? file.filename : null
 
     return this.productService.createProduct(productPath, createProductDto)

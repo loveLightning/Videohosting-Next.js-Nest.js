@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common'
 import { Prisma } from '@prisma/client'
 import { titleToSlug } from 'src/common/utils/slug'
 import { PrismaService } from 'src/services/prisma/prisma.service'
@@ -165,11 +170,18 @@ export class ProductService {
 
   async createProduct(productPath: string, createProductDto: CreateProductDto) {
     const { category, desc, name, price } = createProductDto
+
+    const existProduct = await this.getByName(name)
+
+    if (existProduct) {
+      throw new HttpException('Product already exists', HttpStatus.CONFLICT)
+    }
+
     const product = await this.prisma.product.create<Prisma.ProductCreateArgs>({
       data: {
         description: desc,
         name: name,
-        price: price,
+        price: +price,
         slug: titleToSlug(name),
         images: [productPath],
         category: {
@@ -183,38 +195,6 @@ export class ProductService {
             },
           },
         },
-
-        // reviews: {
-        //   create: [
-        //     {
-        //       rating: 5,
-        //       text: 'It is amazing',
-        //       user: {
-        //         connect: {
-        //           id: 1,
-        //         },
-        //       },
-        //     },
-        //     {
-        //       rating: 4,
-        //       text: 'It is amadssdzing',
-        //       user: {
-        //         connect: {
-        //           id: 1,
-        //         },
-        //       },
-        //     },
-        //     {
-        //       rating: 2,
-        //       text: 'It is  dsd dsamazing',
-        //       user: {
-        //         connect: {
-        //           id: 1,
-        //         },
-        //       },
-        //     },
-        //   ],
-        // },
       },
     })
     return product.id
@@ -254,6 +234,14 @@ export class ProductService {
     return this.prisma.product.delete({
       where: {
         id: productId,
+      },
+    })
+  }
+
+  private async getByName(name: string) {
+    return this.prisma.product.findUnique({
+      where: {
+        name: name.trim(),
       },
     })
   }

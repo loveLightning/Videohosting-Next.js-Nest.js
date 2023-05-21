@@ -1,5 +1,5 @@
 import { Rating } from 'react-simple-star-rating'
-import { ProductsService, ReviewsService } from '@amazon/common/src'
+import { ApiMethods, ProductsService, ReviewsService } from '@amazon/common/src'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Form, Formik, FormikHelpers } from 'formik'
 import Image from 'next/image'
@@ -7,7 +7,7 @@ import { useRouter } from 'next/router'
 import styled from 'styled-components'
 
 import { Button } from 'src/components'
-import { PROFILE_IMAGE_URL } from 'src/constants'
+import { GET_IMAGE_URL } from 'src/constants'
 import { leaveReviewSchema } from 'src/scheme'
 import { useAppSelector, userSelector } from 'src/store'
 import { IReviewDto } from 'src/types'
@@ -86,7 +86,11 @@ export const ProductCard = () => {
               marginBottom: 20,
             }}>
             <Image
-              src={product.images[0]}
+              src={GET_IMAGE_URL(
+                ApiMethods.Products,
+                'products',
+                product.images[0],
+              )}
               alt="product"
               height={500}
               width={500}
@@ -143,7 +147,11 @@ export const ProductCard = () => {
                 <div>
                   {review.user.avatarPath && (
                     <Image
-                      src={PROFILE_IMAGE_URL(review.user.avatarPath, 'profile')}
+                      src={GET_IMAGE_URL(
+                        ApiMethods.Users,
+                        'profile',
+                        review.user.avatarPath,
+                      )}
                       alt="avatar"
                       height={50}
                       width={50}

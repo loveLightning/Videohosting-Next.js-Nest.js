@@ -1,9 +1,10 @@
-import { convertPrice, UsersService } from '@amazon/common/src'
+import { ApiMethods, convertPrice, UsersService } from '@amazon/common/src'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import styled from 'styled-components'
 
+import { GET_IMAGE_URL } from 'src/constants'
 import { useAppSelector, userSelector } from 'src/store'
 import { IProduct, RootCart } from 'src/types'
 
@@ -37,7 +38,11 @@ export const ProductItem = ({ product, favorites, cart }: Props) => {
     <Card onClick={() => push(`/product/${product.slug}`)}>
       {product.images[0].length && (
         <ImageCard
-          src={product.images[0]}
+          src={GET_IMAGE_URL(
+            ApiMethods.Products,
+            'products',
+            product.images[0],
+          )}
           alt={product.name}
           width={0}
           height={0}

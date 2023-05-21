@@ -1,4 +1,4 @@
-import { UsersService } from '@amazon/common/src'
+import { ApiMethods, UsersService } from '@amazon/common/src'
 import { useQuery } from '@tanstack/react-query'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -6,7 +6,7 @@ import { useRouter } from 'next/router'
 import styled from 'styled-components'
 
 import { Container, Tabs } from 'src/components'
-import { PROFILE_IMAGE_URL } from 'src/constants'
+import { GET_IMAGE_URL } from 'src/constants'
 import { useAppSelector, userSelector } from 'src/store'
 
 import { EditingProfile } from './editing-profile'
@@ -71,7 +71,7 @@ export const ContentProfile = () => {
         <NameUser>{profile?.name}</NameUser>
         {profile?.avatarPath && (
           <PhotoProfile
-            src={PROFILE_IMAGE_URL(profile.avatarPath, 'profile')}
+            src={GET_IMAGE_URL(ApiMethods.Users, 'profile', profile.avatarPath)}
             alt="avatar"
             priority
             height={300}

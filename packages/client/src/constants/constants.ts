@@ -3,5 +3,10 @@ import getConfig from 'next/config'
 
 const { publicRuntimeConfig } = getConfig()
 
-export const PROFILE_IMAGE_URL = (file: string, path: string) =>
-  `${publicRuntimeConfig.backendUrl}/${ApiMethods.Users}/${path}/${file}`
+type PathType = 'profile' | 'products'
+
+export const GET_IMAGE_URL = (
+  method: ApiMethods,
+  path: PathType,
+  file: string,
+) => `${publicRuntimeConfig.backendUrl}/${method}/${path}/${file}`

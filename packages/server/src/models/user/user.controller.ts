@@ -33,7 +33,7 @@ export class UsersController {
 
   @Get('profile/:filename')
   async getPicture(@Param('filename') filename, @Res() res: Response) {
-    res.sendFile(filename, { root: './uploads' })
+    res.sendFile(filename, { root: './uploads/avatars' })
   }
 
   @Patch('profile')
@@ -47,7 +47,7 @@ export class UsersController {
 
   @Patch('profile/avatar')
   @UseGuards(JwtGuard)
-  @UseInterceptors(FileInterceptor('file', storage))
+  @UseInterceptors(FileInterceptor('file', storage('avatars')))
   async updateProfile(
     @CurrentUser('id') userId: number,
     @UploadedFile(

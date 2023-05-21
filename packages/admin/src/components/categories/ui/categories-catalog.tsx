@@ -21,7 +21,7 @@ export const CategoriesCatalog = ({ categories }: Props) => {
         </Link>
 
         {categories?.length ? (
-          categories?.map((category) => (
+          categories.map((category) => (
             <li key={category.id}>
               <CategoryCard category={category} />
             </li>
