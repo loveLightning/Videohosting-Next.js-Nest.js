@@ -1,8 +1,17 @@
 import React from 'react'
-import { FieldInputProps } from 'formik'
+import { FormikHandlers } from 'formik'
 import styled from 'styled-components'
 
 import { FormikErrorMessage } from 'src/components'
+
+export interface FieldInputProps<Value> {
+  value: Value
+  name: string
+  multiple?: boolean
+  checked?: boolean
+  onChange: FormikHandlers['handleChange']
+  onBlur?: FormikHandlers['handleBlur']
+}
 
 type Props<T> = {
   name: string
