@@ -8,7 +8,7 @@ import { Button } from 'src/components'
 import { ProductCard } from './product-card'
 
 interface Props {
-  products: IPaginationProduct
+  products?: IPaginationProduct
   setCurrentPage: (val: number) => void
   currentPage: number
 }
@@ -45,7 +45,7 @@ export const ProductsCatalog = ({
         )}
       </Wrap>
       <Pagination>
-        {allPages.map((el) => (
+        {allPages?.map((el) => (
           <Button
             onClick={() => setCurrentPage(el)}
             style={{

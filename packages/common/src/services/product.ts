@@ -1,11 +1,10 @@
+import { ApiMethods } from '../enums'
 import {
-  AddProduct,
+  AddProductFormData,
   IPaginationProduct,
   IProduct,
   IProductSort,
-} from 'src/types'
-
-import { ApiMethods } from '../enums'
+} from '../types'
 import { BaseService } from './base'
 
 export class ProductsService extends BaseService {
@@ -40,7 +39,7 @@ export class ProductsService extends BaseService {
     })
   }
 
-  public static async create(data: AddProduct) {
+  public static async create(data: AddProductFormData) {
     return await this.fetch<IProduct[]>({
       method: 'POST',
       url: ApiMethods.Products,
@@ -48,7 +47,7 @@ export class ProductsService extends BaseService {
     })
   }
 
-  public static async update(id: string | number, data: AddProduct) {
+  public static async update(id: string | number, data: AddProductFormData) {
     return await this.fetch<IProduct[]>({
       method: 'PUT',
       url: `${ApiMethods.Products}/${id}`,

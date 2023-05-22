@@ -1,6 +1,5 @@
-import { ICategory } from 'src/types'
-
 import { ApiMethods } from '../enums'
+import { ICategory } from '../types'
 import { BaseService } from './base'
 
 export class CategoriesService extends BaseService {

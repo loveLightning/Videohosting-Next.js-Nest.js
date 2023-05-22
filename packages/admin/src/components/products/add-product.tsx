@@ -1,6 +1,7 @@
 import { ChangeEvent, createRef, useState } from 'react'
 import {
   AddProduct,
+  AddProductFormData,
   CategoriesService,
   checkFileSize,
   checkFormatFile,
@@ -66,7 +67,7 @@ export const AddProducts = () => {
     formData.append('price', values.price)
 
     try {
-      await ProductsService.create(formData)
+      await ProductsService.create(formData as AddProductFormData)
       formikHelpers.resetForm()
       setUpdateAvatarPreview({
         img: '',

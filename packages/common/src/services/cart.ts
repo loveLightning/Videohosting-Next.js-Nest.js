@@ -1,6 +1,5 @@
-import { RootCart } from 'src/types'
-
 import { ApiMethods } from '../enums'
+import { RootCart } from '../types'
 import { BaseService } from './base'
 
 export class CartService extends BaseService {

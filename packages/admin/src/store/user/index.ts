@@ -1,8 +1,3 @@
 export * from './slice'
 export * from './selectors'
-export {
-  fetchRegister,
-  fetchLogin,
-  fetchLogout,
-  fetchCheckAuth,
-} from './actions'
+export { fetchLogin, fetchLogout, fetchCheckAuth } from './actions'

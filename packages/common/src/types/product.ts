@@ -52,3 +52,5 @@ export interface AddProduct {
   category: string
   file: File | null
 }
+
+export interface AddProductFormData extends FormData, AddProduct {}

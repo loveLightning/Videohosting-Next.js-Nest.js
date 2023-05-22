@@ -1,6 +1,5 @@
-import { IPagination } from 'src/types'
-
 import { ApiMethods } from '../enums'
+import { IPagination } from '../types'
 import { BaseService } from './base'
 
 export class PaginationService extends BaseService {

@@ -1,6 +1,5 @@
-import { ConfirmType, IOrder, StatusData } from 'src/types'
-
 import { ApiMethods } from '../enums'
+import { ConfirmType, IOrder, StatusData } from '../types'
 import { BaseService } from './base'
 
 export class OrdersService extends BaseService {

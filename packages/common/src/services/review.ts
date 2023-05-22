@@ -1,6 +1,5 @@
-import { IRating, IReview, IReviewDto } from 'src/types'
-
 import { ApiMethods } from '../enums'
+import { IRating, IReview, IReviewDto } from '../types'
 import { BaseService } from './base'
 
 export class ReviewsService extends BaseService {

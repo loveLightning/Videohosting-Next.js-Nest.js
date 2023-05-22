@@ -10,7 +10,7 @@
     ]
   },
   "scripts": {
-    "build": "tsc —build tsconfig.json"
+    "build": "tsc --build tsconfig.json"
   },
   "description": "",
   "license": "MIT",

@@ -1,6 +1,5 @@
-import { IFullProfile, IUpdateUser } from 'src/types'
-
 import { ApiMethods } from '../enums'
+import { IFullProfile, IUpdateUser } from '../types'
 import { BaseService } from './base'
 
 export class UsersService extends BaseService {

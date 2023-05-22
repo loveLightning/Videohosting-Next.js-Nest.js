@@ -13,11 +13,14 @@ export const addProductSchema = yup.object({
     .test(
       'Fichier taille',
       'upload file',
-      (value) => !value || (value && value.size <= 1024 * 1024),
+      (value: unknown) =>
+        !value || (value instanceof File && value.size <= 1024 * 1024),
     )
     .test(
       'format',
       'upload file',
-      (value) => !value || (value && SUPPORTED_FORMATS.includes(value.type)),
+      (value: unknown) =>
+        !value ||
+        (value instanceof File && SUPPORTED_FORMATS.includes(value.type)),
     ),
 })

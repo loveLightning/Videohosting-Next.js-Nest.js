@@ -1,6 +1,5 @@
-import { AuthLogin, AuthRegister, IUser } from 'src/types'
-
 import { ApiMethods } from '../enums'
+import { AuthLogin, AuthRegister, IUser } from '../types'
 import { BaseService } from './base'
 
 export class AuthService extends BaseService {

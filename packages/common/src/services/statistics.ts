@@ -1,6 +1,5 @@
-import { IStatistics } from 'src/types'
-
 import { ApiMethods } from '../enums'
+import { IStatistics } from '../types'
 import { BaseService } from './base'
 
 export class StatisticsService extends BaseService {
