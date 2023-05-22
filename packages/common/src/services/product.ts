@@ -3,7 +3,6 @@ import {
   IPaginationProduct,
   IProduct,
   IProductSort,
-  UpdateProductTypes,
 } from 'src/types'
 
 import { ApiMethods } from '../enums'
@@ -49,7 +48,7 @@ export class ProductsService extends BaseService {
     })
   }
 
-  public static async update(id: string | number, data: UpdateProductTypes) {
+  public static async update(id: string | number, data: AddProduct) {
     return await this.fetch<IProduct[]>({
       method: 'PUT',
       url: `${ApiMethods.Products}/${id}`,
@@ -65,7 +64,7 @@ export class ProductsService extends BaseService {
   }
 
   public static async getById(id: string | number) {
-    return await this.fetch<IProduct[]>({
+    return await this.fetch<IProduct>({
       method: 'GET',
       url: `${ApiMethods.Products}/${id}`,
     })

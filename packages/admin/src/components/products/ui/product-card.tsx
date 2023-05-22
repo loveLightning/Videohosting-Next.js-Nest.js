@@ -31,7 +31,7 @@ export const ProductCard = ({ product }: Props) => {
   }
 
   return (
-    <Card onClick={() => push(`/product/${product.slug}`)}>
+    <Card onClick={() => push(`/product/edit/${product.slug}`)}>
       {product.images[0].length && (
         <ImageCard
           src={GET_IMAGE_URL(

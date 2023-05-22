@@ -1,5 +1,10 @@
 import React from 'react'
-import { CartService, convertPrice, OrdersService } from '@amazon/common/src'
+import {
+  ApiMethods,
+  CartService,
+  convertPrice,
+  OrdersService,
+} from '@amazon/common/src'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -7,6 +12,7 @@ import { useRouter } from 'next/router'
 import styled from 'styled-components'
 
 import { Button } from 'src/components'
+import { GET_IMAGE_URL } from 'src/constants'
 import { useAppSelector, userSelector } from 'src/store'
 import { RemoveCart, UpdateCart } from 'src/types'
 
@@ -87,7 +93,11 @@ export const CartProducts = () => {
             <CartItem key={item.id}>
               <CartItemImage
                 priority
-                src={item.product.images[0]}
+                src={GET_IMAGE_URL(
+                  ApiMethods.Products,
+                  'products',
+                  item.product.images[0],
+                )}
                 alt={item.product.name}
                 height={150}
                 width={150}

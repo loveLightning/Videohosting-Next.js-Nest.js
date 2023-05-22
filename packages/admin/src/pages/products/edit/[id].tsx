@@ -1,10 +1,9 @@
-import { MainLayout } from 'src/components'
-import { EditProduct } from 'src/components/products/edit-product'
+import { EditProducts, MainLayout } from 'src/components'
 
 const ProductsEditPage = () => {
   return (
     <MainLayout>
-      <EditProduct />
+      <EditProducts />
     </MainLayout>
   )
 }
