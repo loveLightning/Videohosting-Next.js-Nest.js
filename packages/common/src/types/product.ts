@@ -50,7 +50,6 @@ export interface AddProduct {
   desc: string
   price: string
   category: string
-  file: File | null
 }
 
 export interface AddProductFormData extends FormData, AddProduct {}

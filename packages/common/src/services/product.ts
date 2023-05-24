@@ -1,5 +1,6 @@
 import { ApiMethods } from '../enums'
 import {
+  AddProduct,
   AddProductFormData,
   IPaginationProduct,
   IProduct,
@@ -47,10 +48,18 @@ export class ProductsService extends BaseService {
     })
   }
 
-  public static async update(id: string | number, data: AddProductFormData) {
+  public static async update(id: string | number, data: AddProduct) {
     return await this.fetch<IProduct[]>({
       method: 'PUT',
       url: `${ApiMethods.Products}/${id}`,
+      data,
+    })
+  }
+
+  public static async updateImage(id: string | number, data: FormData) {
+    return await this.fetch<IProduct[]>({
+      method: 'PATCH',
+      url: `${ApiMethods.Products}/productPath/${id}`,
       data,
     })
   }

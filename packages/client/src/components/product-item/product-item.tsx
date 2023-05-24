@@ -29,8 +29,10 @@ export const ProductItem = ({ product, favorites, cart }: Props) => {
   const { mutate } = useMutation(
     (productId: number) => UsersService.toggleFavorites(productId),
     {
-      onSuccess: () =>
-        queryClient.invalidateQueries(['get profile from catalog']),
+      onSuccess: () => {
+        queryClient.invalidateQueries(['get profile from catalog'])
+        queryClient.invalidateQueries(['get profile'])
+      },
     },
   )
 

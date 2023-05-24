@@ -1,3 +1,4 @@
 export { loginSchema } from './login-schema'
-export { addCategorySchema } from './add-category-schema'
+export { categorySchema } from './category-schema'
 export { addProductSchema } from './add-product-schema'
+export { editProductSchema } from './edit-product-schema'

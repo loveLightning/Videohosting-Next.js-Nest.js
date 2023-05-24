@@ -5,7 +5,7 @@ import { Form, Formik, FormikHelpers } from 'formik'
 import { useRouter } from 'next/router'
 
 import { Button, FormikField } from 'src/components'
-import { addCategorySchema } from 'src/scheme'
+import { categorySchema } from 'src/scheme'
 
 import { GoBack, Title, Wrapper, WrapperAuth } from './styled'
 
@@ -51,7 +51,6 @@ export const EditCategories = () => {
     try {
       if (data?.name && typeof id === 'string') {
         await mutateAsync({ id, name: values.name })
-        queryClient.invalidateQueries(['get category by id'])
       }
     } catch (error) {
       if (error && axios.isAxiosError(error)) {
@@ -72,7 +71,7 @@ export const EditCategories = () => {
           initialValues={{
             name: data?.name || '',
           }}
-          validationSchema={addCategorySchema}
+          validationSchema={categorySchema}
           onSubmit={onSubmit}>
           {(formik) => {
             return (

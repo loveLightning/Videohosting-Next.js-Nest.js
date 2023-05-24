@@ -5,7 +5,7 @@ import { Form, Formik, FormikHelpers } from 'formik'
 import { useRouter } from 'next/router'
 
 import { Button, FormikField } from 'src/components'
-import { addCategorySchema } from 'src/scheme'
+import { categorySchema } from 'src/scheme'
 
 import { GoBack, Title, Wrapper, WrapperAuth } from './styled'
 
@@ -50,7 +50,7 @@ export const AddCategories = () => {
           enableReinitialize
           initialValues={initialValues}
           onSubmit={onSubmit}
-          validationSchema={addCategorySchema}>
+          validationSchema={categorySchema}>
           {(formik) => {
             return (
               <Form>

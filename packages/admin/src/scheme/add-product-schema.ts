@@ -9,7 +9,6 @@ export const addProductSchema = yup.object({
   file: yup
     .mixed()
     .nullable()
-    .required('A file is required')
     .test(
       'Fichier taille',
       'upload file',

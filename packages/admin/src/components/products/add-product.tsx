@@ -18,12 +18,16 @@ import { addProductSchema } from 'src/scheme'
 
 import { GoBack, Title, Wrapper, WrapperAuth } from './styled'
 
-const initialValues: AddProduct = {
+interface AddProductFile extends AddProduct {
+  file: string | File
+}
+
+const initialValues: AddProductFile = {
   name: '',
   desc: '',
   price: '',
   category: '',
-  file: null,
+  file: '',
 }
 
 interface AvatarPreviewTypes {
@@ -54,8 +58,8 @@ export const AddProducts = () => {
   )
 
   const onSubmit = async (
-    values: AddProduct,
-    formikHelpers: FormikHelpers<AddProduct>,
+    values: AddProductFile,
+    formikHelpers: FormikHelpers<AddProductFile>,
   ) => {
     setIsLoading(true)
 

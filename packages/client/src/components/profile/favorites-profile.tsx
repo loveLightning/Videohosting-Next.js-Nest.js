@@ -13,7 +13,11 @@ export const FavoritesProfile = ({ favorites }: Props) => {
     <Wrap>
       {favorites.length ? (
         favorites.map((product) => (
-          <ProductItem key={product.id} product={product} />
+          <ProductItem
+            key={product.id}
+            product={product}
+            favorites={favorites}
+          />
         ))
       ) : (
         <p>There are no products</p>
