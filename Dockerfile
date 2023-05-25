@@ -1,18 +1,19 @@
-FROM node:alpine
+FROM node:14
 
-RUN mkdir -p /usr/src/app
-ENV PORT 3000
+# Set the working directory inside the container
+WORKDIR /app
 
-WORKDIR /usr/src/app
+# Copy the package.json and yarn.lock files into the container
+COPY package*.json yarn.lock ./
 
-COPY package.json /usr/src/app
-COPY yarn.lock /usr/src/app
+# Install dependencies using Yarn
+RUN yarn install --frozen-lockfile
 
-RUN yarn install --production
+# Copy the rest of the application code into the container
+COPY . .
 
-COPY . /usr/src/app
-
+# Build the Next.js application
 RUN yarn build
 
-EXPOSE 3000
-CMD [ "yarn", "start" ]
+# Set the default command to start the Next.js server
+CMD ["yarn", "start"]
