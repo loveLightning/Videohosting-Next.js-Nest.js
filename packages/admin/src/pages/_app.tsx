@@ -52,9 +52,11 @@ function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter()
   const checkAuthAsync = useCallback(async () => {
     try {
-      const { data } = await AuthService.checkAuth()
-
-      setUser(data)
+      if (Cookies.get('accessToken')) {
+        const { data } = await AuthService.checkAuth()
+        Cookies.set('accessToken', data.accessToken)
+        setUser(data)
+      }
     } catch (err) {
       const error = err as AxiosError
 
@@ -70,7 +72,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       checkAuthAsync()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [Cookies.get('accessToken')])
+  }, [])
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -95,7 +97,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
 MyApp.getInitialProps = async ({ ctx }: Context) => {
   if (ctx !== undefined) {
-    const data = ctx.req?.cookies.accessToken
+    const data = ctx.req?.cookies.refreshToken
 
     if (!data && ctx.pathname !== '/auth') {
       ctx.res?.writeHead(301, { Location: '/auth' }).end()

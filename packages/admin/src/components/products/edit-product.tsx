@@ -171,7 +171,7 @@ export const EditProducts = () => {
       <WrapperAuth>
         <GoBack onClick={() => back()}>Go back</GoBack>
         <Title>Edit Product</Title>
-        {renderLoading}
+        {renderLoading()}
         {data && (
           <Formik
             enableReinitialize

@@ -8,6 +8,7 @@ export const addProductSchema = yup.object({
   category: yup.string().required('Category field is required'),
   file: yup
     .mixed()
+    .required('File field is required')
     .nullable()
     .test(
       'Fichier taille',
