@@ -1,3 +1,4 @@
+import { RootCart } from './cart'
 import { IProduct } from './product'
 
 export interface IUser {
@@ -23,6 +24,7 @@ export interface IProfile {
 
 export interface IFullProfile extends IProfile {
   favorites: IProduct[]
+  carts: RootCart
 }
 
 export interface IUpdateUser {

@@ -38,7 +38,12 @@ export const ContentProfile = () => {
         }
 
         case 'favorites': {
-          return <FavoritesProfile favorites={profile?.favorites} />
+          return (
+            <FavoritesProfile
+              favorites={profile.favorites}
+              cart={profile.carts}
+            />
+          )
         }
 
         case 'editing': {

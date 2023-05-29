@@ -45,6 +45,9 @@ export class ProductsService extends BaseService {
       method: 'POST',
       url: ApiMethods.Products,
       data,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
     })
   }
 
@@ -61,6 +64,9 @@ export class ProductsService extends BaseService {
       method: 'PATCH',
       url: `${ApiMethods.Products}/productPath/${id}`,
       data,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
     })
   }
 

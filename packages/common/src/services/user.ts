@@ -23,6 +23,9 @@ export class UsersService extends BaseService {
       method: 'PATCH',
       url: `${ApiMethods.Users}/profile/avatar`,
       data,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
     })
   }
 

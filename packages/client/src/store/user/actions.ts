@@ -47,6 +47,8 @@ export const fetchCheckAuth = createAsyncThunk(
 
       return response.data
     } catch (error) {
+      Cookies.remove('accessToken')
+
       return rejectWithValue(error)
     }
   },

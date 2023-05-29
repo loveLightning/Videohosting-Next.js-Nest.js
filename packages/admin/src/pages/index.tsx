@@ -1,9 +1,12 @@
-import { MainLayout } from 'src/components'
+import { MainLayout, NextHead } from 'src/components'
 
 export default function Home() {
   return (
-    <MainLayout>
-      <div>Some text</div>
-    </MainLayout>
+    <>
+      <NextHead description="admin panel" title="Admin" />
+      <MainLayout>
+        <div>Some text</div>
+      </MainLayout>
+    </>
   )
 }

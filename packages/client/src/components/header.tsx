@@ -10,6 +10,7 @@ import { ModalUnauth, SearchInput } from 'src/components'
 import { BasketIcon, LogoIcon, ProfileIcon } from 'src/icons'
 import {
   fetchCheckAuth,
+  resetUser,
   useAppDispatch,
   useAppSelector,
   userSelector,
@@ -44,6 +45,8 @@ export const Header = () => {
 
         return
       } catch (error) {
+        Cookies.remove('accessToken')
+        dispatch(resetUser())
         setIsShowModal(true)
       }
     } else {
@@ -60,10 +63,6 @@ export const Header = () => {
           </Link>
           <SearchInput />
           <WrapPanel>
-            {/* <WrapIcon onClick={checkRedirect}>
-              <FavoritesIcon active={true} />
-            </WrapIcon> */}
-
             <WrapBasket onClick={() => checkRedirect('/cart')}>
               {cart && (
                 <WrapCount>
@@ -116,6 +115,7 @@ const WrapBasket = styled.div`
   padding: 5px;
   border-radius: 5px;
   position: relative;
+  cursor: pointer;
 `
 
 const WrapCount = styled.div`

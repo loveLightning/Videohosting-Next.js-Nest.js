@@ -1,12 +1,15 @@
 import React from 'react'
 
-import { AddProducts, MainLayout } from 'src/components'
+import { AddProducts, MainLayout, NextHead } from 'src/components'
 
 const AddingProductsPage = () => {
   return (
-    <MainLayout>
-      <AddProducts />
-    </MainLayout>
+    <>
+      <NextHead title="Add product" />
+      <MainLayout>
+        <AddProducts />
+      </MainLayout>
+    </>
   )
 }
 

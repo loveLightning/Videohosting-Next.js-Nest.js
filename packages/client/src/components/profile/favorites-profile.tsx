@@ -1,20 +1,22 @@
 import styled from 'styled-components'
 
-import { IProduct } from 'src/types'
+import { IProduct, RootCart } from 'src/types'
 
 import { ProductItem } from '../product-item'
 
 interface Props {
   favorites: IProduct[]
+  cart: RootCart
 }
 
-export const FavoritesProfile = ({ favorites }: Props) => {
+export const FavoritesProfile = ({ favorites, cart }: Props) => {
   return (
     <Wrap>
       {favorites.length ? (
         favorites.map((product) => (
           <ProductItem
             key={product.id}
+            cart={cart}
             product={product}
             favorites={favorites}
           />

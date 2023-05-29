@@ -102,7 +102,6 @@ export const AddProducts = () => {
     if (files) {
       if (!checkFileSize(files[0]) || !checkFormatFile(files[0])) {
         setErrorMsgFile('Choose file a png, jpeg or jpg ')
-        setFieldValue('file', files[0])
         setUpdateAvatarPreview({
           img: '',
           scale: 1,

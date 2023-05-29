@@ -1,12 +1,15 @@
 import React from 'react'
 
-import { AddCategories, MainLayout } from 'src/components'
+import { AddCategories, MainLayout, NextHead } from 'src/components'
 
 const AddingCategoriesPage = () => {
   return (
-    <MainLayout>
-      <AddCategories />
-    </MainLayout>
+    <>
+      <NextHead title="Add category" />
+      <MainLayout>
+        <AddCategories />
+      </MainLayout>
+    </>
   )
 }
 

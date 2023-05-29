@@ -1,7 +1,12 @@
-import { Login } from 'src/components'
+import { Login, NextHead } from 'src/components'
 
 const AuthPage = () => {
-  return <Login />
+  return (
+    <>
+      <NextHead title="Login" description="auth login" />
+      <Login />
+    </>
+  )
 }
 
 export default AuthPage

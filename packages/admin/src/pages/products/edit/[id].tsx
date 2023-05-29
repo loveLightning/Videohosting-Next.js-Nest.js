@@ -1,10 +1,13 @@
-import { EditProducts, MainLayout } from 'src/components'
+import { EditProducts, MainLayout, NextHead } from 'src/components'
 
 const ProductsEditPage = () => {
   return (
-    <MainLayout>
-      <EditProducts />
-    </MainLayout>
+    <>
+      <NextHead title="Edit product" />
+      <MainLayout>
+        <EditProducts />
+      </MainLayout>
+    </>
   )
 }
 

@@ -1,10 +1,13 @@
-import { MainLayout, Products } from 'src/components'
+import { MainLayout, NextHead, Products } from 'src/components'
 
 const ProductsPage = () => {
   return (
-    <MainLayout>
-      <Products />
-    </MainLayout>
+    <>
+      <NextHead title="Products" />
+      <MainLayout>
+        <Products />
+      </MainLayout>
+    </>
   )
 }
 

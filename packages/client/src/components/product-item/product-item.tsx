@@ -15,7 +15,7 @@ import { ProductRating } from './product-rating'
 interface Props {
   product: IProduct
   favorites?: IProduct[] | undefined
-  cart?: RootCart | undefined
+  cart: RootCart | undefined
 }
 
 export const ProductItem = ({ product, favorites, cart }: Props) => {

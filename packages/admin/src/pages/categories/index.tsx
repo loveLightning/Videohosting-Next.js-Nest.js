@@ -1,12 +1,15 @@
 import React from 'react'
 
-import { Categories, MainLayout } from 'src/components'
+import { Categories, MainLayout, NextHead } from 'src/components'
 
 const EditingCategoriesPage = () => {
   return (
-    <MainLayout>
-      <Categories />
-    </MainLayout>
+    <>
+      <NextHead title="Categories" />
+      <MainLayout>
+        <Categories />
+      </MainLayout>
+    </>
   )
 }
 
