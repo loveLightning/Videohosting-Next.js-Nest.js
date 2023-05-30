@@ -1,4 +1,5 @@
 import { Container, ProductCard } from 'src/components'
+import { withAuthPublic } from 'src/hoc'
 
 const ProductPage = () => {
   return (
@@ -8,4 +9,4 @@ const ProductPage = () => {
   )
 }
 
-export default ProductPage
+export default withAuthPublic(ProductPage)

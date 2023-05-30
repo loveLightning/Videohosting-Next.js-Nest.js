@@ -1,5 +1,5 @@
 import { Login, NextHead, Register } from 'src/components'
-import { withAuth } from 'src/hoc'
+import { withAuthProtected } from 'src/hoc'
 import { useAppSelector, userSelector } from 'src/store'
 import { AuthModeEnum } from 'src/types'
 
@@ -16,4 +16,4 @@ function AuthPage() {
   )
 }
 
-export default withAuth(AuthPage)
+export default withAuthProtected(AuthPage)

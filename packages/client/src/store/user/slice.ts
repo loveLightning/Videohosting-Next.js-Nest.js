@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import { IUser } from 'src/types'
 
@@ -35,7 +35,9 @@ const toolkitSlice = createSlice({
   initialState,
   reducers: {
     resetUser: () => initialState,
-
+    setUser(state: UserState, { payload }: PayloadAction<IUser>) {
+      state.user = payload
+    },
     changeAuthMode: (state) => {
       state.authMode =
         state.authMode === AuthModeEnum.SignIn
@@ -101,6 +103,6 @@ const toolkitSlice = createSlice({
   },
 })
 
-export const { resetUser, changeAuthMode } = toolkitSlice.actions
+export const { resetUser, setUser, changeAuthMode } = toolkitSlice.actions
 
 export default toolkitSlice.reducer

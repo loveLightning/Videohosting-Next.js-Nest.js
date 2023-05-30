@@ -1,23 +1,15 @@
 import { useState } from 'react'
 import { CartService } from '@amazon/common/src'
 import { useQuery } from '@tanstack/react-query'
-import Cookies from 'js-cookie'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import styled, { useTheme } from 'styled-components'
 
 import { ModalUnauth, SearchInput } from 'src/components'
 import { BasketIcon, LogoIcon, ProfileIcon } from 'src/icons'
-import {
-  fetchCheckAuth,
-  resetUser,
-  useAppDispatch,
-  useAppSelector,
-  userSelector,
-} from 'src/store'
+import { useAppSelector, userSelector } from 'src/store'
 
 export const Header = () => {
-  const dispatch = useAppDispatch()
   const { push } = useRouter()
   const { white } = useTheme()
 
@@ -37,21 +29,7 @@ export const Header = () => {
   )
 
   const checkRedirect = async (path: string) => {
-    if (Cookies.get('accessToken')) {
-      try {
-        await dispatch(fetchCheckAuth()).unwrap()
-
-        push(path)
-
-        return
-      } catch (error) {
-        Cookies.remove('accessToken')
-        dispatch(resetUser())
-        setIsShowModal(true)
-      }
-    } else {
-      setIsShowModal(true)
-    }
+    user?.isActivated ? push(path) : setIsShowModal(true)
   }
 
   return (

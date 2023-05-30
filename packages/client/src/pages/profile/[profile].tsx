@@ -1,8 +1,8 @@
 import { ContentProfile } from 'src/components'
-import { withAuth } from 'src/hoc'
+import { withAuthProtected } from 'src/hoc'
 
 const ProfilePage = () => {
   return <ContentProfile />
 }
 
-export default withAuth(ProfilePage)
+export default withAuthProtected(ProfilePage)

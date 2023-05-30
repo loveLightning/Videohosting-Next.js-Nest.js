@@ -3,6 +3,7 @@ import { GetStaticPaths, GetStaticProps } from 'next'
 import { ParsedUrlQuery } from 'querystring'
 
 import { Catalog, MainLayout, NextHead } from 'src/components'
+import { withAuthPublic } from 'src/hoc'
 import { ICategory, IPaginationProduct } from 'src/types'
 
 interface Props {
@@ -61,4 +62,4 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
   }
 }
 
-export default CategoryPage
+export default withAuthPublic(CategoryPage)

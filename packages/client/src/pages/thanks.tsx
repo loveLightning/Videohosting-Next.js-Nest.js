@@ -1,5 +1,7 @@
 import Link from 'next/link'
 
+import { withAuthPublic } from 'src/hoc'
+
 const Thanks = () => {
   return (
     <>
@@ -9,4 +11,4 @@ const Thanks = () => {
   )
 }
 
-export default Thanks
+export default withAuthPublic(Thanks)

@@ -1,1 +1,2 @@
-export { withAuth } from './with-auth'
+export { withAuthProtected } from './with-auth-protected'
+export { withAuthPublic } from './with-auth-public'

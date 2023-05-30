@@ -1,5 +1,5 @@
 import { CartProducts, NextHead } from 'src/components'
-import { withAuth } from 'src/hoc'
+import { withAuthProtected } from 'src/hoc'
 
 const Cart = () => {
   return (
@@ -10,4 +10,4 @@ const Cart = () => {
   )
 }
 
-export default withAuth(Cart)
+export default withAuthProtected(Cart)

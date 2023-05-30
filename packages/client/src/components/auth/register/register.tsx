@@ -123,7 +123,7 @@ export const Register = () => {
             <TextConfirm>
               The message has been sent to the post office:
             </TextConfirm>
-            <EmailText>{user.user.email}</EmailText>
+            <EmailText>{user?.user?.email}</EmailText>
 
             <Note onClick={async () => await dispatch(fetchLogout())}>
               Register another mail

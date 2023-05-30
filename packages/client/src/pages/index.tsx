@@ -2,6 +2,7 @@ import { ProductsService } from '@amazon/common/src'
 import { GetStaticProps } from 'next'
 
 import { Catalog, MainLayout, NextHead } from 'src/components'
+import { withAuthPublic } from 'src/hoc'
 import { IPaginationProduct } from 'src/types'
 
 interface Props {
@@ -33,4 +34,4 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
   }
 }
 
-export default HomePage
+export default withAuthPublic(HomePage)

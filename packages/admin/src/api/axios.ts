@@ -1,10 +1,11 @@
+import { AuthService } from '@amazon/common'
 import { axiosBase } from '@amazon/common/src'
 import Cookies from 'js-cookie'
 import getConfig from 'next/config'
 
 const { publicRuntimeConfig } = getConfig()
 
-import { fetchCheckAuth, store } from 'src/store'
+import { setUser, store } from 'src/store'
 
 export const api = axiosBase
 
@@ -28,15 +29,19 @@ api.interceptors.response.use(
   },
   // eslint-disable-next-line promise/prefer-await-to-callbacks
   async (err) => {
-    const originalRequest = err?.config
+    const originalRequest = err.config
 
-    if (err?.response?.status == 401 && err.config && !err?.config?._isRetry) {
+    if (err.response.status == 401 && err.config && !err.config._isRetry) {
       originalRequest._isRetry = true
 
       try {
-        await store.dispatch(fetchCheckAuth())
-        const accessToken = store.getState().user.user.accessToken
-        Cookies.set('accessToken', accessToken)
+        const { data } = await AuthService.checkAuth()
+
+        if (data.accessToken) {
+          const accessToken = data.accessToken
+          Cookies.set('accessToken', accessToken)
+          store.dispatch(setUser(data))
+        }
 
         return api.request(originalRequest)
       } catch (error) {}

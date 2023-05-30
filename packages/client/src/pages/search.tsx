@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
 
 import { Catalog, MainLayout, NextHead } from 'src/components'
+import { withAuthPublic } from 'src/hoc'
 
 const SearchPage = () => {
   const { query } = useRouter()
@@ -33,4 +34,4 @@ const SearchPage = () => {
   )
 }
 
-export default SearchPage
+export default withAuthPublic(SearchPage)
