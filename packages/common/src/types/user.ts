@@ -24,7 +24,7 @@ export interface IProfile {
 
 export interface IFullProfile extends IProfile {
   favorites: IProduct[]
-  carts: RootCart
+  carts: RootCart[]
 }
 
 export interface IUpdateUser {

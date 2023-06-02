@@ -11,7 +11,7 @@ import {
 import { sidebarData } from 'src/types'
 
 export const Sidebar = () => {
-  const { asPath, push } = useRouter()
+  const { asPath, replace } = useRouter()
 
   const { user } = useAppSelector(userSelector)
   const isUser = user?.user?.isActivated
@@ -19,7 +19,7 @@ export const Sidebar = () => {
 
   const logOut = async () => {
     await dispatch(fetchLogout())
-    push('/auth')
+    replace('/auth')
   }
 
   return (

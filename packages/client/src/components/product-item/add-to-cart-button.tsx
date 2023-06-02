@@ -26,7 +26,10 @@ export const AddToCartButton = ({ product, cart }: Props) => {
   const mutationAddToCart = useMutation(
     (productId: number) => CartService.addProduct(productId),
     {
-      onSuccess: () => queryClient.invalidateQueries(['get cart from catalog']),
+      onSuccess: () => {
+        queryClient.invalidateQueries(['get profile from catalog'])
+        queryClient.invalidateQueries(['get profile'])
+      },
     },
   )
 
@@ -34,7 +37,10 @@ export const AddToCartButton = ({ product, cart }: Props) => {
     ({ cartId, productId }: RemoveCart) =>
       CartService.removeProduct(cartId, productId),
     {
-      onSuccess: () => queryClient.invalidateQueries(['get cart from catalog']),
+      onSuccess: () => {
+        queryClient.invalidateQueries(['get profile from catalog'])
+        queryClient.invalidateQueries(['get profile'])
+      },
     },
   )
 

@@ -41,7 +41,7 @@ export const ContentProfile = () => {
           return (
             <FavoritesProfile
               favorites={profile.favorites}
-              cart={profile.carts}
+              cart={profile.carts[0]}
             />
           )
         }
