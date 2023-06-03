@@ -10,6 +10,6 @@ module.exports = {
     ...globalRules.rules,
     'react/sort-comp': 'warn',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
-    '@next/next/no-html-link-for-pages': ['error', 'packages/web/pages/'],
+    '@next/next/no-html-link-for-pages': ['error', 'packages/client/pages/'],
   },
 }
