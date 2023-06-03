@@ -27,7 +27,7 @@ export const AddToCartButton = ({ product, cart }: Props) => {
     (productId: number) => CartService.addProduct(productId),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(['get profile from catalog'])
+        queryClient.invalidateQueries(['get cart from catalog'])
         queryClient.invalidateQueries(['get profile'])
       },
     },
@@ -38,7 +38,7 @@ export const AddToCartButton = ({ product, cart }: Props) => {
       CartService.removeProduct(cartId, productId),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(['get profile from catalog'])
+        queryClient.invalidateQueries(['get cart from catalog'])
         queryClient.invalidateQueries(['get profile'])
       },
     },
