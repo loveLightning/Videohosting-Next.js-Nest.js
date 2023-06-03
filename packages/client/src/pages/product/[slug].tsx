@@ -1,11 +1,18 @@
-import { Container, ProductCard } from 'src/components'
+import { useRouter } from 'next/router'
+
+import { Container, NextHead, ProductCard } from 'src/components'
 import { withAuthPublic } from 'src/hoc'
 
 const ProductPage = () => {
+  const { query } = useRouter()
+
   return (
-    <Container>
-      <ProductCard />
-    </Container>
+    <>
+      {query?.slug && <NextHead title={query.slug as string} />}
+      <Container>
+        <ProductCard />
+      </Container>
+    </>
   )
 }
 
